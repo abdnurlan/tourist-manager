@@ -1,0 +1,77 @@
+# Tur Planlayıcı — root orchestration
+# Services: db (postgres) -> backend (Go/Fiber) -> frontend (Next.js)
+# (the obsolete top-level `version:` key has been removed; Compose v2 ignores it)
+
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: turplanlayici_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: tourist_manager
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d tourist_manager"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    networks:
+      - turnet
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: turplanlayici_backend
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file:
+      - ./backend/.env
+    environment:
+      # Override DB host to the compose service name regardless of .env value.
+      DATABASE_URL: postgres://postgres:postgres@db:5432/tourist_manager?sslmode=disable
+      PORT: "8080"
+    ports:
+      - "8080:8080"
+    networks:
+      - turnet
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        # NEXT_PUBLIC_API_URL is baked into the client bundle at BUILD time, so
+        # it MUST be passed as a build arg (not only as a runtime env var).
+        # It must be reachable FROM THE BROWSER — change to your public HTTPS
+        # domain in production, e.g. https://your-domain.com/api
+        NEXT_PUBLIC_API_URL: http://localhost:8080/api
+    container_name: turplanlayici_frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    env_file:
+      - ./frontend/.env
+    environment:
+      # Runtime copy (kept in sync with the build arg above for clarity).
+      NEXT_PUBLIC_API_URL: http://localhost:8080/api
+    ports:
+      - "3000:3000"
+    networks:
+      - turnet
+
+volumes:
+  pgdata:
+    driver: local
+
+networks:
+  turnet:
+    driver: bridge

@@ -1,0 +1,317 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─────────────────────────────────────────────────────────────
+   Tur Planlayıcı — "Səyahət Jurnalı" design tokens
+   An editorial travel-journal aesthetic: warm paper, deep teal
+   ink, terracotta accents. Magazine-grade, art-directed.
+   ───────────────────────────────────────────────────────────── */
+
+:root {
+  /* Type: single family (Plus Jakarta Sans). Display aliases sans so headings
+     use the same family at heavier weights. */
+  --font-display: var(--font-sans);
+
+  /* Palette — light "paper" */
+  --background: #f6f1e7;
+  --surface: #fffdf8;
+  --surface-muted: #efe6d4;
+  --foreground: #1c1917;
+  --muted-foreground: #6f655a;
+  --border: #e6dac4;
+
+  --accent: #115e59;
+  --accent-foreground: #fdfaf2;
+  --accent-hover: #0e4f4a;
+  --accent-subtle: #dcebe7;
+
+  /* Secondary accent — terracotta */
+  --terracotta: #c75e3a;
+  --terracotta-hover: #b14e2d;
+  --terracotta-foreground: #fff7f2;
+  --terracotta-subtle: #f2e1d7;
+
+  --success: #3f7d5e;
+  --warning: #b8791c;
+  --danger: #b3402f;
+  --info: #2f6f9e;
+  --ring: #115e59;
+
+  /* Radius scale */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-full: 9999px;
+
+  /* Elevation / shadow scale — warm, ink-tinted */
+  --shadow-xs: 0 1px 2px rgba(28, 25, 23, 0.05);
+  --shadow-sm: 0 1px 3px rgba(28, 25, 23, 0.08), 0 1px 2px rgba(28, 25, 23, 0.05);
+  --shadow-md: 0 6px 16px rgba(28, 25, 23, 0.08), 0 2px 6px rgba(28, 25, 23, 0.05);
+  --shadow-lg: 0 16px 40px rgba(28, 25, 23, 0.12), 0 6px 12px rgba(28, 25, 23, 0.06);
+  --shadow-glass: 0 8px 32px rgba(28, 25, 23, 0.1);
+
+  /* Texture layer opacities (overridable in dark) */
+  --topo-opacity: 0.04;
+  --grain-opacity: 0.03;
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-fast: 150ms;
+  --dur-base: 220ms;
+  --dur-slow: 320ms;
+}
+
+.dark,
+[data-theme="dark"] {
+  /* Warm "night journal" dark variant */
+  --background: #15120c;
+  --surface: #1f1a12;
+  --surface-muted: #271f15;
+  --foreground: #f3ead9;
+  --muted-foreground: #b3a795;
+  --border: #352b1e;
+
+  --accent: #2bb6ae;
+  --accent-foreground: #0a201e;
+  --accent-hover: #46c7bf;
+  --accent-subtle: #10302d;
+
+  --terracotta: #e07a52;
+  --terracotta-hover: #ec8b66;
+  --terracotta-foreground: #1c0f08;
+  --terracotta-subtle: #3a2419;
+
+  --success: #5aa37e;
+  --warning: #d6a521;
+  --danger: #e0654f;
+  --info: #5b9ed0;
+  --ring: #2bb6ae;
+
+  --topo-opacity: 0.05;
+  --grain-opacity: 0.035;
+
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.5), 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 6px 16px rgba(0, 0, 0, 0.5), 0 2px 6px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.6), 0 6px 12px rgba(0, 0, 0, 0.4);
+  --shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    position: relative;
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans), "Plus Jakarta Sans", -apple-system,
+      BlinkMacSystemFont, "Segoe UI", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overscroll-behavior-y: none;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display), "Plus Jakarta Sans", -apple-system,
+      BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-weight: 700;
+  }
+
+  h1,
+  h2 {
+    letter-spacing: -0.02em;
+  }
+
+  /* Tabular/lining numerals for stats, dates, big numbers. */
+  .font-display {
+    font-feature-settings: "tnum" 1, "lnum" 1;
+  }
+
+  ::selection {
+    background-color: var(--accent);
+    color: var(--accent-foreground);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+}
+
+@layer utilities {
+  /* Glass surface for sticky headers / nav — warm paper tint. */
+  .glass {
+    background-color: color-mix(in srgb, var(--surface) 78%, transparent);
+    backdrop-filter: blur(14px) saturate(150%);
+    -webkit-backdrop-filter: blur(14px) saturate(150%);
+    box-shadow: var(--shadow-glass);
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  /* Safe area padding for mobile bottom nav / FAB */
+  .pb-safe {
+    padding-bottom: calc(env(safe-area-inset-bottom) + 0.5rem);
+  }
+  .bottom-safe {
+    bottom: calc(env(safe-area-inset-bottom) + 1rem);
+  }
+
+  /* Warm shimmer skeleton */
+  .skeleton-shimmer {
+    position: relative;
+    overflow: hidden;
+  }
+  .skeleton-shimmer::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%);
+    background: linear-gradient(
+      90deg,
+      transparent,
+      color-mix(in srgb, var(--surface) 70%, transparent),
+      transparent
+    );
+    animation: shimmer 1.6s infinite;
+  }
+
+  /* ── Signature: ticket-stub / boarding-pass treatment ──────────
+     A perforated left edge: dotted vertical line + half-circle
+     notches top & bottom that punch out of the divider. */
+  .ticket {
+    position: relative;
+    padding-left: 1.5rem;
+  }
+  .ticket::before {
+    content: "";
+    position: absolute;
+    top: 0.75rem;
+    bottom: 0.75rem;
+    left: 1.05rem;
+    width: 0;
+    border-left: 2px dotted
+      color-mix(in srgb, var(--border) 100%, transparent);
+    pointer-events: none;
+  }
+  /* The two notches that "cut" the edge of the card. */
+  .ticket::after {
+    content: "";
+    position: absolute;
+    left: 1.05rem;
+    top: -8px;
+    width: 16px;
+    height: 16px;
+    border-radius: var(--radius-full);
+    background: var(--background);
+    border: 1px solid var(--border);
+    transform: translateX(-50%);
+    box-shadow: 0 calc(100% + 16px) 0 0 var(--background),
+      0 calc(100% + 16px) 0 1px var(--border);
+    pointer-events: none;
+  }
+
+  /* ── Signature: rubber-stamp status treatment ── */
+  .stamp {
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 600;
+  }
+
+  /* Itinerary timeline spine */
+  .timeline-spine {
+    background: linear-gradient(
+      to bottom,
+      transparent,
+      var(--border) 8px,
+      var(--border) calc(100% - 8px),
+      transparent
+    );
+  }
+}
+
+@layer components {
+  /* Day stamp for itinerary day sections. */
+  .day-stamp {
+    font-family: var(--font-display), "Plus Jakarta Sans", sans-serif;
+    font-feature-settings: "tnum" 1, "lnum" 1;
+    font-weight: 700;
+  }
+}
+
+/* ── Fixed atmosphere layers: topographic contours + film grain ──
+   Mounted via <BackgroundTexture/>. Both behind content, no events. */
+.bg-topo {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: var(--topo-opacity);
+  background-image: url("/topo.svg");
+  background-size: 900px 900px;
+  background-repeat: repeat;
+}
+.dark .bg-topo,
+[data-theme="dark"] .bg-topo {
+  filter: invert(1);
+}
+.bg-grain {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: var(--grain-opacity);
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.dark .bg-grain,
+[data-theme="dark"] .bg-grain {
+  mix-blend-mode: screen;
+}
+
+/* Refined scrollbar (desktop) */
+@media (pointer: fine) {
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background-color: color-mix(in srgb, var(--muted-foreground) 28%, transparent);
+    border-radius: 9999px;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: color-mix(in srgb, var(--muted-foreground) 45%, transparent);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
