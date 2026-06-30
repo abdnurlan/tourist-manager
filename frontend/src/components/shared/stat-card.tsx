@@ -36,7 +36,7 @@ export function StatCard({
   className,
 }: StatCardProps) {
   return (
-    <Card interactive className={cn("p-5", className)}>
+    <Card interactive className={cn("h-full p-5", className)}>
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
           <p className="text-sm text-muted-foreground">{label}</p>

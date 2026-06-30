@@ -127,6 +127,8 @@ export interface AiChatResponse {
   reply: string;
   intent: string;
   source: EventSource;
+  /** Present on the voice path: what Whisper heard. */
+  transcript?: string;
 }
 
 export interface AiHistoryItem {

@@ -1,7 +1,6 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { Topbar } from "@/components/layout/topbar";
 import { PageHeader, PageBody } from "@/components/layout/page-header";
 import {
   PageTransition,
@@ -37,13 +36,10 @@ export default function SettingsPage() {
   });
 
   return (
-    <>
-      <Topbar title={az.screen.settings} />
+    <PageTransition>
+      <PageHeader title={az.screen.settings} subtitle={az.settings.subtitle} />
 
-      <PageTransition>
-        <PageHeader title={az.screen.settings} subtitle={az.settings.subtitle} />
-
-        <PageBody>
+      <PageBody>
           <StaggerList className="mx-auto flex max-w-2xl flex-col gap-4">
             <StaggerItem>
               <ProfileCard user={user} loading={userLoading && !user} />
@@ -73,7 +69,6 @@ export default function SettingsPage() {
             </StaggerItem>
           </StaggerList>
         </PageBody>
-      </PageTransition>
-    </>
+    </PageTransition>
   );
 }

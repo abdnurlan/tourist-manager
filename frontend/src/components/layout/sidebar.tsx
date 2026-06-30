@@ -2,8 +2,9 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Compass, LogOut } from "lucide-react";
+import { LogOut } from "lucide-react";
 import { NAV_ITEMS, isNavActive } from "./nav-items";
+import { Logo } from "@/components/shared/logo";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -33,9 +34,7 @@ export function Sidebar() {
     <aside className="fixed inset-y-0 left-0 z-30 hidden w-64 flex-col border-r border-border bg-surface md:flex">
       {/* Brand */}
       <div className="flex h-16 items-center gap-2.5 border-b border-border/70 px-5">
-        <span className="flex size-9 items-center justify-center rounded-full bg-accent text-accent-foreground shadow-xs">
-          <Compass className="size-5" />
-        </span>
+        <Logo size={72} className="size-9 shrink-0" />
         <div className="leading-tight">
           <p className="font-display text-base font-semibold tracking-tight text-foreground">
             {az.app.name}

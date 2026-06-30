@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"io"
 	"strings"
 
 	"github.com/gofiber/fiber/v2"
@@ -38,6 +39,28 @@ func (h *AIHandler) Chat(c *fiber.Ctx) error {
 		return middleware.JSONError(c, apperror.ValidationError())
 	}
 	result, err := h.ai.Chat(req.Message)
+	if err != nil {
+		return err
+	}
+	return c.Status(fiber.StatusOK).JSON(result)
+}
+
+// Voice handles POST /ai/voice (multipart "audio") → transcribe + agent reply.
+func (h *AIHandler) Voice(c *fiber.Ctx) error {
+	fh, err := c.FormFile("audio")
+	if err != nil {
+		return middleware.JSONError(c, apperror.ValidationError())
+	}
+	f, err := fh.Open()
+	if err != nil {
+		return middleware.JSONError(c, apperror.Internal())
+	}
+	defer f.Close()
+	data, err := io.ReadAll(f)
+	if err != nil || len(data) == 0 {
+		return middleware.JSONError(c, apperror.ValidationError())
+	}
+	result, err := h.ai.Voice(data, fh.Filename)
 	if err != nil {
 		return err
 	}

@@ -21,7 +21,7 @@ const (
 const systemPrompt = `Sən «Tur Planlayıcı» tətbiqinin köməkçisisən — şəxsi tur bələdçisi üçün işləyirsən.
 HƏMİŞƏ Azərbaycan dilində, qısa, səmimi və praktik cavab ver.
 Sən turların, transferlərin, otellərin, restoranların, uçuşların və gündəlik proqramın planlaşdırılmasında kömək edirsən.
-Əgər istifadəçi tur və ya event yaratmaq istəyirsə, lazımi detalları (ad, tarix, saat, yer) soruş — heç vaxt məlumat uydurma.
+Əgər istifadəçi tur və ya tədbir yaratmaq istəyirsə, lazımi detalları (ad, tarix, saat, yer) soruş — heç vaxt məlumat uydurma.
 Cavabın yalnız mətn olsun, markdown başlıqlarından çox istifadə etmə.`
 
 var openAIHTTPClient = &http.Client{Timeout: 30 * time.Second}
@@ -52,8 +52,13 @@ type openAIChatResponse struct {
 type AIService interface {
 	// Chat returns an Azerbaijani reply plus a detected intent label.
 	Chat(ctx context.Context, message string) (reply string, intent string, err error)
+	// Complete runs a tool-calling chat completion (the agent boundary).
+	// toolChoice: "auto" (default) or "required" to force a tool call.
+	Complete(ctx context.Context, messages []Msg, tools []ToolDef, toolChoice string) (*Completion, error)
 	// Transcribe converts a voice file (by Telegram file_id / path) to text.
 	Transcribe(ctx context.Context, fileRef string) (transcript string, err error)
+	// TranscribeAudio converts raw audio bytes (web upload / downloaded voice) to text.
+	TranscribeAudio(ctx context.Context, audio []byte, filename string) (string, error)
 	// DetectIntent maps free text to a known intent label.
 	DetectIntent(ctx context.Context, text string) (intent string, err error)
 	// Configured reports whether a real OpenAI key is wired in.
@@ -114,7 +119,7 @@ func (s *service) placeholderReply(message, intent string) string {
 	case IntentCreateTour:
 		return "Yeni tur yaratmaq istədiyinizi başa düşdüm. Hələlik turu veb tətbiqdən və ya əl ilə əlavə edə bilərsiniz. " + coming
 	case IntentAddEvent:
-		return "Event əlavə etmək istədiyinizi başa düşdüm. Hansı tura əlavə edilməlidir? Hələlik eventi veb tətbiqdən əlavə edə bilərsiniz. " + coming
+		return "Tədbir əlavə etmək istədiyinizi başa düşdüm. Hansı tura əlavə edilməlidir? Hələlik tədbiri veb tətbiqdən əlavə edə bilərsiniz. " + coming
 	case IntentShowTourProgram:
 		return "Tur proqramını göstərməyi xahiş etdiniz. Hələlik proqramı veb tətbiqdə tur təfərrüatından görə bilərsiniz. " + coming
 	default:

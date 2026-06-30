@@ -31,29 +31,57 @@ export function EmptyState({
       transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
       className={cn(
         "flex flex-col items-center justify-center text-center",
-        compact ? "py-10" : "py-16",
+        compact ? "py-6" : "py-16",
         className,
       )}
     >
-      <div className="relative mb-5 flex size-16 items-center justify-center">
-        {/* faint compass-rose ring backdrop */}
+      <div
+        className={cn(
+          "relative flex items-center justify-center",
+          compact ? "mb-2.5 size-11" : "mb-5 size-16",
+        )}
+      >
+        {/* faint compass-rose ring backdrop — full size only */}
+        {!compact && (
+          <>
+            <span
+              aria-hidden
+              className="absolute inset-0 rounded-full border border-dashed border-border"
+            />
+            <span
+              aria-hidden
+              className="absolute inset-2 rounded-full border border-border/70"
+            />
+          </>
+        )}
         <span
-          aria-hidden
-          className="absolute inset-0 rounded-full border border-dashed border-border"
-        />
-        <span
-          aria-hidden
-          className="absolute inset-2 rounded-full border border-border/70"
-        />
-        <span className="relative flex size-11 items-center justify-center rounded-full bg-accent-subtle text-accent">
-          <Icon className="size-6" strokeWidth={1.75} />
+          className={cn(
+            "relative flex items-center justify-center rounded-full bg-accent-subtle text-accent",
+            compact ? "size-11" : "size-11",
+          )}
+        >
+          <Icon className={compact ? "size-5" : "size-6"} strokeWidth={1.75} />
         </span>
       </div>
-      <h3 className="font-display text-h3 font-semibold text-foreground">{title}</h3>
+      <h3
+        className={cn(
+          "font-display font-semibold text-foreground",
+          compact ? "text-sm" : "text-h3",
+        )}
+      >
+        {title}
+      </h3>
       {subtitle && (
-        <p className="mt-1.5 max-w-sm text-sm text-muted-foreground">{subtitle}</p>
+        <p
+          className={cn(
+            "mt-1.5 max-w-sm text-muted-foreground",
+            compact ? "text-xs" : "text-sm",
+          )}
+        >
+          {subtitle}
+        </p>
       )}
-      {action && <div className="mt-5">{action}</div>}
+      {action && <div className={compact ? "mt-3" : "mt-5"}>{action}</div>}
     </motion.div>
   );
 }

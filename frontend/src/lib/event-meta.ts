@@ -38,15 +38,15 @@ export const EVENT_META: Record<EventType, EventMeta> = {
     labelKey: "transfer",
     label: az.eventType.transfer,
     icon: Car,
-    color: "#115e59", // teal
-    subtle: "#dcebe7",
+    color: "#01335e", // brand navy
+    subtle: "#d7e3f0",
   },
   hotel: {
     labelKey: "hotel",
     label: az.eventType.hotel,
     icon: BedDouble,
-    color: "#c75e3a", // terracotta
-    subtle: "#f2e1d7",
+    color: "#e9790d", // sun-orange
+    subtle: "#fbe6ce",
   },
   restaurant: {
     labelKey: "restaurant",

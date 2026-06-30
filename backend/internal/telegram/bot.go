@@ -38,6 +38,7 @@ type botService struct {
 	tours    service.TourService
 	events   service.EventService
 	ai       ai.AIService
+	agent    *service.AIAgent
 	telegram repository.TelegramRepository
 }
 
@@ -50,6 +51,7 @@ func NewBotService(
 	tours service.TourService,
 	events service.EventService,
 	aiClient ai.AIService,
+	agent *service.AIAgent,
 	telegram repository.TelegramRepository,
 ) (BotService, error) {
 	var api *tgbotapi.BotAPI
@@ -67,6 +69,7 @@ func NewBotService(
 		tours:         tours,
 		events:        events,
 		ai:            aiClient,
+		agent:         agent,
 		telegram:      telegram,
 	}, nil
 }

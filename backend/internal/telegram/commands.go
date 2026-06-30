@@ -124,7 +124,7 @@ func (b *botService) sendDayPlan(chatID int64, heading, date string) error {
 		return b.SendMessage(chatID, "Məlumat alınarkən xəta baş verdi. Bir az sonra yenidən cəhd edin.")
 	}
 	if len(events) == 0 {
-		return b.SendMessage(chatID, fmt.Sprintf("📅 %s (%s)\n\nBu tarix üçün eventiniz yoxdur. Dincəlin! 😌", heading, formatDate(date)))
+		return b.SendMessage(chatID, fmt.Sprintf("📅 %s (%s)\n\nBu tarix üçün tədbiriniz yoxdur. Dincəlin! 😌", heading, formatDate(date)))
 	}
 
 	var sb strings.Builder

@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { AnimatePresence } from "framer-motion";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { History } from "lucide-react";
-import { aiChat } from "@/lib/api/ai";
+import { aiChat, aiVoice } from "@/lib/api/ai";
 import { queryKeys } from "@/lib/query";
 import { az } from "@/lib/i18n/az";
 import type { AiChatRequest, AiChatResponse } from "@/lib/types";
@@ -98,6 +98,68 @@ export default function AiAssistantPage() {
     [chat],
   );
 
+  const voice = useMutation<
+    AiChatResponse,
+    unknown,
+    { userId: string; blob: Blob }
+  >({
+    mutationFn: ({ blob }) => aiVoice(blob),
+    onSuccess: (res, { userId }) => {
+      setMessages((prev) =>
+        prev.map((m) => {
+          if (m.id === userId) {
+            return { ...m, content: res.transcript || "🎙 Səs mesajı" };
+          }
+          if (m.pending && m.role === "assistant") {
+            return {
+              ...m,
+              content: res.reply,
+              source: res.source,
+              pending: false,
+              createdAt: new Date().toISOString(),
+            };
+          }
+          return m;
+        }),
+      );
+      queryClient.invalidateQueries({ queryKey: queryKeys.aiHistory });
+    },
+    onError: () => {
+      setMessages((prev) =>
+        prev.map((m) =>
+          m.pending && m.role === "assistant"
+            ? {
+                ...m,
+                content: az.ai.error_reply,
+                source: "ai",
+                pending: false,
+                createdAt: new Date().toISOString(),
+              }
+            : m,
+        ),
+      );
+    },
+  });
+
+  const sendVoice = useCallback(
+    (blob: Blob) => {
+      if (chat.isPending || voice.isPending) return;
+      const userId = nextId();
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: userId,
+          role: "user",
+          content: "🎙 Səs mesajı…",
+          createdAt: new Date().toISOString(),
+        },
+        { id: nextId(), role: "assistant", content: null, pending: true },
+      ]);
+      voice.mutate({ userId, blob });
+    },
+    [chat.isPending, voice],
+  );
+
   const handleSuggestion = useCallback((text: string) => {
     // Load into composer so the user can review/edit before sending.
     setDraft({ text, nonce: Date.now() });
@@ -171,7 +233,8 @@ export default function AiAssistantPage() {
             )}
             <ChatComposer
               onSend={send}
-              disabled={chat.isPending}
+              onVoice={sendVoice}
+              disabled={chat.isPending || voice.isPending}
               draft={draft?.text}
               draftNonce={draft?.nonce}
             />

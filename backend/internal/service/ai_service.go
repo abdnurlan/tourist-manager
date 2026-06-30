@@ -4,39 +4,41 @@ import (
 	"context"
 	"strings"
 
-	"tourist-manager/backend/internal/ai"
 	"tourist-manager/backend/internal/models"
 	"tourist-manager/backend/internal/repository"
 	"tourist-manager/backend/pkg/apperror"
 )
 
-// webAppUserID denotes the web app as the telegram_messages sender (CONTRACT.md §6.7).
+// webUserKey identifies the web app as the agent's conversation key, and
+// telegram_user_id = 0 as the message sender (CONTRACT.md §6.7).
+const webUserKey = "web"
 const webAppUserID int64 = 0
 
 // ChatResult is the /ai/chat action response (CONTRACT.md §6.7).
 type ChatResult struct {
-	Reply  string `json:"reply"`
-	Intent string `json:"intent"`
-	Source string `json:"source"`
+	Reply      string `json:"reply"`
+	Intent     string `json:"intent"`
+	Source     string `json:"source"`
+	Transcript string `json:"transcript,omitempty"` // set on the voice path
 }
 
-// AIService wraps the AI boundary and logs web chat to telegram_messages
-// (telegram_user_id = 0 denotes the web app).
+// AIService is the web-facing AI boundary: it runs the agent and logs the
+// exchange to telegram_messages (telegram_user_id = 0 denotes the web app).
 type AIService interface {
-	// Chat answers a web-app message and logs inbound/outbound to telegram_messages.
 	Chat(message string) (*ChatResult, error)
-	// History returns recent telegram_messages (newest first), feeding the AI history view.
+	// Voice transcribes uploaded audio then runs it through Chat.
+	Voice(audio []byte, filename string) (*ChatResult, error)
 	History(limit int) ([]models.TelegramMessage, error)
 }
 
 type aiService struct {
-	ai       ai.AIService
+	agent    *AIAgent
 	telegram repository.TelegramRepository
 }
 
-// NewAIService builds the service-layer AIService.
-func NewAIService(aiClient ai.AIService, telegram repository.TelegramRepository) AIService {
-	return &aiService{ai: aiClient, telegram: telegram}
+// NewAIService builds the web AIService on top of the shared agent.
+func NewAIService(agent *AIAgent, telegram repository.TelegramRepository) AIService {
+	return &aiService{agent: agent, telegram: telegram}
 }
 
 func (s *aiService) Chat(message string) (*ChatResult, error) {
@@ -47,34 +49,41 @@ func (s *aiService) Chat(message string) (*ChatResult, error) {
 		})
 	}
 
-	reply, intent, err := s.ai.Chat(context.Background(), message)
+	reply, intent, err := s.agent.Handle(context.Background(), webUserKey, message)
 	if err != nil {
 		return nil, apperror.Internal()
 	}
 
-	// Log inbound (web user) — best-effort; do not fail the chat on log errors.
-	inContent := message
-	inIntent := intent
-	_ = s.telegram.Create(&models.TelegramMessage{
-		TelegramUserID: webAppUserID,
-		Direction:      "in",
-		Kind:           "text",
-		Content:        &inContent,
-		Intent:         &inIntent,
-	})
-
-	// Log outbound (assistant reply).
-	outContent := reply
-	outIntent := intent
-	_ = s.telegram.Create(&models.TelegramMessage{
-		TelegramUserID: webAppUserID,
-		Direction:      "out",
-		Kind:           "text",
-		Content:        &outContent,
-		Intent:         &outIntent,
-	})
+	s.log("in", message, intent)
+	s.log("out", reply, intent)
 
 	return &ChatResult{Reply: reply, Intent: intent, Source: "ai"}, nil
+}
+
+func (s *aiService) Voice(audio []byte, filename string) (*ChatResult, error) {
+	transcript, err := s.agent.Transcribe(context.Background(), audio, filename)
+	if err != nil || strings.TrimSpace(transcript) == "" {
+		return nil, apperror.Internal()
+	}
+	// Run the transcript through the normal chat path (logs + agent).
+	res, err := s.Chat(transcript)
+	if err != nil {
+		return nil, err
+	}
+	res.Transcript = transcript
+	return res, nil
+}
+
+func (s *aiService) log(direction, content, intent string) {
+	c := content
+	i := intent
+	_ = s.telegram.Create(&models.TelegramMessage{
+		TelegramUserID: webAppUserID,
+		Direction:      direction,
+		Kind:           "text",
+		Content:        &c,
+		Intent:         &i,
+	})
 }
 
 func (s *aiService) History(limit int) ([]models.TelegramMessage, error) {
@@ -82,7 +91,6 @@ func (s *aiService) History(limit int) ([]models.TelegramMessage, error) {
 	if err != nil {
 		return nil, err
 	}
-	// Strip raw Telegram payloads (chat/user metadata) from the web history view.
 	for i := range msgs {
 		msgs[i].RawJSON = nil
 	}

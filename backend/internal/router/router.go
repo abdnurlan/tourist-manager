@@ -74,6 +74,7 @@ func New(cfg *config.Config, h Handlers) *fiber.App {
 	api.Get("/search", auth, h.Search.Search)
 
 	api.Post("/ai/chat", auth, h.AI.Chat)
+	api.Post("/ai/voice", auth, h.AI.Voice)
 	api.Get("/ai/history", auth, h.AI.History)
 
 	return app

@@ -61,9 +61,12 @@ export default function DashboardPage() {
           </span>
         }
         actions={
+          // Desktop only — on mobile the floating action button covers "new tour",
+          // so showing both here would be redundant.
           <Button
             variant="primary"
             size="sm"
+            className="max-md:hidden"
             onClick={() => router.push("/tours/new")}
           >
             <MapPinned className="size-4" />

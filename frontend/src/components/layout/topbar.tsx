@@ -25,28 +25,31 @@ export function Topbar({ title, showBack, onBack, actions, leading, className }:
   return (
     <header
       className={cn(
-        "glass sticky top-0 z-20 flex h-16 items-center gap-3 border-b border-border px-4 md:px-8",
+        "glass sticky top-0 z-20 border-b border-border",
         className,
       )}
     >
-      {showBack && (
-        <Button
-          variant="ghost"
-          size="icon-sm"
-          aria-label={az.action.back}
-          onClick={onBack ?? (() => router.back())}
-          className="-ml-1"
-        >
-          <ChevronLeft className="size-5" />
-        </Button>
-      )}
-      {leading}
-      {title && (
-        <h1 className="truncate font-display text-h3 font-semibold tracking-tight text-foreground">
-          {title}
-        </h1>
-      )}
-      {actions && <div className="ml-auto flex items-center gap-2">{actions}</div>}
+      {/* Full-bleed glass bar; inner row is centered & aligned with the page body. */}
+      <div className="mx-auto flex h-16 w-full max-w-[1200px] items-center gap-3 px-4 md:px-8">
+        {showBack && (
+          <Button
+            variant="ghost"
+            size="icon-sm"
+            aria-label={az.action.back}
+            onClick={onBack ?? (() => router.back())}
+            className="-ml-1"
+          >
+            <ChevronLeft className="size-5" />
+          </Button>
+        )}
+        {leading}
+        {title && (
+          <h1 className="truncate font-display text-h3 font-semibold tracking-tight text-foreground">
+            {title}
+          </h1>
+        )}
+        {actions && <div className="ml-auto flex items-center gap-2">{actions}</div>}
+      </div>
     </header>
   );
 }

@@ -8,6 +8,7 @@ import { z } from "zod";
 import { BottomSheetForm } from "@/components/shared/bottom-sheet-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { DatePicker } from "@/components/ui/date-picker";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import {
@@ -66,6 +67,9 @@ export function TourEditSheet({
     handleSubmit,
     control,
     reset,
+    watch,
+    setValue,
+    getValues,
     formState: { errors },
   } = useForm<Values>({
     resolver: zodResolver(schema),
@@ -87,6 +91,16 @@ export function TourEditSheet({
       description: tour.description ?? "",
     });
   }, [tour, reset]);
+
+  // Auto-fill end date to match a newly picked start when end is empty/earlier
+  // (1-day tour = same start/end with a single tap).
+  const handleStartChange = (iso: string) => {
+    setValue("start_date", iso, { shouldValidate: true, shouldDirty: true });
+    const end = getValues("end_date");
+    if (!end || end < iso) {
+      setValue("end_date", iso, { shouldValidate: true, shouldDirty: true });
+    }
+  };
 
   const submit = handleSubmit((v) => {
     onSubmit({
@@ -127,10 +141,31 @@ export function TourEditSheet({
 
         <div className="grid grid-cols-2 gap-3">
           <Field label={az.field.start_date} error={errors.start_date?.message}>
-            <Input type="date" aria-invalid={!!errors.start_date} {...register("start_date")} />
+            <Controller
+              control={control}
+              name="start_date"
+              render={({ field }) => (
+                <DatePicker
+                  value={field.value}
+                  onChange={handleStartChange}
+                  aria-invalid={!!errors.start_date}
+                />
+              )}
+            />
           </Field>
           <Field label={az.field.end_date} error={errors.end_date?.message}>
-            <Input type="date" aria-invalid={!!errors.end_date} {...register("end_date")} />
+            <Controller
+              control={control}
+              name="end_date"
+              render={({ field }) => (
+                <DatePicker
+                  value={field.value}
+                  onChange={field.onChange}
+                  min={watch("start_date") || undefined}
+                  aria-invalid={!!errors.end_date}
+                />
+              )}
+            />
           </Field>
         </div>
 

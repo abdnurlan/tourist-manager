@@ -7,6 +7,7 @@ import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { DatePicker, DateTimePicker } from "@/components/ui/date-picker";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import {
@@ -260,7 +261,17 @@ export function EventForm({
       {/* Date + Time */}
       <div className="grid grid-cols-2 gap-3">
         <Field label={az.field.date} error={errors.date?.message}>
-          <Input type="date" aria-invalid={!!errors.date} {...register("date")} />
+          <Controller
+            control={control}
+            name="date"
+            render={({ field }) => (
+              <DatePicker
+                value={field.value}
+                onChange={field.onChange}
+                aria-invalid={!!errors.date}
+              />
+            )}
+          />
         </Field>
         <Field label={az.field.time} optional error={errors.time?.message}>
           <Input type="time" aria-invalid={!!errors.time} {...register("time")} />
@@ -350,10 +361,16 @@ export function EventForm({
 
       {/* Reminder time */}
       <Field label={az.field.reminder_time} optional>
-        <Input
-          type="datetime-local"
-          aria-label={az.event.form.reminder_hint}
-          {...register("reminder_time")}
+        <Controller
+          control={control}
+          name="reminder_time"
+          render={({ field }) => (
+            <DateTimePicker
+              value={field.value}
+              onChange={field.onChange}
+              placeholder={az.event.form.reminder_hint}
+            />
+          )}
         />
       </Field>
 

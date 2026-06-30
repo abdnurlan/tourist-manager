@@ -4,8 +4,8 @@
 
 /* ─────────────────────────────────────────────────────────────
    Tur Planlayıcı — "Səyahət Jurnalı" design tokens
-   An editorial travel-journal aesthetic: warm paper, deep teal
-   ink, terracotta accents. Magazine-grade, art-directed.
+   An editorial travel-journal aesthetic: warm paper, deep navy
+   ink, sun-orange accents — drawn from the M4STrip logo.
    ───────────────────────────────────────────────────────────── */
 
 :root {
@@ -21,22 +21,23 @@
   --muted-foreground: #6f655a;
   --border: #e6dac4;
 
-  --accent: #115e59;
-  --accent-foreground: #fdfaf2;
-  --accent-hover: #0e4f4a;
-  --accent-subtle: #dcebe7;
+  /* Primary accent — deep brand navy (from the M4STrip logo) */
+  --accent: #01335e;
+  --accent-foreground: #f4f8fd;
+  --accent-hover: #012846;
+  --accent-subtle: #d7e3f0;
 
-  /* Secondary accent — terracotta */
-  --terracotta: #c75e3a;
-  --terracotta-hover: #b14e2d;
-  --terracotta-foreground: #fff7f2;
-  --terracotta-subtle: #f2e1d7;
+  /* Secondary accent — sun-orange (from the logo) */
+  --terracotta: #e9790d;
+  --terracotta-hover: #d46c06;
+  --terracotta-foreground: #fff6ec;
+  --terracotta-subtle: #fbe6ce;
 
   --success: #3f7d5e;
   --warning: #b8791c;
   --danger: #b3402f;
   --info: #2f6f9e;
-  --ring: #115e59;
+  --ring: #01335e;
 
   /* Radius scale */
   --radius-sm: 8px;
@@ -74,21 +75,23 @@
   --muted-foreground: #b3a795;
   --border: #352b1e;
 
-  --accent: #2bb6ae;
-  --accent-foreground: #0a201e;
-  --accent-hover: #46c7bf;
-  --accent-subtle: #10302d;
+  /* Primary accent — brand navy lifted to azure for contrast on dark paper */
+  --accent: #5c9bd6;
+  --accent-foreground: #06223d;
+  --accent-hover: #76ade0;
+  --accent-subtle: #102b45;
 
-  --terracotta: #e07a52;
-  --terracotta-hover: #ec8b66;
-  --terracotta-foreground: #1c0f08;
-  --terracotta-subtle: #3a2419;
+  /* Secondary accent — sun-orange lifted for dark */
+  --terracotta: #f5973a;
+  --terracotta-hover: #f8a857;
+  --terracotta-foreground: #2a1604;
+  --terracotta-subtle: #3b2613;
 
   --success: #5aa37e;
   --warning: #d6a521;
   --danger: #e0654f;
   --info: #5b9ed0;
-  --ring: #2bb6ae;
+  --ring: #5c9bd6;
 
   --topo-opacity: 0.05;
   --grain-opacity: 0.035;

@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Compass } from "lucide-react";
+import { Logo } from "@/components/shared/logo";
 import { az } from "@/lib/i18n/az";
 import { cn } from "@/lib/utils/cn";
 
@@ -30,14 +30,9 @@ export function LoadingScreen({
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 0.32, ease: [0.16, 1, 0.3, 1] }}
-        className="relative flex size-16 items-center justify-center rounded-full bg-accent text-accent-foreground shadow-md"
+        className="relative flex size-16 items-center justify-center"
       >
-        <motion.span
-          animate={{ rotate: 360 }}
-          transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
-        >
-          <Compass className="size-8" strokeWidth={2} />
-        </motion.span>
+        <Logo size={160} priority className="size-full" />
         {/* rotating dashed "compass rose" ring */}
         <motion.span
           className="absolute -inset-2.5 rounded-full border border-dashed border-accent/40"

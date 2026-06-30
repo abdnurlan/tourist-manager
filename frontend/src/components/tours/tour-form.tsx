@@ -8,6 +8,7 @@ import { z } from "zod";
 import { BottomSheetForm } from "@/components/shared/bottom-sheet-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { DatePicker } from "@/components/ui/date-picker";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import {
@@ -91,11 +92,27 @@ export function TourForm({
     handleSubmit,
     control,
     reset,
+    watch,
+    setValue,
+    getValues,
     formState: { errors },
   } = useForm<TourFormValues>({
     resolver: zodResolver(tourSchema),
     defaultValues: defaultsFor(tour),
   });
+
+  const startDate = watch("start_date");
+
+  // Picking a start date auto-fills the end date to the same day when end is
+  // empty or now earlier — so a 1-day tour just needs one tap (start = end),
+  // while multi-day tours can still extend the end afterwards.
+  const handleStartChange = (iso: string) => {
+    setValue("start_date", iso, { shouldValidate: true, shouldDirty: true });
+    const end = getValues("end_date");
+    if (!end || end < iso) {
+      setValue("end_date", iso, { shouldValidate: true, shouldDirty: true });
+    }
+  };
 
   // Re-seed the form whenever it (re)opens or the target tour changes.
   useEffect(() => {
@@ -162,11 +179,17 @@ export function TourForm({
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <div className="space-y-1.5">
             <Label htmlFor="tour-start">{az.field.start_date}</Label>
-            <Input
-              id="tour-start"
-              type="date"
-              aria-invalid={Boolean(errors.start_date)}
-              {...register("start_date")}
+            <Controller
+              control={control}
+              name="start_date"
+              render={({ field }) => (
+                <DatePicker
+                  id="tour-start"
+                  value={field.value}
+                  onChange={handleStartChange}
+                  aria-invalid={Boolean(errors.start_date)}
+                />
+              )}
             />
             {errors.start_date && (
               <p className="text-xs text-danger">{errors.start_date.message}</p>
@@ -174,17 +197,27 @@ export function TourForm({
           </div>
           <div className="space-y-1.5">
             <Label htmlFor="tour-end">{az.field.end_date}</Label>
-            <Input
-              id="tour-end"
-              type="date"
-              aria-invalid={Boolean(errors.end_date)}
-              {...register("end_date")}
+            <Controller
+              control={control}
+              name="end_date"
+              render={({ field }) => (
+                <DatePicker
+                  id="tour-end"
+                  value={field.value}
+                  onChange={field.onChange}
+                  min={startDate || undefined}
+                  aria-invalid={Boolean(errors.end_date)}
+                />
+              )}
             />
             {errors.end_date && (
               <p className="text-xs text-danger">{errors.end_date.message}</p>
             )}
           </div>
         </div>
+        <p className="-mt-2 text-xs text-muted-foreground">
+          Eyni günü seçsəniz — 1 günlük tur olur.
+        </p>
 
         {/* Status */}
         <div className="space-y-1.5">

@@ -13,8 +13,9 @@ export interface FloatingActionButtonProps {
   className?: string;
 }
 
-/** Routes where the quick-create FAB must never appear. */
-const FAB_HIDDEN_ROUTES = ["/ai", "/login"];
+/** Routes where the quick-create (new tour) FAB makes no sense — chat, auth,
+ *  global search, and settings have nothing to "quick create". */
+const FAB_HIDDEN_ROUTES = ["/ai", "/login", "/search", "/settings"];
 
 /** Mobile floating action button for quick create (CONTRACT §11.9). Hidden
  *  >= md, and route-aware: never renders on /ai or /login. */

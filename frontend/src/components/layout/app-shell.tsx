@@ -30,9 +30,11 @@ export function AppShell({ children, hideFab, onFabClick }: AppShellProps) {
       <div className="relative z-10">
         <Sidebar />
 
-        {/* Content column: offset for sidebar on desktop, padded for bottom nav on mobile */}
+        {/* Content column: offset for sidebar on desktop, padded for bottom nav on mobile.
+            Full-width so the sticky glass Topbar can span the whole column; inner
+            content is centered to max-w-[1200px] by PageHeader / PageBody / the Topbar. */}
         <div className="md:pl-64">
-          <main className="mx-auto w-full max-w-[1200px] pb-[calc(env(safe-area-inset-bottom)+88px)] md:pb-12">
+          <main className="w-full pb-[calc(env(safe-area-inset-bottom)+88px)] md:pb-12">
             {children}
           </main>
         </div>

@@ -2,7 +2,6 @@
 
 import { useCallback, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Topbar } from "@/components/layout/topbar";
 import { PageHeader, PageBody } from "@/components/layout/page-header";
 import { PageTransition } from "@/components/shared/page-transition";
 import { SearchInput } from "@/components/search/search-input";
@@ -39,13 +38,10 @@ export default function SearchPage() {
   const busy = isFetching && !isLoading;
 
   return (
-    <>
-      <Topbar title={az.screen.search} />
+    <PageTransition>
+      <PageHeader title={az.screen.search} />
 
-      <PageTransition>
-        <PageHeader title={az.screen.search} />
-
-        <PageBody className="space-y-6">
+      <PageBody className="space-y-6">
           <SearchInput value={value} onChange={setValue} busy={busy} />
 
           <SearchResults
@@ -59,7 +55,6 @@ export default function SearchPage() {
             onSelectEvent={handleSelectEvent}
           />
         </PageBody>
-      </PageTransition>
-    </>
+    </PageTransition>
   );
 }

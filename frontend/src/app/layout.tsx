@@ -21,6 +21,7 @@ export const metadata: Metadata = {
   },
   description: az.app.tagline,
   applicationName: az.app.name,
+  manifest: "/manifest.webmanifest",
   formatDetection: { telephone: false },
 };
 

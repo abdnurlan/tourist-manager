@@ -3,7 +3,11 @@ package telegram
 import (
 	"context"
 	"encoding/json"
+	"fmt"
+	"io"
+	"net/http"
 	"strings"
+	"time"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 
@@ -84,37 +88,62 @@ func (b *botService) dispatchCommand(chatID int64, command string) {
 	}
 }
 
-// handleVoice runs the voice pipeline: [PLACEHOLDER] transcription → free text route.
+// handleVoice downloads the Telegram voice file, transcribes it with Whisper,
+// then routes the transcript through the same free-text agent pipeline.
 func (b *botService) handleVoice(chatID, userID int64, msg *tgbotapi.Message) {
 	ctx := context.Background()
-	transcript, err := b.ai.Transcribe(ctx, msg.Voice.FileID)
-	if err != nil || strings.TrimSpace(transcript) == "" {
+	transcript := ""
+	if b.api != nil && b.agent != nil {
+		if url, err := b.api.GetFileDirectURL(msg.Voice.FileID); err == nil {
+			if audio, err := downloadBytes(url); err == nil && len(audio) > 0 {
+				if t, err := b.agent.Transcribe(ctx, audio, "voice.oga"); err == nil {
+					transcript = t
+				}
+			}
+		}
+	}
+	if strings.TrimSpace(transcript) == "" {
 		_ = b.SendMessage(chatID, "Səs mesajını emal edə bilmədim. Zəhmət olmasa mətn şəklində yazın.")
 		return
 	}
-	// Persist the transcript onto the inbound voice message for the AI history.
 	b.logTranscript(userID, transcript)
 	b.handleFreeText(chatID, transcript)
 }
 
-// handleFreeText runs text through the AI service then the intent/action pipeline.
+// downloadBytes fetches a URL body (used to pull Telegram voice files for Whisper).
+func downloadBytes(url string) ([]byte, error) {
+	client := &http.Client{Timeout: 30 * time.Second}
+	resp, err := client.Get(url)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+	return io.ReadAll(resp.Body)
+}
+
+// handleFreeText runs text through the AI agent (tool-calling). The agent decides
+// whether to answer, fetch live data, or perform a confirmed mutation.
 func (b *botService) handleFreeText(chatID int64, text string) {
 	ctx := context.Background()
+	if b.agent != nil {
+		reply, _, err := b.agent.Handle(ctx, fmt.Sprintf("tg:%d", chatID), text)
+		if err != nil {
+			_ = b.SendMessage(chatID, "Xəta baş verdi. Bir az sonra yenidən cəhd edin.")
+			return
+		}
+		_ = b.SendMessage(chatID, reply)
+		return
+	}
+
+	// Legacy fallback (no agent wired): keyword-intent pipeline.
 	reply, intent, err := b.ai.Chat(ctx, text)
 	if err != nil {
 		_ = b.SendMessage(chatID, "Xəta baş verdi. Bir az sonra yenidən cəhd edin.")
 		return
 	}
-
-	// Intent-driven action pipeline. For data-fetch intents we answer with live DB
-	// data; for mutating intents (create_tour/add_event/...) we ask a clarification
-	// question — we NEVER guess (CONTRACT.md §10.5). The action path is fully wired
-	// so a real LLM extractor can fill structured args later with no caller change.
 	if handled := b.executeIntent(chatID, intent, text); handled {
 		return
 	}
-
-	// Fallback: deliver the AI (placeholder) reply.
 	_ = b.SendMessage(chatID, reply)
 }
 

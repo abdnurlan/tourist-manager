@@ -14,7 +14,7 @@ export function PageHeader({ title, subtitle, actions, className }: PageHeaderPr
   return (
     <div
       className={cn(
-        "flex flex-col gap-4 px-4 pb-2 pt-6 md:flex-row md:items-end md:justify-between md:px-8 md:pt-8",
+        "mx-auto flex w-full max-w-[1200px] flex-col gap-4 px-4 pb-2 pt-6 md:flex-row md:items-end md:justify-between md:px-8 md:pt-8",
         className,
       )}
     >
@@ -37,5 +37,14 @@ export function PageBody({
   children: ReactNode;
   className?: string;
 }) {
-  return <div className={cn("px-4 py-4 md:px-8 md:py-6", className)}>{children}</div>;
+  return (
+    <div
+      className={cn(
+        "mx-auto w-full max-w-[1200px] px-4 py-4 md:px-8 md:py-6",
+        className,
+      )}
+    >
+      {children}
+    </div>
+  );
 }

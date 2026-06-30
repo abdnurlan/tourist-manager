@@ -12,37 +12,43 @@ export function BottomNav() {
 
   return (
     <nav className="glass fixed inset-x-0 bottom-0 z-30 border-t border-border md:hidden">
-      <ul className="mx-auto flex max-w-md items-stretch justify-around px-2 pb-[calc(env(safe-area-inset-bottom))] pt-1.5">
+      <ul className="mx-auto flex max-w-md items-stretch justify-around px-1 pb-[calc(env(safe-area-inset-bottom))] pt-1.5">
         {BOTTOM_NAV_ITEMS.map((item) => {
           const active = isNavActive(pathname, item.href);
           const Icon = item.icon;
           return (
-            <li key={item.href} className="flex-1">
+            <li key={item.href} className="min-w-0 flex-1">
               <Link
                 href={item.href}
-                className={cn(
-                  "relative flex min-h-[52px] flex-col items-center justify-center gap-0.5 rounded-md px-1 py-1.5 text-[11px] font-medium transition-colors duration-fast",
-                  active ? "text-accent" : "text-muted-foreground",
-                )}
+                aria-current={active ? "page" : undefined}
+                className="relative flex min-h-[52px] flex-col items-center justify-center gap-1 px-0.5 py-1.5 text-[10px] font-medium"
               >
-                {active && (
-                  <motion.span
-                    layoutId="bottom-nav-active"
-                    className="absolute inset-x-2 top-1 h-8 rounded-md bg-accent-subtle"
-                    transition={{ type: "spring", stiffness: 380, damping: 32 }}
-                  />
-                )}
-                <span className="relative">
-                  <Icon className="size-[22px]" strokeWidth={active ? 2.25 : 2} />
+                {/* Active = solid navy chip carrying a white icon. The chip
+                    slides between tabs via the shared layoutId. */}
+                <span className="relative flex h-8 w-11 items-center justify-center">
                   {active && (
                     <motion.span
-                      layoutId="bottom-nav-dot"
-                      className="absolute -bottom-0.5 left-1/2 size-1 -translate-x-1/2 rounded-full bg-terracotta"
-                      transition={{ type: "spring", stiffness: 380, damping: 32 }}
+                      layoutId="bottom-nav-active"
+                      className="absolute inset-0 rounded-2xl bg-accent shadow-sm"
+                      transition={{ type: "spring", stiffness: 400, damping: 34 }}
                     />
                   )}
+                  <Icon
+                    className={cn(
+                      "relative size-[21px] transition-colors duration-fast",
+                      active ? "text-accent-foreground" : "text-muted-foreground",
+                    )}
+                    strokeWidth={active ? 2.4 : 2}
+                  />
                 </span>
-                <span className="relative truncate">{item.label}</span>
+                <span
+                  className={cn(
+                    "max-w-full truncate transition-colors duration-fast",
+                    active ? "font-semibold text-accent" : "text-muted-foreground",
+                  )}
+                >
+                  {item.short ?? item.label}
+                </span>
               </Link>
             </li>
           );

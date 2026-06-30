@@ -50,7 +50,10 @@ func main() {
 	dashboardSvc := service.NewDashboardService(tourRepo, eventRepo, reminderRepo, telegramRepo, cfg.TelegramMode, cfg.TelegramAllowedUserID != 0)
 	calendarSvc := service.NewCalendarService(eventRepo, tourRepo)
 	searchSvc := service.NewSearchService(tourRepo, eventRepo)
-	aiSvc := service.NewAIService(aiClient, telegramRepo)
+
+	// AI agent: tool-calling assistant shared by the web chat and the Telegram bot.
+	agent := service.NewAIAgent(aiClient, tourSvc, eventSvc, tourRepo, eventRepo, telegramRepo)
+	aiSvc := service.NewAIService(agent, telegramRepo)
 
 	// 8. Telegram bot.
 	bot, err := telegram.NewBotService(
@@ -60,6 +63,7 @@ func main() {
 		tourSvc,
 		eventSvc,
 		aiClient,
+		agent,
 		telegramRepo,
 	)
 	if err != nil {

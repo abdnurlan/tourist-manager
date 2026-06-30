@@ -10,8 +10,8 @@ const EASE = [0.16, 1, 0.3, 1] as const;
 
 /**
  * Atmospheric brand panel for the immersive editorial login.
- * cream→teal wash + topo contour texture + compass brand mark +
- * Fraunces wordmark + warm tagline + a faint "sample itinerary" motif.
+ * cream→navy wash + topo contour texture + M4STrip logo brand mark +
+ * wordmark + warm tagline + a faint "sample itinerary" motif.
  *
  * Desktop: occupies the left split. Mobile: sits on top as a shorter
  * banner. Layout/sizing is owned by the parent page.
@@ -19,12 +19,12 @@ const EASE = [0.16, 1, 0.3, 1] as const;
 export function BrandPanel() {
   return (
     <div className="relative isolate flex h-full flex-col justify-between overflow-hidden">
-      {/* cream → teal subtle gradient wash */}
+      {/* cream → navy subtle gradient wash */}
       <div
         aria-hidden
         className="absolute inset-0 -z-20 bg-[linear-gradient(155deg,var(--surface),var(--accent-subtle)_58%,var(--accent-subtle))]"
       />
-      {/* deep teal bloom anchored bottom-left */}
+      {/* deep navy bloom anchored bottom-left */}
       <motion.div
         aria-hidden
         className="absolute -bottom-32 -left-24 -z-10 size-[460px] rounded-full bg-accent/15 blur-3xl"
