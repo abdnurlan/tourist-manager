@@ -1,0 +1,11 @@
+# Backend build context excludes — keep the image small and avoid leaking secrets.
+.env
+.env.*
+!.env.example
+tmp/
+*.log
+.air.toml
+.git
+.gitignore
+Dockerfile
+.dockerignore

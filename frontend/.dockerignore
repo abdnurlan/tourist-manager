@@ -1,0 +1,16 @@
+# Frontend build context excludes.
+# CRITICAL: .env must be excluded so it does NOT override the NEXT_PUBLIC_API_URL
+# build arg at build time (otherwise the production bundle would bake in localhost).
+.env
+.env.*
+!.env.example
+node_modules
+.next
+out
+*.log
+.git
+.gitignore
+Dockerfile
+.dockerignore
+npm-debug.log*
+.DS_Store

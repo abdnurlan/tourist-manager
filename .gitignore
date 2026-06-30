@@ -4,7 +4,11 @@
 .env
 .env.*
 !.env.example
+!.env.production.example
 *.local
+
+# Local TLS / certbot artefaktları (server-də volume-larda saxlanır)
+/deploy/certbot/
 
 # ─────────────────────────────────────────────────────────────
 # Go (backend)

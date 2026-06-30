@@ -1,0 +1,40 @@
+name: Deploy
+
+# main-ə hər push-dan sonra (CI uğurlu olarsa) serverə avtomatik deploy.
+on:
+  workflow_run:
+    workflows: ["CI"]
+    types: [completed]
+    branches: [main]
+  workflow_dispatch:        # Əl ilə də işə salına bilər (Actions tab-ından).
+
+concurrency:
+  group: production-deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: SSH Deploy
+    runs-on: ubuntu-latest
+    # Yalnız CI uğurlu bitibsə (və ya əl ilə işə salınıbsa).
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      github.event.workflow_run.conclusion == 'success'
+    steps:
+      - name: Serverdə deploy
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT || 22 }}
+          script_stop: true
+          command_timeout: 20m
+          script: |
+            set -e
+            cd ${{ secrets.DEPLOY_PATH }}
+            echo "## Kod yenilənir ..."
+            git fetch --all
+            git reset --hard origin/main
+            echo "## Deploy işə salınır ..."
+            bash deploy/scripts/deploy.sh
