@@ -1,7 +1,6 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { KeyRound } from "lucide-react";
 
 import { BrandPanel } from "@/components/login/brand-panel";
 import { LoginForm } from "@/components/login/login-form";
@@ -66,17 +65,6 @@ export default function LoginPage() {
               className="rounded-xl border border-border bg-surface p-6 shadow-md sm:p-7"
             >
               <LoginForm />
-
-              {/* demo credential hint */}
-              <div className="mt-6 flex items-center gap-2.5 rounded-lg border border-border bg-surface-muted/60 px-3.5 py-2.5 text-xs text-muted-foreground">
-                <KeyRound className="size-3.5 shrink-0 text-accent" />
-                <span>
-                  {az.login.hint_prefix}{" "}
-                  <span className="font-semibold text-foreground">admin</span>
-                  {" / "}
-                  <span className="font-semibold text-foreground">admin123</span>
-                </span>
-              </div>
             </motion.div>
 
             {/* footer wordmark */}

@@ -72,11 +72,6 @@ export const az = {
     logout_confirm: "Çıxış etmək istədiyinizə əminsiniz?",
   },
 
-  // Login screen-local strings (demo credential hint)
-  login: {
-    hint_prefix: "Sınaq girişi:",
-  },
-
   // §9.6 Field labels
   field: {
     title: "Başlıq",

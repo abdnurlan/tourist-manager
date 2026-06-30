@@ -43,18 +43,26 @@ V4=$(curl -fsSL https://www.cloudflare.com/ips-v4)
 V6=$(curl -fsSL https://www.cloudflare.com/ips-v6)
 [[ -n "$V4" && -n "$V6" ]] || { echo "XƏTA: IP siyahısı boşdur." >&2; exit 1; }
 
+# Xarici interfeys (yalnız bura GƏLƏN trafikə qayda tətbiq olunsun).
+# KRİTİK: -i olmadan qayda konteynerlərin ÇIXIŞ (OpenAI/Telegram/fonts) HTTPS
+# trafikini də bloklayır — onlar da dport 443-ə forward olunur.
+IFACE="${CF_IFACE:-$(ip route show default 2>/dev/null | awk '{print $5}' | head -1)}"
+[[ -n "$IFACE" ]] || { echo "XƏTA: xarici interfeys tapılmadı (CF_IFACE= ilə ötür)." >&2; exit 1; }
+echo "### Xarici interfeys: $IFACE"
+
 clean_rules
 
 # DROP-u ƏVVƏL əlavə edirik ki, ACCEPT-lər (sonra -I ilə yuxarı qoyulur)
 # ondan ƏVVƏL gəlsin. Nəticə sırası: [CF ACCEPT...] [DROP] [default].
-iptables  -I DOCKER-USER -p tcp -m multiport --dports 80,443 -m comment --comment "$TAG" -j DROP
-ip6tables -I DOCKER-USER -p tcp -m multiport --dports 80,443 -m comment --comment "$TAG" -j DROP
+# -i $IFACE: yalnız xaricdən gələn (inbound) trafik — outbound toxunulmur.
+iptables  -I DOCKER-USER -i "$IFACE" -p tcp -m multiport --dports 80,443 -m comment --comment "$TAG" -j DROP
+ip6tables -I DOCKER-USER -i "$IFACE" -p tcp -m multiport --dports 80,443 -m comment --comment "$TAG" -j DROP
 
 while read -r c; do [[ -n "$c" ]] && \
-  iptables -I DOCKER-USER -s "$c" -p tcp -m multiport --dports 80,443 -m comment --comment "$TAG" -j ACCEPT
+  iptables -I DOCKER-USER -i "$IFACE" -s "$c" -p tcp -m multiport --dports 80,443 -m comment --comment "$TAG" -j ACCEPT
 done <<< "$V4"
 while read -r c; do [[ -n "$c" ]] && \
-  ip6tables -I DOCKER-USER -s "$c" -p tcp -m multiport --dports 80,443 -m comment --comment "$TAG" -j ACCEPT
+  ip6tables -I DOCKER-USER -i "$IFACE" -s "$c" -p tcp -m multiport --dports 80,443 -m comment --comment "$TAG" -j ACCEPT
 done <<< "$V6"
 
 # Reboot-dan sonra qalması üçün saxla.
