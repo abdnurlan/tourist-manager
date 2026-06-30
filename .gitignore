@@ -7,8 +7,10 @@
 !.env.production.example
 *.local
 
-# Local TLS / certbot artefaktları (server-də volume-larda saxlanır)
-/deploy/certbot/
+# TLS — Cloudflare Origin Certificate və açar (ƏSLA commit etmə!)
+# Qovluq git-də qalır (README ilə), amma sertifikat/açar fayllar yox.
+/deploy/nginx/ssl/*
+!/deploy/nginx/ssl/README.md
 
 # ─────────────────────────────────────────────────────────────
 # Go (backend)

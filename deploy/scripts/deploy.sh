@@ -39,11 +39,13 @@ done
 echo "### 4/5 Köhnə image-lər təmizlənir ..."
 docker image prune -f >/dev/null 2>&1 || true
 
-echo "### 5/5 Sağlamlıq yoxlanışı (/api/health) ..."
+echo "### 5/5 Sağlamlıq yoxlanışı (/api/health, birbaşa origin) ..."
+# Cloudflare-dən asılı olmamaq üçün birbaşa origin nginx-ə (localhost) sorğu;
+# -k: origin cert localhost üçün deyil, -H Host: düzgün server blokunu seçir.
 sleep 5
 ok=0
 for i in $(seq 1 15); do
-  code=$(curl -s -o /dev/null -w "%{http_code}" "https://${DOMAIN}/api/health" 2>/dev/null || echo "000")
+  code=$(curl -sk -o /dev/null -w "%{http_code}" -H "Host: ${DOMAIN}" "https://127.0.0.1/api/health" 2>/dev/null || echo "000")
   if [[ "$code" == "200" ]]; then
     echo "    ✓ Backend sağlamdır (200)."
     ok=1
