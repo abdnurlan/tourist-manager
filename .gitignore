@@ -12,6 +12,10 @@
 /deploy/nginx/ssl/*
 !/deploy/nginx/ssl/README.md
 
+# DB snapshot-ları (real data — ƏSLA commit etmə!)
+prod-snapshot-*.sql.gz
+*.sql.gz
+
 # ─────────────────────────────────────────────────────────────
 # Go (backend)
 # ─────────────────────────────────────────────────────────────

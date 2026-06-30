@@ -154,6 +154,22 @@ bash deploy/scripts/restore.sh /opt/tour-planner/backups/tourist_manager-YYYYMMD
 
 ---
 
+## 8b. Production datasını lokalda görmək
+
+Lokal və production **ayrı bazalardır** (lokal data ≠ prod data). Lokalda
+real production datası ilə işləmək istəsən, surətini çək:
+
+```bash
+bash deploy/scripts/pull-prod-db.sh root@<SERVER_IP>
+```
+
+Bu skript prod-dan dump götürür, lokal bazanın üstünə yükləyir (təsdiqlə).
+- ✅ Lokal dəyişikliklərin production-a **təsir etmir**
+- ℹ️ Birdəfəlik surətdir — təzə data üçün yenidən işlət
+- Snapshot faylı (`prod-snapshot-*.sql.gz`) saxlanılır, git-ə düşmür
+
+---
+
 ## 9. CI/CD — avtomatik deploy (GitHub Actions)
 
 `main`-ə hər push: **CI** keçəndən sonra **Deploy** SSH ilə `deploy.sh` işlədir.
