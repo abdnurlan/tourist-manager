@@ -2,6 +2,9 @@ package main
 
 import (
 	"log"
+	"net/http"
+	"os"
+	"time"
 
 	"tourist-manager/backend/internal/ai"
 	"tourist-manager/backend/internal/config"
@@ -13,7 +16,28 @@ import (
 	"tourist-manager/backend/internal/telegram"
 )
 
+// runHealthcheck is invoked as `server healthcheck` by Docker's HEALTHCHECK.
+// The distroless runtime image has no shell/curl, so the binary checks itself.
+func runHealthcheck() {
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
+	client := &http.Client{Timeout: 3 * time.Second}
+	resp, err := client.Get("http://127.0.0.1:" + port + "/api/health")
+	if err != nil || resp.StatusCode != http.StatusOK {
+		os.Exit(1)
+	}
+	os.Exit(0)
+}
+
 func main() {
+	// Healthcheck alt-əmri (Docker HEALTHCHECK üçün) — ağır init-dən əvvəl.
+	if len(os.Args) > 1 && os.Args[1] == "healthcheck" {
+		runHealthcheck()
+		return
+	}
+
 	// 1. Config.
 	cfg := config.Load()
 

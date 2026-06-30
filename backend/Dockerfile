@@ -27,4 +27,8 @@ EXPOSE 8080
 
 USER nonroot:nonroot
 
+# Binary özünü yoxlayır (distroless-də shell/curl yoxdur) — exec forması.
+HEALTHCHECK --interval=30s --timeout=5s --start-period=20s --retries=3 \
+  CMD ["/app/server", "healthcheck"]
+
 ENTRYPOINT ["/app/server"]
