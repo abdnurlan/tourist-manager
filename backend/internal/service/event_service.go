@@ -24,6 +24,8 @@ type EventInput struct {
 	ReminderTime  *time.Time
 	Attachment    *string
 	Notes         *string
+	Details       *string   // marshaled type-specific JSON (nil = unchanged on update)
+	GuestIDs      *[]string // nil = leave unchanged; non-nil = set exactly this set
 	Status        *string
 	Source        *string // set server-side: manual | telegram | ai
 }
@@ -137,11 +139,21 @@ func (s *eventService) Create(tourID string, in EventInput) (*models.Event, erro
 		ReminderTime:  in.ReminderTime,
 		Attachment:    in.Attachment,
 		Notes:         in.Notes,
+		Details:       in.Details,
 		Status:        status,
 		Source:        source,
 	}
 	if err := s.events.Create(event); err != nil {
 		return nil, apperror.Internal()
+	}
+	if in.GuestIDs != nil {
+		if err := s.events.SetGuests(event.ID, *in.GuestIDs); err != nil {
+			return nil, apperror.Internal()
+		}
+		// Reload so the response carries the associated guests.
+		if reloaded, err := s.events.FindByID(event.ID); err == nil {
+			event = reloaded
+		}
 	}
 	return event, nil
 }
@@ -226,6 +238,9 @@ func (s *eventService) Update(id string, in EventInput) (*models.Event, error) {
 	if in.Notes != nil {
 		event.Notes = in.Notes
 	}
+	if in.Details != nil {
+		event.Details = in.Details
+	}
 	if in.Status != nil {
 		status := strings.TrimSpace(*in.Status)
 		if !validEventStatuses[status] {
@@ -249,6 +264,14 @@ func (s *eventService) Update(id string, in EventInput) (*models.Event, error) {
 
 	if err := s.events.Update(event); err != nil {
 		return nil, apperror.Internal()
+	}
+	if in.GuestIDs != nil {
+		if err := s.events.SetGuests(event.ID, *in.GuestIDs); err != nil {
+			return nil, apperror.Internal()
+		}
+		if reloaded, err := s.events.FindByID(event.ID); err == nil {
+			event = reloaded
+		}
 	}
 	return event, nil
 }

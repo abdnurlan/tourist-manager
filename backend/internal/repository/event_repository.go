@@ -27,6 +27,7 @@ type EventRepository interface {
 	Delete(id string) error
 	Search(query string) ([]models.Event, error)
 	CountByDateStatus(date, status string) (int64, error)
+	SetGuests(eventID string, guestIDs []string) error
 }
 
 type eventRepository struct {
@@ -40,7 +41,7 @@ func NewEventRepository(db *gorm.DB) EventRepository {
 
 func (r *eventRepository) ListByTour(tourID string) ([]models.Event, error) {
 	var events []models.Event
-	err := r.db.Where("tour_id = ?", tourID).Order("date ASC, time ASC").Find(&events).Error
+	err := r.db.Preload("Guests").Where("tour_id = ?", tourID).Order("date ASC, time ASC").Find(&events).Error
 	return events, err
 }
 
@@ -68,7 +69,7 @@ func (r *eventRepository) List(filter EventFilter) ([]models.Event, error) {
 
 func (r *eventRepository) FindByID(id string) (*models.Event, error) {
 	var e models.Event
-	err := r.db.Where("id = ?", id).First(&e).Error
+	err := r.db.Preload("Guests").Where("id = ?", id).First(&e).Error
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil, ErrNotFound
 	}
@@ -104,4 +105,34 @@ func (r *eventRepository) CountByDateStatus(date, status string) (int64, error) 
 	var n int64
 	err := r.db.Model(&models.Event{}).Where("date = ? AND status = ?", date, status).Count(&n).Error
 	return n, err
+}
+
+// SetGuests replaces an event's guest associations with exactly the given IDs.
+// Operates on the event_guests join table directly (does NOT upsert guest rows),
+// so passing bare {ID} structs can't accidentally create empty guests.
+func (r *eventRepository) SetGuests(eventID string, guestIDs []string) error {
+	return r.db.Transaction(func(tx *gorm.DB) error {
+		// Clear existing links for this event.
+		if err := tx.Exec("DELETE FROM event_guests WHERE event_id = ?", eventID).Error; err != nil {
+			return err
+		}
+		// Insert only links whose guest actually belongs to the same tour
+		// (silently drops unknown/foreign guest IDs).
+		for _, gid := range guestIDs {
+			if gid == "" {
+				continue
+			}
+			if err := tx.Exec(
+				`INSERT INTO event_guests (event_id, guest_id)
+				 SELECT ?, g.id FROM guests g
+				 JOIN events e ON e.id = ?
+				 WHERE g.id = ? AND g.tour_id = e.tour_id
+				 ON CONFLICT DO NOTHING`,
+				eventID, eventID, gid,
+			).Error; err != nil {
+				return err
+			}
+		}
+		return nil
+	})
 }
