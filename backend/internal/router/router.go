@@ -16,6 +16,7 @@ type Handlers struct {
 	Dashboard *handler.DashboardHandler
 	Tour      *handler.TourHandler
 	Event     *handler.EventHandler
+	Guest     *handler.GuestHandler
 	Calendar  *handler.CalendarHandler
 	Search    *handler.SearchHandler
 	AI        *handler.AIHandler
@@ -68,6 +69,11 @@ func New(cfg *config.Config, h Handlers) *fiber.App {
 	api.Get("/events/:id", auth, h.Event.Get)
 	api.Patch("/events/:id", auth, h.Event.Update)
 	api.Delete("/events/:id", auth, h.Event.Delete)
+
+	api.Get("/tours/:id/guests", auth, h.Guest.ListByTour)
+	api.Post("/tours/:id/guests", auth, h.Guest.Create)
+	api.Patch("/guests/:guestId", auth, h.Guest.Update)
+	api.Delete("/guests/:guestId", auth, h.Guest.Delete)
 
 	api.Get("/calendar/events", auth, h.Calendar.Events)
 

@@ -61,6 +61,7 @@ func main() {
 	userRepo := repository.NewUserRepository(db)
 	tourRepo := repository.NewTourRepository(db)
 	eventRepo := repository.NewEventRepository(db)
+	guestRepo := repository.NewGuestRepository(db)
 	reminderRepo := repository.NewReminderRepository(db)
 	telegramRepo := repository.NewTelegramRepository(db)
 
@@ -71,6 +72,7 @@ func main() {
 	authSvc := service.NewAuthService(userRepo, cfg.JWTSecret)
 	tourSvc := service.NewTourService(tourRepo, eventRepo)
 	eventSvc := service.NewEventService(eventRepo, tourRepo)
+	guestSvc := service.NewGuestService(guestRepo, tourRepo)
 	dashboardSvc := service.NewDashboardService(tourRepo, eventRepo, reminderRepo, telegramRepo, cfg.TelegramMode, cfg.TelegramAllowedUserID != 0)
 	calendarSvc := service.NewCalendarService(eventRepo, tourRepo)
 	searchSvc := service.NewSearchService(tourRepo, eventRepo)
@@ -100,6 +102,7 @@ func main() {
 		Dashboard: handler.NewDashboardHandler(dashboardSvc),
 		Tour:      handler.NewTourHandler(tourSvc),
 		Event:     handler.NewEventHandler(eventSvc),
+		Guest:     handler.NewGuestHandler(guestSvc),
 		Calendar:  handler.NewCalendarHandler(calendarSvc),
 		Search:    handler.NewSearchHandler(searchSvc),
 		AI:        handler.NewAIHandler(aiSvc),
