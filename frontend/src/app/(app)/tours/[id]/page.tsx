@@ -21,6 +21,7 @@ import { toast } from "@/components/ui/sonner";
 
 import { TourDetailHeader } from "@/components/tour-detail/tour-detail-header";
 import { DayTimeline } from "@/components/tour-detail/day-timeline";
+import { GuestSection } from "@/components/tour-detail/guest-section";
 import { EventFormSheet } from "@/components/tour-detail/event-form-sheet";
 import { TourEditSheet } from "@/components/tour-detail/tour-edit-sheet";
 
@@ -287,6 +288,8 @@ export default function TourDetailPage() {
             onEdit={() => setTourEditOpen(true)}
             onDelete={() => setTourDeleteOpen(true)}
           />
+
+          <GuestSection tourId={tourId} />
 
           {eventsQuery.isLoading ? (
             <EventListSkeleton count={4} />
