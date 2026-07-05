@@ -34,6 +34,7 @@ func Migrate(db *gorm.DB) error {
 		&models.User{},
 		&models.Tour{},
 		&models.Event{},
+		&models.Guest{},
 		&models.Attachment{},
 		&models.TelegramMessage{},
 		&models.Reminder{},

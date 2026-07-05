@@ -19,8 +19,10 @@ type Event struct {
 	ReminderTime  *time.Time `json:"reminder_time"  gorm:"type:timestamptz"`
 	Attachment    *string    `json:"attachment"     gorm:"type:text"`
 	Notes         *string    `json:"notes"          gorm:"type:text"`
+	Details       *string    `json:"details"        gorm:"type:jsonb"` // type-specific fields as JSON (Block B)
 	Status        string     `json:"status"         gorm:"type:event_status;default:'planned';not null"`
 	Source        string     `json:"source"         gorm:"type:event_source;default:'manual';not null"`
+	Guests        []Guest    `json:"guests"         gorm:"many2many:event_guests;joinForeignKey:event_id;joinReferences:guest_id"`
 	CreatedAt     time.Time  `json:"created_at"     gorm:"autoCreateTime"`
 	UpdatedAt     time.Time  `json:"updated_at"     gorm:"autoUpdateTime"`
 }
