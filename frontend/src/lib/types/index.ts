@@ -157,6 +157,29 @@ export interface SearchResponse {
   query: string;
 }
 
+// ── Guests (turistlər — tura bağlı) ────────────────────────────
+export interface Guest {
+  id: string;
+  tour_id: string;
+  full_name: string;
+  phone: string | null;
+  passport: string | null;
+  nationality: string | null;
+  notes: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface CreateGuestRequest {
+  full_name: string;
+  phone?: string | null;
+  passport?: string | null;
+  nationality?: string | null;
+  notes?: string | null;
+}
+
+export type UpdateGuestRequest = Partial<CreateGuestRequest>;
+
 // ── Generic envelopes ──────────────────────────────────────────
 export interface ListResponse<T> {
   data: T[];

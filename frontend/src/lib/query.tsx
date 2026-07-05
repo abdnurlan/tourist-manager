@@ -49,6 +49,7 @@ export const queryKeys = {
   tours: (filters?: unknown) => ["tours", filters ?? null] as const,
   tour: (id: string) => ["tour", id] as const,
   tourEvents: (id: string) => ["tour", id, "events"] as const,
+  tourGuests: (id: string) => ["tour", id, "guests"] as const,
   event: (id: string) => ["event", id] as const,
   calendar: (filters?: unknown) => ["calendar", filters ?? null] as const,
   search: (q: string) => ["search", q] as const,
