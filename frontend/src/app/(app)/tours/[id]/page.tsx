@@ -118,6 +118,8 @@ export default function TourDetailPage() {
         reminder_time: body.reminder_time ?? null,
         attachment: body.attachment ?? null,
         notes: body.notes ?? null,
+        details: body.details ?? null,
+        guests: [],
         status: body.status ?? "planned",
         source: "manual",
         created_at: new Date().toISOString(),

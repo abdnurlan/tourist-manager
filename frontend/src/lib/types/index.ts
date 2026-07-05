@@ -57,6 +57,10 @@ export interface Event {
   reminder_time: string | null; // RFC3339
   attachment: string | null;
   notes: string | null;
+  /** Type-specific fields as JSON. API returns a JSON string; parse defensively. */
+  details: Record<string, unknown> | string | null;
+  /** Tourists participating in this event (many-to-many). */
+  guests: Guest[];
   status: EventStatus;
   source: EventSource;
   created_at: string;
@@ -227,6 +231,8 @@ export interface CreateEventRequest {
   reminder_time?: string | null;
   attachment?: string | null;
   notes?: string | null;
+  details?: Record<string, unknown> | null;
+  guest_ids?: string[];
   status?: EventStatus;
 }
 
@@ -248,7 +254,10 @@ export type UpdateEventRequest = Partial<
     | "notes"
     | "status"
   >
->;
+> & {
+  details?: Record<string, unknown> | null;
+  guest_ids?: string[];
+};
 
 export interface AiChatRequest {
   message: string;
