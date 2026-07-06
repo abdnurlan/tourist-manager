@@ -4,7 +4,7 @@ import { BottomSheetForm } from "@/components/shared/bottom-sheet-form";
 import { EventForm, EventFormFooter } from "@/components/events/event-form";
 import { az } from "@/lib/i18n/az";
 import { formatDayMonth } from "@/lib/utils/date";
-import type { CreateEventRequest, Event } from "@/lib/types";
+import type { CreateEventRequest, Event, EventType } from "@/lib/types";
 
 const FORM_ID = "event-form";
 
@@ -15,6 +15,10 @@ export interface EventFormSheetProps {
   event?: Event;
   /** Prefilled date (the tapped day) on create. */
   defaultDate?: string;
+  /** Prefilled type (from the per-type add button) on create. */
+  defaultType?: EventType;
+  /** Parent tour id — for the guest picker. */
+  tourId: string;
   submitting?: boolean;
   onSubmit: (body: CreateEventRequest) => void;
 }
@@ -25,17 +29,21 @@ export function EventFormSheet({
   onOpenChange,
   event,
   defaultDate,
+  defaultType,
+  tourId,
   submitting,
   onSubmit,
 }: EventFormSheetProps) {
   const isEdit = Boolean(event);
   const dayDate = event?.date ?? defaultDate;
+  // Create başlığı seçilmiş tipin adını göstərir (məs. "Transfer").
+  const createTitle = defaultType ? az.eventType[defaultType] : az.screen.event_new;
 
   return (
     <BottomSheetForm
       open={open}
       onOpenChange={onOpenChange}
-      title={isEdit ? az.screen.event_edit : az.screen.event_new}
+      title={isEdit ? az.screen.event_edit : createTitle}
       description={dayDate ? formatDayMonth(dayDate) : undefined}
       className="sm:max-w-lg"
       footer={
@@ -50,6 +58,8 @@ export function EventFormSheet({
         formId={FORM_ID}
         event={event}
         defaultDate={defaultDate}
+        defaultType={defaultType}
+        tourId={tourId}
         submitting={submitting}
         onSubmit={onSubmit}
       />

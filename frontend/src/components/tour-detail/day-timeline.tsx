@@ -1,21 +1,51 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { Plus, CalendarDays, MapPin } from "lucide-react";
+import { CalendarDays } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { EventCard } from "@/components/shared/event-card";
 import { EmptyState } from "@/components/shared/empty-state";
+import { EVENT_TYPE_ICON } from "@/components/shared/event-type-icon";
+import { CREATE_TYPES } from "@/components/events/type-fields-config";
 import { az } from "@/lib/i18n/az";
 import { sortByTime, dateOnly, type DaySection } from "@/lib/utils/date";
 import { eventMeta } from "@/lib/event-meta";
-import type { Event } from "@/lib/types";
+import type { Event, EventType } from "@/lib/types";
+
+/** A row of per-type "add" buttons for a given day. */
+function TypeButtons({
+  dateISO,
+  onAdd,
+}: {
+  dateISO: string;
+  onAdd: (dateISO: string, type: EventType) => void;
+}) {
+  return (
+    <div className="flex flex-wrap gap-2">
+      {CREATE_TYPES.map((t) => {
+        const Icon = EVENT_TYPE_ICON[t];
+        return (
+          <Button
+            key={t}
+            variant="secondary"
+            size="sm"
+            onClick={() => onAdd(dateISO, t)}
+          >
+            <Icon className="size-4" style={{ color: eventMeta(t).color }} />
+            {az.eventType[t]}
+          </Button>
+        );
+      })}
+    </div>
+  );
+}
 
 export interface DayTimelineProps {
   sections: DaySection[];
   /** Events bucketed by date (YYYY-MM-DD). */
   eventsByDate: Record<string, Event[]>;
-  onAddEvent: (dateISO: string) => void;
+  onAddEvent: (dateISO: string, type: EventType) => void;
   onEditEvent: (event: Event) => void;
   onDeleteEvent: (event: Event) => void;
 }
@@ -77,38 +107,22 @@ export function DayTimeline({
             </span>
 
             {/* day header — serif day stamp */}
-            <div className="mb-3.5 flex items-end justify-between gap-3">
-              <div className="min-w-0">
-                <h3 className="day-stamp text-h3 font-semibold leading-tight tracking-tight text-foreground">
-                  {dayLabel}
-                </h3>
-                {dateLabel && (
-                  <p className="day-stamp mt-0.5 text-sm font-medium uppercase tracking-[0.1em] text-muted-foreground">
-                    {dateLabel}
-                  </p>
-                )}
-              </div>
-              <Button
-                variant="ghost"
-                size="sm"
-                className="shrink-0 text-accent hover:bg-accent-subtle"
-                onClick={() => onAddEvent(section.dateISO)}
-              >
-                <Plus className="size-4" />
-                <span className="hidden sm:inline">{az.action.add_event}</span>
-              </Button>
+            <div className="mb-3.5 min-w-0">
+              <h3 className="day-stamp text-h3 font-semibold leading-tight tracking-tight text-foreground">
+                {dayLabel}
+              </h3>
+              {dateLabel && (
+                <p className="day-stamp mt-0.5 text-sm font-medium uppercase tracking-[0.1em] text-muted-foreground">
+                  {dateLabel}
+                </p>
+              )}
             </div>
 
             {/* events */}
             {events.length === 0 ? (
-              <button
-                type="button"
-                onClick={() => onAddEvent(section.dateISO)}
-                className="flex w-full items-center justify-center gap-2 rounded-lg border border-dashed border-border bg-surface/30 py-6 text-sm text-muted-foreground transition-colors duration-base ease-out hover:border-accent hover:bg-accent-subtle/40 hover:text-accent"
-              >
-                <MapPin className="size-4" />
-                {az.action.add_event}
-              </button>
+              <div className="rounded-lg border border-dashed border-border bg-surface/30 p-4">
+                <TypeButtons dateISO={section.dateISO} onAdd={onAddEvent} />
+              </div>
             ) : (
               <div className="space-y-3">
                 <AnimatePresence initial={false} mode="popLayout">
@@ -144,6 +158,10 @@ export function DayTimeline({
                     );
                   })}
                 </AnimatePresence>
+                {/* Bu günə daha bir tədbir əlavə et */}
+                <div className="pt-1">
+                  <TypeButtons dateISO={section.dateISO} onAdd={onAddEvent} />
+                </div>
               </div>
             )}
           </motion.section>

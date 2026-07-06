@@ -40,6 +40,7 @@ import { buildDaySections, dateOnly } from "@/lib/utils/date";
 import { ApiClientError } from "@/lib/api/axios";
 import type {
   Event,
+  EventType,
   Tour,
   CreateEventRequest,
   UpdateTourRequest,
@@ -62,6 +63,7 @@ export default function TourDetailPage() {
   const [eventSheetOpen, setEventSheetOpen] = useState(false);
   const [editingEvent, setEditingEvent] = useState<Event | undefined>();
   const [prefillDate, setPrefillDate] = useState<string | undefined>();
+  const [prefillType, setPrefillType] = useState<EventType | undefined>();
   const [tourEditOpen, setTourEditOpen] = useState(false);
   const [tourDeleteOpen, setTourDeleteOpen] = useState(false);
   const [eventToDelete, setEventToDelete] = useState<Event | undefined>();
@@ -221,15 +223,17 @@ export default function TourDetailPage() {
   });
 
   // ── Handlers ──────────────────────────────────────────────────
-  const openCreate = (dateISO?: string) => {
+  const openCreate = (dateISO?: string, type?: EventType) => {
     setEditingEvent(undefined);
     setPrefillDate(dateISO ?? tour?.start_date);
+    setPrefillType(type ?? "other");
     setEventSheetOpen(true);
   };
 
   const openEdit = (event: Event) => {
     setEditingEvent(event);
     setPrefillDate(undefined);
+    setPrefillType(undefined);
     setEventSheetOpen(true);
   };
 
@@ -320,7 +324,7 @@ export default function TourDetailPage() {
       <motion.button
         type="button"
         aria-label={az.action.add_event}
-        onClick={() => openCreate()}
+        onClick={() => openCreate(undefined, "other")}
         whileTap={{ scale: 0.92 }}
         initial={{ scale: 0, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
@@ -340,6 +344,8 @@ export default function TourDetailPage() {
         }}
         event={editingEvent}
         defaultDate={prefillDate}
+        defaultType={prefillType}
+        tourId={tourId}
         submitting={eventSubmitting}
         onSubmit={handleEventSubmit}
       />
