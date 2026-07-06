@@ -109,28 +109,49 @@ export default function ActiveToursExportPage() {
 
     setDownloading(true);
     try {
-      const canvas = await html2canvas(sheetRef.current, {
-        backgroundColor: "#ffffff",
-        scale: Math.min(2, window.devicePixelRatio || 1),
-        useCORS: true,
-      });
-
       const pdf = new jsPDF("p", "mm", "a4");
       const pageWidth = pdf.internal.pageSize.getWidth();
       const pageHeight = pdf.internal.pageSize.getHeight();
-      const imgWidth = pageWidth;
-      const imgHeight = (canvas.height * imgWidth) / canvas.width;
-      const imgData = canvas.toDataURL("image/png");
+      const margin = 10;
+      const gap = 5;
+      const contentWidth = pageWidth - margin * 2;
+      const contentHeight = pageHeight - margin * 2;
+      let cursorY = margin;
 
-      let y = 0;
-      pdf.addImage(imgData, "PNG", 0, y, imgWidth, imgHeight);
+      const parts = [
+        sheetRef.current.querySelector<HTMLElement>(".export-cover"),
+        ...Array.from(
+          sheetRef.current.querySelectorAll<HTMLElement>(".tour-export-block"),
+        ),
+      ].filter(Boolean) as HTMLElement[];
 
-      let remaining = imgHeight - pageHeight;
-      while (remaining > 0) {
-        y -= pageHeight;
-        pdf.addPage();
-        pdf.addImage(imgData, "PNG", 0, y, imgWidth, imgHeight);
-        remaining -= pageHeight;
+      for (const part of parts) {
+        const canvas = await html2canvas(part, {
+          backgroundColor: "#ffffff",
+          scale: Math.min(2, window.devicePixelRatio || 1),
+          useCORS: true,
+        });
+        const naturalWidth = contentWidth;
+        const naturalHeight = (canvas.height * naturalWidth) / canvas.width;
+
+        if (cursorY > margin && cursorY + naturalHeight > pageHeight - margin) {
+          pdf.addPage();
+          cursorY = margin;
+        }
+
+        const imgHeight = Math.min(naturalHeight, contentHeight);
+        const imgWidth = (canvas.width * imgHeight) / canvas.height;
+        const x = margin + (contentWidth - imgWidth) / 2;
+
+        pdf.addImage(
+          canvas.toDataURL("image/png"),
+          "PNG",
+          x,
+          cursorY,
+          imgWidth,
+          imgHeight,
+        );
+        cursorY += imgHeight + gap;
       }
 
       pdf.save(`aktiv-turlar-${todayISO()}.pdf`);
@@ -197,7 +218,7 @@ export default function ActiveToursExportPage() {
             ref={sheetRef}
             className="export-sheet overflow-hidden rounded-lg border border-border bg-surface shadow-sm"
           >
-            <div className="relative border-b border-border bg-accent px-6 py-7 text-accent-foreground sm:px-8">
+            <div className="export-cover relative border-b border-border bg-accent px-6 py-7 text-accent-foreground sm:px-8">
               <div className="absolute inset-y-0 right-0 w-1/3 bg-[radial-gradient(circle_at_70%_30%,rgba(233,121,13,0.35),transparent_48%)]" />
               <div className="relative flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
                 <div>
@@ -211,7 +232,7 @@ export default function ActiveToursExportPage() {
                     {az.calendar.export_subtitle}
                   </p>
                 </div>
-                <div className="grid grid-cols-3 gap-2 text-center sm:min-w-[280px]">
+                <div className="grid grid-cols-2 gap-2 text-center sm:min-w-[300px]">
                   <Metric value={tours.length} label={az.common.tours} />
                   <Metric value={totalEvents} label={az.common.events} />
                   <Metric value={generated} label={az.calendar.generated_at} wide />
@@ -291,10 +312,15 @@ function Metric({
     <div
       className={cn(
         "rounded-md border border-accent-foreground/18 bg-accent-foreground/8 px-2.5 py-2",
-        wide && "col-span-3 sm:col-span-1",
+        wide && "col-span-2",
       )}
     >
-      <p className="truncate font-display text-lg font-semibold leading-none tabular-nums">
+      <p
+        className={cn(
+          "font-display font-semibold leading-none tabular-nums",
+          wide ? "text-sm" : "text-lg",
+        )}
+      >
         {value}
       </p>
       <p className="mt-1 text-[10px] font-semibold uppercase tracking-[0.1em] text-accent-foreground/65">
