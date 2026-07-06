@@ -1,0 +1,130 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e3]:
+    - complementary [ref=e4]:
+      - generic [ref=e5]:
+        - img "M4STrip" [ref=e6]
+        - generic [ref=e7]:
+          - paragraph [ref=e8]: Tur Planlayıcı
+          - paragraph [ref=e9]: Şəxsi tur planlayıcınız
+      - navigation [ref=e10]:
+        - link "Ana səhifə" [ref=e11] [cursor=pointer]:
+          - /url: /
+          - img [ref=e12]
+          - text: Ana səhifə
+        - link "Turlar" [ref=e17] [cursor=pointer]:
+          - /url: /tours
+          - img [ref=e19]
+          - text: Turlar
+        - link "Təqvim" [ref=e23] [cursor=pointer]:
+          - /url: /calendar
+          - img [ref=e24]
+          - text: Təqvim
+        - link "Axtarış" [ref=e26] [cursor=pointer]:
+          - /url: /search
+          - img [ref=e27]
+          - text: Axtarış
+        - link "AI Köməkçi" [ref=e30] [cursor=pointer]:
+          - /url: /ai
+          - img [ref=e31]
+          - text: AI Köməkçi
+        - link "Tənzimləmələr" [ref=e33] [cursor=pointer]:
+          - /url: /settings
+          - img [ref=e34]
+          - text: Tənzimləmələr
+      - 'button "A admin Rol: Administrator" [ref=e38] [cursor=pointer]':
+        - generic [ref=e40]: A
+        - generic [ref=e41]:
+          - paragraph [ref=e42]: admin
+          - paragraph [ref=e43]: "Rol: Administrator"
+    - main [ref=e45]:
+      - generic [ref=e47]:
+        - button "Geri" [ref=e48] [cursor=pointer]:
+          - img [ref=e49]
+        - heading "test" [level=1] [ref=e88]
+      - generic [ref=e90]:
+        - generic [ref=e92]:
+          - generic [ref=e93]:
+            - generic [ref=e94]:
+              - img [ref=e95]
+              - text: Tur təfərrüatı
+            - generic [ref=e98]: Tamamlanıb
+          - generic [ref=e99]:
+            - generic [ref=e100]:
+              - heading "test" [level=1] [ref=e101]
+              - generic [ref=e102]:
+                - generic [ref=e103]:
+                  - generic [ref=e104]:
+                    - img [ref=e105]
+                    - text: Başlama tarixi
+                  - paragraph [ref=e107]: 17 — 17 İyul
+                - generic [ref=e108]:
+                  - generic [ref=e109]:
+                    - img [ref=e110]
+                    - text: gün
+                  - paragraph [ref=e114]: 1 gün · 1 tədbir
+              - paragraph [ref=e115]: test
+            - generic [ref=e116]:
+              - button "Redaktə et" [ref=e117] [cursor=pointer]:
+                - img [ref=e118]
+                - text: Redaktə et
+              - button "Sil" [ref=e121] [cursor=pointer]:
+                - img [ref=e122]
+                - text: Sil
+          - img
+        - generic [ref=e125]:
+          - generic [ref=e126]:
+            - heading "Qonaqlar (1)" [level=2] [ref=e241]:
+              - img [ref=e128]
+              - text: Qonaqlar
+              - generic [ref=e133]: (1)
+            - button "Qonaq əlavə et" [ref=e134] [cursor=pointer]:
+              - img [ref=e135]
+              - generic [ref=e138]: Qonaq əlavə et
+          - generic [ref=e243] [cursor=pointer]:
+            - img [ref=e245]
+            - generic [ref=e248]:
+              - paragraph [ref=e249]: Rəşad Məmmədov
+              - paragraph [ref=e250]:
+                - img [ref=e251]
+                - text: "+994552223344"
+            - button [ref=e253]:
+              - img [ref=e254]
+        - generic [ref=e142]:
+          - generic [ref=e144]: "1"
+          - generic [ref=e145]:
+            - generic [ref=e146]:
+              - heading "1-ci gün" [level=3] [ref=e147]
+              - paragraph [ref=e148]: 17 İyul
+            - button "Tədbir əlavə et" [ref=e149] [cursor=pointer]:
+              - img [ref=e150]
+              - generic [ref=e151]: Tədbir əlavə et
+          - generic [ref=e157]:
+            - img [ref=e160]
+            - generic [ref=e164]:
+              - generic [ref=e165]:
+                - generic [ref=e166]:
+                  - paragraph [ref=e167]: test
+                  - paragraph [ref=e168]: Transfer
+                - button "Redaktə et" [ref=e169] [cursor=pointer]:
+                  - img [ref=e170]
+              - generic [ref=e174]:
+                - generic [ref=e175]:
+                  - img [ref=e176]
+                  - generic [ref=e179]: 19:50
+                - generic [ref=e180]:
+                  - img [ref=e181]
+                  - generic [ref=e184]: test
+                - generic [ref=e185]:
+                  - img [ref=e186]
+                  - generic [ref=e191]: test
+                - generic [ref=e192]:
+                  - img [ref=e193]
+                  - text: test
+              - generic [ref=e195]:
+                - generic [ref=e196]: Planlaşdırılıb
+                - generic [ref=e197]: Ödənilməyib
+                - generic [ref=e198]: 12 ₼
+  - region "Notifications alt+T"
+  - button "Open Next.js Dev Tools" [ref=e204] [cursor=pointer]:
+    - img [ref=e205]
+  - alert [ref=e87]

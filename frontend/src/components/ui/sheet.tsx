@@ -28,7 +28,7 @@ const SheetOverlay = React.forwardRef<
 SheetOverlay.displayName = DialogPrimitive.Overlay.displayName;
 
 const sheetVariants = cva(
-  "fixed z-50 gap-4 bg-surface shadow-lg transition ease-out data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=open]:duration-base data-[state=closed]:duration-fast",
+  "fixed z-50 flex flex-col overflow-hidden bg-surface shadow-lg transition ease-out data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=open]:duration-base data-[state=closed]:duration-fast",
   {
     variants: {
       side: {
@@ -67,7 +67,7 @@ const SheetContent = React.forwardRef<
           <div className="h-1.5 w-10 rounded-full bg-border" aria-hidden />
         </div>
       )}
-      <div className="overflow-y-auto px-5 pb-[calc(env(safe-area-inset-bottom)+1.25rem)] pt-2">
+      <div className="min-h-0 flex-1 overflow-y-auto px-5 pb-[calc(env(safe-area-inset-bottom)+1.25rem)] pt-2">
         {children}
       </div>
       {!hideClose && (

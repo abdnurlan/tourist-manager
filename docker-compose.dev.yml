@@ -1,0 +1,95 @@
+# ─────────────────────────────────────────────────────────────
+# Tur Planlayıcı — DEV orchestration (CANLI / REALTIME hot reload)
+#
+# İstifadə:
+#   docker compose -f docker-compose.dev.yml up
+#
+# • backend  : Go/Fiber + Air — .go dəyişəndə avtomatik rebuild + restart
+# • frontend : Next.js `next dev` — UI dəyişəndə brauzer avtomatik yenilənir (HMR)
+# • db       : PostgreSQL 16
+#
+# Mənbə kod host-dan bind-mount edilir, ona görə redaktorunda etdiyin
+# HƏR dəyişiklik dərhal konteynerdə əks olunur. Rebuild lazım deyil.
+# ─────────────────────────────────────────────────────────────
+
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: turplanlayici_db_dev
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: tourist_manager
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata_dev:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d tourist_manager"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    networks:
+      - turnet
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.dev
+    container_name: turplanlayici_backend_dev
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file:
+      - ./backend/.env
+    environment:
+      # Compose service adı ilə DB host-unu override et.
+      DATABASE_URL: postgres://postgres:postgres@db:5432/tourist_manager?sslmode=disable
+      PORT: "8080"
+    volumes:
+      # Bütün backend mənbə kodu — Air canlı izləyir.
+      - ./backend:/src
+      # Air-in build çıxışı host-a yazılmasın (konteynerə xas qalsın).
+      - backend_tmp:/src/tmp
+    ports:
+      - "8080:8080"
+    networks:
+      - turnet
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    container_name: turplanlayici_frontend_dev
+    restart: unless-stopped
+    depends_on:
+      - backend
+    environment:
+      # Brauzerdən çağırılır — host maşının localhost-u.
+      NEXT_PUBLIC_API_URL: http://localhost:8080/api
+      # Bind-mount üzərində fayl dəyişikliyini tutmaq üçün polling.
+      WATCHPACK_POLLING: "true"
+      CHOKIDAR_USEPOLLING: "true"
+    volumes:
+      # Bütün frontend mənbə kodu — Next.js HMR canlı izləyir.
+      - ./frontend:/app
+      # node_modules və .next konteynerə xas qalsın (host onları kölgələməsin).
+      - /app/node_modules
+      - /app/.next
+    ports:
+      - "3000:3000"
+    networks:
+      - turnet
+
+volumes:
+  pgdata_dev:
+    driver: local
+  backend_tmp:
+    driver: local
+
+networks:
+  turnet:
+    driver: bridge

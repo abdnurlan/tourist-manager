@@ -20,6 +20,30 @@ import { eventTypeLabel, az } from "@/lib/i18n/az";
 import { eventMeta } from "@/lib/event-meta";
 import type { Event } from "@/lib/types";
 
+/** Parse a details value that may be an object or a JSON string. */
+function parseDetails(raw: Event["details"]): Record<string, unknown> {
+  if (!raw) return {};
+  if (typeof raw === "string") {
+    try {
+      return JSON.parse(raw);
+    } catch {
+      return {};
+    }
+  }
+  return raw as Record<string, unknown>;
+}
+
+/** A short, type-aware one-line summary of the event's key detail. */
+function detailSummary(event: Event): string | null {
+  const d = parseDetails(event.details);
+  if (event.type === "transfer" && (d.from || d.to)) {
+    return `${d.from ?? "?"} → ${d.to ?? "?"}`;
+  }
+  if (event.type === "hotel" && d.hotel_name) return String(d.hotel_name);
+  if (event.type === "restaurant" && d.venue) return String(d.venue);
+  return null;
+}
+
 export interface EventCardProps {
   event: Event;
   /** Parent tour title (calendar / search contexts). */
@@ -80,6 +104,11 @@ export function EventCard({
                 {eventTypeLabel(event.type)}
                 {tourTitle ? ` · ${tourTitle}` : ""}
               </p>
+              {detailSummary(event) && (
+                <p className="mt-0.5 truncate text-xs font-medium text-foreground/80">
+                  {detailSummary(event)}
+                </p>
+              )}
             </div>
 
             {hasMenu && (
@@ -135,6 +164,14 @@ export function EventCard({
               <span className="inline-flex items-center gap-1">
                 <Phone className="size-3.5" />
                 {event.phone}
+              </span>
+            )}
+            {event.guests && event.guests.length > 0 && (
+              <span className="inline-flex min-w-0 items-center gap-1">
+                <Users className="size-3.5 shrink-0" />
+                <span className="truncate">
+                  {event.guests.map((g) => g.full_name).join(", ")}
+                </span>
               </span>
             )}
           </div>

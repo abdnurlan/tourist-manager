@@ -222,8 +222,10 @@ export default function AiAssistantPage() {
           </div>
 
           {/* Composer + (when chatting) compact suggestion row.
-              pb-safe clears the mobile bottom-nav; the FAB is hidden on /ai. */}
-          <div className="sticky bottom-0 mx-auto w-full max-w-2xl bg-gradient-to-t from-background via-background to-transparent pb-safe pt-3 md:pb-4">
+              On mobile it sits ABOVE the fixed bottom-nav (≈4.25rem tall incl.
+              safe-area) so the input is never hidden behind it — especially
+              once the keyboard shrinks the viewport. The FAB is hidden on /ai. */}
+          <div className="sticky bottom-[calc(env(safe-area-inset-bottom)+4.75rem)] mx-auto w-full max-w-2xl bg-gradient-to-t from-background via-background to-transparent pb-3 pt-3 md:bottom-0 md:pb-4">
             {!isEmpty && (
               <SuggestionChips
                 onSelect={handleSuggestion}

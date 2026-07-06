@@ -1,0 +1,20 @@
+# ─────────────────────────────────────────────────────────────
+# Tur Planlayıcı — Backend DEV image (canlı yenilənmə / hot reload)
+# Air faylları izləyir; .go dəyişəndə avtomatik yenidən qurub restart edir.
+# Mənbə kod compose-da bind-mount edilir — image içində kod SAXLANMIR.
+# ─────────────────────────────────────────────────────────────
+FROM golang:1.26
+
+WORKDIR /src
+
+# Air (canlı yenilənmə aləti) quraşdırılır.
+RUN go install github.com/air-verse/air@latest
+
+# Asılılıqları əvvəlcədən keşlə (kod bind-mount ilə gələcək).
+COPY go.mod go.sum ./
+RUN go mod download
+
+EXPOSE 8080
+
+# .air.toml layihə kökündədir — bind-mount ilə gəlir.
+CMD ["air", "-c", ".air.toml"]

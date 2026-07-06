@@ -32,7 +32,11 @@ export const viewport: Viewport = {
   ],
   width: "device-width",
   initialScale: 1,
-  maximumScale: 1,
+  // Let the on-screen keyboard shrink the layout viewport so fixed/sticky
+  // elements (sheet footers, chat composer, bottom-nav) reflow above it
+  // instead of being covered.
+  interactiveWidget: "resizes-content",
+  // NB: no maximumScale — pinch-zoom stays enabled (a11y / WCAG 1.4.4).
   viewportFit: "cover",
 };
 

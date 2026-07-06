@@ -1,0 +1,45 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e3]:
+    - complementary [ref=e4]:
+      - generic [ref=e5]:
+        - img "M4STrip" [ref=e6]
+        - generic [ref=e7]:
+          - paragraph [ref=e8]: Tur Planlayıcı
+          - paragraph [ref=e9]: Şəxsi tur planlayıcınız
+      - navigation [ref=e10]:
+        - link "Ana səhifə" [ref=e11] [cursor=pointer]:
+          - /url: /
+          - img [ref=e12]
+          - text: Ana səhifə
+        - link "Turlar" [ref=e17] [cursor=pointer]:
+          - /url: /tours
+          - img [ref=e19]
+          - text: Turlar
+        - link "Təqvim" [ref=e23] [cursor=pointer]:
+          - /url: /calendar
+          - img [ref=e24]
+          - text: Təqvim
+        - link "Axtarış" [ref=e26] [cursor=pointer]:
+          - /url: /search
+          - img [ref=e27]
+          - text: Axtarış
+        - link "AI Köməkçi" [ref=e30] [cursor=pointer]:
+          - /url: /ai
+          - img [ref=e31]
+          - text: AI Köməkçi
+        - link "Tənzimləmələr" [ref=e33] [cursor=pointer]:
+          - /url: /settings
+          - img [ref=e34]
+          - text: Tənzimləmələr
+      - 'button "A admin Rol: Administrator" [ref=e38] [cursor=pointer]':
+        - generic [ref=e40]: A
+        - generic [ref=e41]:
+          - paragraph [ref=e42]: admin
+          - paragraph [ref=e43]: "Rol: Administrator"
+    - main [ref=e45]:
+      - generic [ref=e47]:
+        - button "Geri" [ref=e48] [cursor=pointer]:
+          - img [ref=e49]
+        - heading "Tur təfərrüatı" [level=1] [ref=e51]
+  - region "Notifications alt+T"
+  - alert [ref=e87]

@@ -1,0 +1,21 @@
+# ─────────────────────────────────────────────────────────────
+# Tur Planlayıcı — Frontend DEV image (Next.js HMR / canlı yenilənmə)
+# `next dev` işə düşür; UI-da nəsə dəyişəndə brauzer avtomatik yenilənir.
+# Mənbə kod compose-da bind-mount edilir — image içində kod SAXLANMIR.
+# ─────────────────────────────────────────────────────────────
+FROM node:20-alpine
+WORKDIR /app
+RUN apk add --no-cache libc6-compat
+
+# Asılılıqları əvvəlcədən quraşdır (kod bind-mount ilə gələcək).
+COPY package.json package-lock.json* ./
+RUN if [ -f package-lock.json ]; then npm ci; else npm install; fi
+
+ENV NEXT_TELEMETRY_DISABLED=1
+EXPOSE 3000
+
+# Docker bind-mount üzərində fayl dəyişikliyini tutmaq üçün polling lazımdır.
+ENV WATCHPACK_POLLING=true
+ENV CHOKIDAR_USEPOLLING=true
+
+CMD ["npm", "run", "dev"]

@@ -1,0 +1,234 @@
+- generic:
+  - generic:
+    - generic:
+      - complementary:
+        - generic:
+          - img
+          - generic:
+            - paragraph: Tur Planlayıcı
+            - paragraph: Şəxsi tur planlayıcınız
+        - navigation:
+          - link:
+            - /url: /
+            - img
+            - text: Ana səhifə
+          - link:
+            - /url: /tours
+            - img
+            - text: Turlar
+          - link:
+            - /url: /calendar
+            - img
+            - text: Təqvim
+          - link:
+            - /url: /search
+            - img
+            - text: Axtarış
+          - link:
+            - /url: /ai
+            - img
+            - text: AI Köməkçi
+          - link:
+            - /url: /settings
+            - img
+            - text: Tənzimləmələr
+        - generic:
+          - button:
+            - generic:
+              - generic: A
+            - generic:
+              - paragraph: admin
+              - paragraph: "Rol: Administrator"
+      - generic:
+        - main:
+          - generic:
+            - generic:
+              - button:
+                - img
+              - heading [level=1]: test
+          - generic:
+            - generic:
+              - generic:
+                - generic:
+                  - generic:
+                    - generic:
+                      - img
+                      - text: Tur təfərrüatı
+                    - generic:
+                      - generic: Tamamlanıb
+                  - generic:
+                    - generic:
+                      - heading [level=1]: test
+                      - generic:
+                        - generic:
+                          - generic:
+                            - img
+                            - text: Başlama tarixi
+                          - paragraph: 17 — 17 İyul
+                        - generic:
+                          - generic:
+                            - img
+                            - text: gün
+                          - paragraph: 1 gün · 1 tədbir
+                      - paragraph: test
+                    - generic:
+                      - button:
+                        - img
+                        - text: Redaktə et
+                      - button:
+                        - img
+                        - text: Sil
+                  - img
+              - generic:
+                - generic:
+                  - generic:
+                    - generic: "1"
+                  - generic:
+                    - generic:
+                      - heading [level=3]: 1-ci gün
+                      - paragraph: 17 İyul
+                    - button:
+                      - img
+                      - generic: Tədbir əlavə et
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - img
+                          - generic:
+                            - generic:
+                              - generic:
+                                - paragraph: test
+                                - paragraph: Transfer
+                              - button:
+                                - img
+                            - generic:
+                              - generic:
+                                - img
+                                - generic: 19:50
+                              - generic:
+                                - img
+                                - generic: test
+                              - generic:
+                                - img
+                                - generic: test
+                              - generic:
+                                - img
+                                - text: test
+                            - generic:
+                              - generic: Planlaşdırılıb
+                              - generic: Ödənilməyib
+                              - generic: 12 ₼
+  - region "Notifications alt+T"
+  - button "Open Next.js Dev Tools" [ref=f2e129] [cursor=pointer]:
+    - img [ref=f2e130]
+  - alert
+  - dialog "Yeni tədbir" [ref=f2e235]:
+    - generic [ref=f2e236]:
+      - heading "Yeni tədbir" [level=2] [ref=f2e237]
+      - paragraph [ref=f2e238]: 17 İyul
+    - generic [ref=f2e239]:
+      - generic [ref=f2e240]:
+        - generic [ref=f2e241]: Başlıq
+        - textbox "Başlıq" [ref=f2e242]
+      - generic [ref=f2e243]:
+        - generic [ref=f2e244]:
+          - generic [ref=f2e245]: Növ
+          - combobox [ref=f2e246] [cursor=pointer]:
+            - generic:
+              - generic:
+                - img
+                - text: Digər
+            - img [ref=f2e247]
+          - combobox [ref=f2e249]
+        - generic [ref=f2e250]:
+          - generic [ref=f2e251]: Status
+          - combobox [ref=f2e252] [cursor=pointer]:
+            - generic: Planlaşdırılıb
+            - img [ref=f2e253]
+          - combobox [ref=f2e255]
+      - generic [ref=f2e256]:
+        - generic [ref=f2e257]:
+          - generic [ref=f2e258]: Tarix
+          - button "17 İyul 2026" [ref=f2e259] [cursor=pointer]:
+            - img [ref=f2e260]
+            - generic [ref=f2e262]: 17 İyul 2026
+        - generic [ref=f2e263]:
+          - generic [ref=f2e264]:
+            - text: Saat
+            - generic [ref=f2e265]: (istəyə bağlı)
+          - textbox [ref=f2e266]
+      - button "Detalları gizlə" [expanded] [active] [ref=f2e278] [cursor=pointer]:
+        - text: Detalları gizlə
+        - img [ref=f2e268]
+      - generic [ref=f2e280]:
+        - generic [ref=f2e281]:
+          - heading "Yer və əlaqə" [level=3] [ref=f2e282]
+          - generic [ref=f2e283]:
+            - generic [ref=f2e284]:
+              - text: Məkan
+              - generic [ref=f2e285]: (istəyə bağlı)
+            - textbox "Məkan" [ref=f2e286]
+          - generic [ref=f2e287]:
+            - generic [ref=f2e288]:
+              - text: İştirakçılar
+              - generic [ref=f2e289]: (istəyə bağlı)
+            - textbox "Adlar (istəyə bağlı)" [ref=f2e290]
+          - generic [ref=f2e291]:
+            - generic [ref=f2e292]:
+              - text: Telefon
+              - generic [ref=f2e293]: (istəyə bağlı)
+            - textbox "+994 50 123 45 67" [ref=f2e294]
+        - generic [ref=f2e295]:
+          - heading "Ödəniş" [level=3] [ref=f2e296]
+          - generic [ref=f2e297]:
+            - generic [ref=f2e298]:
+              - generic [ref=f2e299]:
+                - text: Qiymət
+                - generic [ref=f2e300]: (istəyə bağlı)
+              - textbox "0" [ref=f2e301]
+            - generic [ref=f2e302]:
+              - generic [ref=f2e303]:
+                - text: Valyuta
+                - generic [ref=f2e304]: (istəyə bağlı)
+              - combobox [ref=f2e305] [cursor=pointer]:
+                - generic: AZN
+                - img [ref=f2e306]
+              - combobox [ref=f2e308]
+          - generic [ref=f2e309]:
+            - generic [ref=f2e310]:
+              - text: Ödəniş statusu
+              - generic [ref=f2e311]: (istəyə bağlı)
+            - combobox [ref=f2e312] [cursor=pointer]:
+              - generic: Seçilməyib
+              - img [ref=f2e313]
+            - combobox [ref=f2e315]
+        - generic [ref=f2e316]:
+          - heading "Xatırlatma" [level=3] [ref=f2e317]
+          - generic [ref=f2e318]:
+            - generic [ref=f2e319]:
+              - text: Xatırlatma vaxtı
+              - generic [ref=f2e320]: (istəyə bağlı)
+            - combobox [ref=f2e321] [cursor=pointer]:
+              - generic: Xatırlatma yoxdur
+              - img [ref=f2e322]
+            - combobox [ref=f2e324]
+        - generic [ref=f2e325]:
+          - heading "Əlavə və qeydlər" [level=3] [ref=f2e326]
+          - generic [ref=f2e327]:
+            - generic [ref=f2e328]:
+              - text: Əlavə
+              - generic [ref=f2e329]: (istəyə bağlı)
+            - textbox "Sənəd və ya şəkil linki" [ref=f2e330]
+          - generic [ref=f2e331]:
+            - generic [ref=f2e332]:
+              - text: Qeydlər
+              - generic [ref=f2e333]: (istəyə bağlı)
+            - textbox "Qeydlər" [ref=f2e334]
+    - generic [ref=f2e270]:
+      - button "Ləğv et" [ref=f2e271] [cursor=pointer]
+      - button "Yadda saxla" [ref=f2e272] [cursor=pointer]
+    - button "Bağla" [ref=f2e273] [cursor=pointer]:
+      - img [ref=f2e274]
+      - generic [ref=f2e277]: Bağla

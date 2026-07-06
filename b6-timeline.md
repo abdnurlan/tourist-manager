@@ -1,0 +1,151 @@
+- generic [active] [ref=f2e1]:
+  - generic [ref=f2e3]:
+    - complementary [ref=f2e4]:
+      - generic [ref=f2e5]:
+        - img "M4STrip" [ref=f2e6]
+        - generic [ref=f2e7]:
+          - paragraph [ref=f2e8]: Tur Planlayıcı
+          - paragraph [ref=f2e9]: Şəxsi tur planlayıcınız
+      - navigation [ref=f2e10]:
+        - link "Ana səhifə" [ref=f2e11] [cursor=pointer]:
+          - /url: /
+          - img [ref=f2e12]
+          - text: Ana səhifə
+        - link "Turlar" [ref=f2e17] [cursor=pointer]:
+          - /url: /tours
+          - img [ref=f2e19]
+          - text: Turlar
+        - link "Təqvim" [ref=f2e23] [cursor=pointer]:
+          - /url: /calendar
+          - img [ref=f2e24]
+          - text: Təqvim
+        - link "Axtarış" [ref=f2e26] [cursor=pointer]:
+          - /url: /search
+          - img [ref=f2e27]
+          - text: Axtarış
+        - link "AI Köməkçi" [ref=f2e30] [cursor=pointer]:
+          - /url: /ai
+          - img [ref=f2e31]
+          - text: AI Köməkçi
+        - link "Tənzimləmələr" [ref=f2e33] [cursor=pointer]:
+          - /url: /settings
+          - img [ref=f2e34]
+          - text: Tənzimləmələr
+      - 'button "A admin Rol: Administrator" [ref=f2e38] [cursor=pointer]':
+        - generic [ref=f2e40]: A
+        - generic [ref=f2e41]:
+          - paragraph [ref=f2e42]: admin
+          - paragraph [ref=f2e43]: "Rol: Administrator"
+    - main [ref=f2e45]:
+      - generic [ref=f2e47]:
+        - button "Geri" [ref=f2e48] [cursor=pointer]:
+          - img [ref=f2e49]
+        - heading "test" [level=1] [ref=f2e88]
+      - generic [ref=f2e90]:
+        - generic [ref=f2e92]:
+          - generic [ref=f2e93]:
+            - generic [ref=f2e94]:
+              - img [ref=f2e95]
+              - text: Tur təfərrüatı
+            - generic [ref=f2e98]: Tamamlanıb
+          - generic [ref=f2e99]:
+            - generic [ref=f2e100]:
+              - heading "test" [level=1] [ref=f2e101]
+              - generic [ref=f2e102]:
+                - generic [ref=f2e103]:
+                  - generic [ref=f2e104]:
+                    - img [ref=f2e105]
+                    - text: Başlama tarixi
+                  - paragraph [ref=f2e107]: 17 — 17 İyul
+                - generic [ref=f2e108]:
+                  - generic [ref=f2e109]:
+                    - img [ref=f2e110]
+                    - text: gün
+                  - paragraph [ref=f2e114]: 1 gün · 1 tədbir
+              - paragraph [ref=f2e115]: test
+            - generic [ref=f2e116]:
+              - button "Redaktə et" [ref=f2e117] [cursor=pointer]:
+                - img [ref=f2e118]
+                - text: Redaktə et
+              - button "Sil" [ref=f2e121] [cursor=pointer]:
+                - img [ref=f2e122]
+                - text: Sil
+          - img
+        - generic [ref=f2e125]:
+          - generic [ref=f2e126]:
+            - heading "Qonaqlar (3)" [level=2] [ref=f2e127]:
+              - img [ref=f2e128]
+              - text: Qonaqlar
+              - generic [ref=f2e133]: (3)
+            - button "Qonaq əlavə et" [ref=f2e134] [cursor=pointer]:
+              - img [ref=f2e135]
+              - generic [ref=f2e138]: Qonaq əlavə et
+          - generic [ref=f2e139]:
+            - generic [ref=f2e140] [cursor=pointer]:
+              - img [ref=f2e142]
+              - paragraph [ref=f2e146]: Aygün Əliyeva
+              - button [ref=f2e147]:
+                - img [ref=f2e148]
+            - generic [ref=f2e151] [cursor=pointer]:
+              - img [ref=f2e153]
+              - paragraph [ref=f2e157]: Murad Həsənov
+              - button [ref=f2e158]:
+                - img [ref=f2e159]
+            - generic [ref=f2e162] [cursor=pointer]:
+              - img [ref=f2e164]
+              - generic [ref=f2e167]:
+                - paragraph [ref=f2e168]: Rəşad Məmmədov
+                - paragraph [ref=f2e169]:
+                  - img [ref=f2e170]
+                  - text: "+994552223344"
+              - button [ref=f2e172]:
+                - img [ref=f2e173]
+        - generic [ref=f2e178]:
+          - generic [ref=f2e180]: "1"
+          - generic [ref=f2e181]:
+            - heading "1-ci gün" [level=3] [ref=f2e182]
+            - paragraph [ref=f2e183]: 17 İyul
+          - generic [ref=f2e184]:
+            - generic [ref=f2e189]:
+              - img [ref=f2e192]
+              - generic [ref=f2e196]:
+                - generic [ref=f2e197]:
+                  - generic [ref=f2e198]:
+                    - paragraph [ref=f2e199]: test
+                    - paragraph [ref=f2e200]: Transfer
+                  - button "Redaktə et" [ref=f2e201] [cursor=pointer]:
+                    - img [ref=f2e202]
+                - generic [ref=f2e206]:
+                  - generic [ref=f2e207]:
+                    - img [ref=f2e208]
+                    - generic [ref=f2e211]: 19:50
+                  - generic [ref=f2e212]:
+                    - img [ref=f2e213]
+                    - generic [ref=f2e216]: test
+                  - generic [ref=f2e217]:
+                    - img [ref=f2e218]
+                    - generic [ref=f2e223]: test
+                  - generic [ref=f2e224]:
+                    - img [ref=f2e225]
+                    - text: test
+                - generic [ref=f2e227]:
+                  - generic [ref=f2e228]: Planlaşdırılıb
+                  - generic [ref=f2e229]: Ödənilməyib
+                  - generic [ref=f2e230]: 12 ₼
+            - generic [ref=f2e232]:
+              - button "Transfer" [ref=f2e233] [cursor=pointer]:
+                - img [ref=f2e234]
+                - text: Transfer
+              - button "Otel" [ref=f2e238] [cursor=pointer]:
+                - img [ref=f2e239]
+                - text: Otel
+              - button "Restoran" [ref=f2e242] [cursor=pointer]:
+                - img [ref=f2e243]
+                - text: Restoran
+              - button "Digər" [ref=f2e248] [cursor=pointer]:
+                - img [ref=f2e249]
+                - text: Digər
+  - region "Notifications alt+T"
+  - button "Open Next.js Dev Tools" [ref=f2e256] [cursor=pointer]:
+    - img [ref=f2e257]
+  - alert [ref=f2e87]
