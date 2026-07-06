@@ -3,6 +3,8 @@
 import { useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { useQueries, useQuery } from "@tanstack/react-query";
+import html2canvas from "html2canvas";
+import { jsPDF } from "jspdf";
 import {
   ArrowLeft,
   CalendarRange,
@@ -107,11 +109,6 @@ export default function ActiveToursExportPage() {
 
     setDownloading(true);
     try {
-      const [{ default: html2canvas }, { default: jsPDF }] = await Promise.all([
-        import("html2canvas"),
-        import("jspdf"),
-      ]);
-
       const canvas = await html2canvas(sheetRef.current, {
         backgroundColor: "#ffffff",
         scale: Math.min(2, window.devicePixelRatio || 1),
