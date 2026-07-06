@@ -1,9 +1,10 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
-import { ChevronLeft, ChevronRight, CalendarX2 } from "lucide-react";
+import { ChevronLeft, ChevronRight, CalendarX2, Download } from "lucide-react";
 import { PageHeader, PageBody } from "@/components/layout/page-header";
 import { PageTransition } from "@/components/shared/page-transition";
 import { EmptyState } from "@/components/shared/empty-state";
@@ -120,8 +121,21 @@ export default function CalendarPage() {
       <PageHeader
         title={az.screen.calendar}
         actions={
-          <div className="hidden md:block">
-            <ViewSwitcher value={view} onChange={handleViewChange} />
+          <div className="flex items-center gap-2">
+            <Button asChild variant="secondary" size="sm" className="rounded-xl">
+              <Link href="/calendar/export">
+                <Download className="size-4" />
+                <span className="hidden sm:inline">
+                  {az.calendar.export_active_tours}
+                </span>
+                <span className="sm:hidden">
+                  {az.calendar.export_active_tours_short}
+                </span>
+              </Link>
+            </Button>
+            <div className="hidden md:block">
+              <ViewSwitcher value={view} onChange={handleViewChange} />
+            </div>
           </div>
         }
       />

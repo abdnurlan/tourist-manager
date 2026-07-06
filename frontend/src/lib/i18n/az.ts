@@ -300,6 +300,13 @@ export const az = {
     next: "Növbəti",
     prev: "Əvvəlki",
     no_events: "Tədbir yoxdur",
+    export_active_tours: "Aktiv turları export et",
+    export_active_tours_short: "Export",
+    export_title: "Aktiv turlar",
+    export_subtitle: "Canlı proqram üçün çap/PDF xülasəsi",
+    print: "Çap et",
+    generated_at: "Hazırlandı",
+    active_tours_empty: "Aktiv tur yoxdur",
   },
 
   // §9.20 Day-section
