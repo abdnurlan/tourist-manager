@@ -472,6 +472,8 @@ export const az = {
     all: "Hamısı",
     none: "Yoxdur",
     days: "gün",
+    tour: "tur",
+    tours: "tur",
     event: "tədbir",
     events: "tədbir",
   },

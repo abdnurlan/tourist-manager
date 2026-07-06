@@ -2,7 +2,8 @@
 
 import { EventCard } from "@/components/shared/event-card";
 import { StaggerList, StaggerItem } from "@/components/shared/page-transition";
-import { groupByDate, sortedEventDates } from "./calendar-utils";
+import { CalendarTourPill } from "./calendar-tour-pill";
+import { groupByDate, groupToursByDate, sortedCalendarDates } from "./calendar-utils";
 import { cn } from "@/lib/utils/cn";
 import {
   formatDayMonth,
@@ -11,24 +12,33 @@ import {
   weekdayNameShort,
   parseDateISO,
 } from "@/lib/utils/date";
-import type { EventWithTour } from "@/lib/types";
+import type { EventWithTour, Tour } from "@/lib/types";
 
 export interface AgendaViewProps {
   events: EventWithTour[];
+  tours: Tour[];
   onSelectEvent: (event: EventWithTour) => void;
+  onSelectTour: (tour: Tour) => void;
 }
 
 /** Chronological timeline/agenda grouped by day (mobile default).
  *  Each day is introduced by a serif "day stamp"; events hang off a spine. */
-export function AgendaView({ events, onSelectEvent }: AgendaViewProps) {
+export function AgendaView({
+  events,
+  tours,
+  onSelectEvent,
+  onSelectTour,
+}: AgendaViewProps) {
   const byDate = groupByDate(events);
-  const dates = sortedEventDates(events);
+  const toursByDate = groupToursByDate(tours);
+  const dates = sortedCalendarDates(events, tours);
   const today = todayISO();
 
   return (
     <StaggerList className="space-y-7">
       {dates.map((iso) => {
         const dayEvents = byDate.get(iso) ?? [];
+        const dayTours = toursByDate.get(iso) ?? [];
         const isToday = iso === today;
         const date = parseDateISO(iso);
 
@@ -73,11 +83,19 @@ export function AgendaView({ events, onSelectEvent }: AgendaViewProps) {
                   </p>
                 </div>
                 <span className="ml-auto rounded-full bg-surface-muted px-2.5 py-0.5 text-xs font-medium tabular-nums text-muted-foreground">
-                  {dayEvents.length}
+                  {dayTours.length + dayEvents.length}
                 </span>
               </div>
 
               <div className="space-y-3 border-l-2 border-dashed border-border/70 pl-4">
+                {dayTours.map((tour) => (
+                  <CalendarTourPill
+                    key={tour.id}
+                    tour={tour}
+                    onClick={onSelectTour}
+                    variant="full"
+                  />
+                ))}
                 {dayEvents.map((ev) => (
                   <EventCard
                     key={ev.id}

@@ -2,16 +2,19 @@
 
 import { motion } from "framer-motion";
 import { CalendarEventPill } from "./calendar-event-pill";
-import { buildWeekDays, groupByDate } from "./calendar-utils";
+import { CalendarTourPill } from "./calendar-tour-pill";
+import { buildWeekDays, groupByDate, groupToursByDate } from "./calendar-utils";
 import { cn } from "@/lib/utils/cn";
 import { toDateISO, todayISO, weekdayNameShort } from "@/lib/utils/date";
 import { az } from "@/lib/i18n/az";
-import type { EventWithTour } from "@/lib/types";
+import type { EventWithTour, Tour } from "@/lib/types";
 
 export interface WeekViewProps {
   anchorISO: string;
   events: EventWithTour[];
+  tours: Tour[];
   onSelectEvent: (event: EventWithTour) => void;
+  onSelectTour: (tour: Tour) => void;
   onSelectDay: (dateISO: string) => void;
 }
 
@@ -20,11 +23,14 @@ export interface WeekViewProps {
 export function WeekView({
   anchorISO,
   events,
+  tours,
   onSelectEvent,
+  onSelectTour,
   onSelectDay,
 }: WeekViewProps) {
   const days = buildWeekDays(anchorISO);
   const byDate = groupByDate(events);
+  const toursByDate = groupToursByDate(tours);
   const today = todayISO();
 
   return (
@@ -37,6 +43,7 @@ export function WeekView({
       {days.map((date) => {
         const iso = toDateISO(date);
         const dayEvents = byDate.get(iso) ?? [];
+        const dayTours = toursByDate.get(iso) ?? [];
         const isToday = iso === today;
         const isWeekend = (date.getDay() + 6) % 7 >= 5;
 
@@ -85,19 +92,29 @@ export function WeekView({
             </button>
 
             <div className="flex flex-1 flex-col gap-1.5 p-2">
-              {dayEvents.length === 0 ? (
+              {dayTours.length === 0 && dayEvents.length === 0 ? (
                 <span className="px-1 py-1 text-[11px] text-muted-foreground/60">
                   {az.calendar.no_events}
                 </span>
               ) : (
-                dayEvents.map((ev) => (
-                  <CalendarEventPill
-                    key={ev.id}
-                    event={ev}
-                    onClick={onSelectEvent}
-                    variant="compact"
-                  />
-                ))
+                <>
+                  {dayTours.map((tour) => (
+                    <CalendarTourPill
+                      key={tour.id}
+                      tour={tour}
+                      onClick={onSelectTour}
+                      variant="compact"
+                    />
+                  ))}
+                  {dayEvents.map((ev) => (
+                    <CalendarEventPill
+                      key={ev.id}
+                      event={ev}
+                      onClick={onSelectEvent}
+                      variant="compact"
+                    />
+                  ))}
+                </>
               )}
             </div>
           </motion.div>

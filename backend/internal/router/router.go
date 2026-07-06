@@ -76,6 +76,7 @@ func New(cfg *config.Config, h Handlers) *fiber.App {
 	api.Delete("/guests/:guestId", auth, h.Guest.Delete)
 
 	api.Get("/calendar/events", auth, h.Calendar.Events)
+	api.Get("/calendar/tours", auth, h.Calendar.Tours)
 
 	api.Get("/search", auth, h.Search.Search)
 

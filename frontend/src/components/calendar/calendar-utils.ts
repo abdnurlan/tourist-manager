@@ -5,7 +5,7 @@
    ───────────────────────────────────────────────────────────── */
 
 import { parseDateISO, toDateISO, dateOnly } from "@/lib/utils/date";
-import type { EventWithTour } from "@/lib/types";
+import type { EventWithTour, Tour } from "@/lib/types";
 
 export type CalendarView = "month" | "week" | "day" | "agenda";
 
@@ -128,9 +128,35 @@ export function groupByDate(
   return map;
 }
 
-/** Ascending list of calendar dates (YYYY-MM-DD) that actually have events. */
-export function sortedEventDates(events: EventWithTour[]): string[] {
-  return Array.from(new Set(events.map((e) => dateOnly(e.date)))).sort();
+/** Group tours by each calendar date they occupy. */
+export function groupToursByDate(tours: Tour[]): Map<string, Tour[]> {
+  const map = new Map<string, Tour[]>();
+  for (const tour of tours) {
+    const start = parseDateISO(tour.start_date);
+    const end = parseDateISO(tour.end_date);
+    const cursor = new Date(start);
+    const last = end >= start ? end : start;
+    let guard = 0;
+    while (cursor <= last && guard < 370) {
+      const key = toDateISO(cursor);
+      const list = map.get(key);
+      if (list) list.push(tour);
+      else map.set(key, [tour]);
+      cursor.setDate(cursor.getDate() + 1);
+      guard += 1;
+    }
+  }
+  for (const list of map.values()) {
+    list.sort((a, b) => dateOnly(a.start_date).localeCompare(dateOnly(b.start_date)));
+  }
+  return map;
+}
+
+/** Ascending list of dates that contain at least one tour or event. */
+export function sortedCalendarDates(events: EventWithTour[], tours: Tour[]): string[] {
+  const dates = new Set(events.map((e) => dateOnly(e.date)));
+  for (const key of groupToursByDate(tours).keys()) dates.add(key);
+  return Array.from(dates).sort();
 }
 
 export { addDays };

@@ -7,7 +7,7 @@
    ───────────────────────────────────────────────────────────── */
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { listCalendarEvents } from "@/lib/api/calendar";
+import { listCalendarEvents, listCalendarTours } from "@/lib/api/calendar";
 import { deleteEvent, updateEvent } from "@/lib/api/events";
 import { queryKeys } from "@/lib/query";
 import type {
@@ -23,6 +23,15 @@ export function useCalendarEvents(query: CalendarQuery) {
     queryKey: queryKeys.calendar(query),
     queryFn: () => listCalendarEvents(query),
     placeholderData: (prev) => prev, // keep previous data while panning views
+  });
+}
+
+/** Fetch tours that overlap the visible calendar range. */
+export function useCalendarTours(query: Pick<CalendarQuery, "from" | "to">) {
+  return useQuery({
+    queryKey: queryKeys.calendarTours(query),
+    queryFn: () => listCalendarTours(query),
+    placeholderData: (prev) => prev,
   });
 }
 

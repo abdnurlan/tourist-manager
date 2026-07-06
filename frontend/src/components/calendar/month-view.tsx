@@ -2,22 +2,25 @@
 
 import { motion } from "framer-motion";
 import { CalendarEventPill } from "./calendar-event-pill";
+import { CalendarTourPill } from "./calendar-tour-pill";
 import { typeStyle } from "./event-type-style";
-import { buildMonthGrid, groupByDate } from "./calendar-utils";
+import { buildMonthGrid, groupByDate, groupToursByDate } from "./calendar-utils";
 import { cn } from "@/lib/utils/cn";
 import { parseDateISO, toDateISO, todayISO } from "@/lib/utils/date";
+import type { EventWithTour, Tour } from "@/lib/types";
 import { az } from "@/lib/i18n/az";
-import type { EventWithTour } from "@/lib/types";
 
 export interface MonthViewProps {
   anchorISO: string;
   events: EventWithTour[];
+  tours: Tour[];
   onSelectEvent: (event: EventWithTour) => void;
+  onSelectTour: (tour: Tour) => void;
   /** Drill into the day view when a date cell is clicked. */
   onSelectDay: (dateISO: string) => void;
 }
 
-const MAX_VISIBLE = 3;
+const MAX_VISIBLE = 4;
 
 /** Professional Monday-first 6-week month grid, editorial "journal" framing.
  *  Always renders the full 7×6 grid: AZ weekday headers, dimmed adjacent-month
@@ -25,11 +28,14 @@ const MAX_VISIBLE = 3;
 export function MonthView({
   anchorISO,
   events,
+  tours,
   onSelectEvent,
+  onSelectTour,
   onSelectDay,
 }: MonthViewProps) {
   const grid = buildMonthGrid(anchorISO);
   const byDate = groupByDate(events);
+  const toursByDate = groupToursByDate(tours);
   const today = todayISO();
   const currentMonth = parseDateISO(anchorISO).getMonth();
 
@@ -55,10 +61,14 @@ export function MonthView({
         {grid.map((date, i) => {
           const iso = toDateISO(date);
           const dayEvents = byDate.get(iso) ?? [];
+          const dayTours = toursByDate.get(iso) ?? [];
+          const visibleTours = dayTours.slice(0, MAX_VISIBLE);
+          const visibleEvents = dayEvents.slice(0, MAX_VISIBLE - visibleTours.length);
           const inMonth = date.getMonth() === currentMonth;
           const isToday = iso === today;
           const isWeekend = (date.getDay() + 6) % 7 >= 5;
-          const overflow = dayEvents.length - MAX_VISIBLE;
+          const overflow =
+            dayTours.length + dayEvents.length - visibleTours.length - visibleEvents.length;
           const row = Math.floor(i / 7);
 
           return (
@@ -103,7 +113,15 @@ export function MonthView({
               </span>
 
               <div className="flex min-w-0 flex-1 flex-col gap-1">
-                {dayEvents.slice(0, MAX_VISIBLE).map((ev) => (
+                {visibleTours.map((tour) => (
+                  <CalendarTourPill
+                    key={tour.id}
+                    tour={tour}
+                    onClick={onSelectTour}
+                    variant="compact"
+                  />
+                ))}
+                {visibleEvents.map((ev) => (
                   <CalendarEventPill
                     key={ev.id}
                     event={ev}
@@ -113,7 +131,7 @@ export function MonthView({
                 ))}
                 {overflow > 0 && (
                   <span className="pl-1 text-[11px] font-medium tabular-nums text-muted-foreground">
-                    +{overflow} {az.common.event}
+                    +{overflow}
                   </span>
                 )}
               </div>

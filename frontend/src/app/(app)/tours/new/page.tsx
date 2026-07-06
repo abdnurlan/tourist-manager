@@ -26,6 +26,7 @@ export default function NewTourPage() {
     mutationFn: (body: CreateTourRequest) => createTour(body),
     onSuccess: (tour: Tour) => {
       queryClient.invalidateQueries({ queryKey: ["tours"] });
+      queryClient.invalidateQueries({ queryKey: ["calendar"] });
       toast.success(az.toast.tour_created);
       router.replace(tour?.id ? `/tours/${tour.id}` : "/tours");
     },

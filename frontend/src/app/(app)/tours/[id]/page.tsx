@@ -142,6 +142,7 @@ export default function TourDetailPage() {
     onSettled: () => {
       qc.invalidateQueries({ queryKey: eventsKey });
       qc.invalidateQueries({ queryKey: queryKeys.tour(tourId) });
+      qc.invalidateQueries({ queryKey: ["calendar"] });
     },
   });
 
@@ -172,6 +173,7 @@ export default function TourDetailPage() {
     },
     onSettled: () => {
       qc.invalidateQueries({ queryKey: eventsKey });
+      qc.invalidateQueries({ queryKey: ["calendar"] });
     },
   });
 
@@ -197,6 +199,7 @@ export default function TourDetailPage() {
     onSettled: () => {
       qc.invalidateQueries({ queryKey: eventsKey });
       qc.invalidateQueries({ queryKey: queryKeys.tour(tourId) });
+      qc.invalidateQueries({ queryKey: ["calendar"] });
     },
   });
 
@@ -206,6 +209,7 @@ export default function TourDetailPage() {
     onSuccess: (updated: Tour) => {
       qc.setQueryData(queryKeys.tour(tourId), updated);
       qc.invalidateQueries({ queryKey: queryKeys.tours() });
+      qc.invalidateQueries({ queryKey: ["calendar"] });
       toast.success(az.toast.tour_updated);
       setTourEditOpen(false);
     },
@@ -216,6 +220,7 @@ export default function TourDetailPage() {
     mutationFn: () => deleteTour(tourId),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: queryKeys.tours() });
+      qc.invalidateQueries({ queryKey: ["calendar"] });
       toast.success(az.toast.tour_deleted);
       router.push("/tours");
     },

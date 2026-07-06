@@ -52,6 +52,8 @@ export const queryKeys = {
   tourGuests: (id: string) => ["tour", id, "guests"] as const,
   event: (id: string) => ["event", id] as const,
   calendar: (filters?: unknown) => ["calendar", filters ?? null] as const,
+  calendarTours: (filters?: unknown) =>
+    ["calendar", "tours", filters ?? null] as const,
   search: (q: string) => ["search", q] as const,
   aiHistory: ["ai", "history"] as const,
   me: ["auth", "me"] as const,

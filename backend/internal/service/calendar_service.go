@@ -18,6 +18,8 @@ type CalendarEvent struct {
 type CalendarService interface {
 	// Events returns events between from/to (inclusive, YYYY-MM-DD) optionally filtered by type.
 	Events(from, to, eventType string) ([]CalendarEvent, error)
+	// Tours returns tours overlapping from/to (inclusive, YYYY-MM-DD).
+	Tours(from, to string) ([]models.Tour, error)
 }
 
 type calendarService struct {
@@ -31,6 +33,41 @@ func NewCalendarService(events repository.EventRepository, tours repository.Tour
 }
 
 func (s *calendarService) Events(from, to, eventType string) ([]CalendarEvent, error) {
+	from, to, fields := normalizeCalendarRange(from, to)
+	if eventType != "" && !validEventTypes[eventType] {
+		fields = append(fields, apperror.FieldError{Field: "type", Message: "Növ dəyəri yanlışdır."})
+	}
+	if len(fields) > 0 {
+		return nil, validationError(fields)
+	}
+
+	events, err := s.events.List(repository.EventFilter{From: from, To: to, Type: eventType})
+	if err != nil {
+		return nil, apperror.Internal()
+	}
+	return enrichWithTourTitles(s.tours, events)
+}
+
+func (s *calendarService) Tours(from, to string) ([]models.Tour, error) {
+	from, to, fields := normalizeCalendarRange(from, to)
+	if len(fields) > 0 {
+		return nil, validationError(fields)
+	}
+
+	tours, err := s.tours.List(repository.TourFilter{From: from, To: to})
+	if err != nil {
+		return nil, apperror.Internal()
+	}
+	for i := range tours {
+		n, err := s.tours.EventsCount(tours[i].ID)
+		if err == nil {
+			tours[i].EventsCount = n
+		}
+	}
+	return tours, nil
+}
+
+func normalizeCalendarRange(from, to string) (string, string, []apperror.FieldError) {
 	var fields []apperror.FieldError
 
 	// Default to the current month when both bounds are omitted.
@@ -47,18 +84,7 @@ func (s *calendarService) Events(from, to, eventType string) ([]CalendarEvent, e
 	if to != "" && !isValidDate(to) {
 		fields = append(fields, apperror.FieldError{Field: "to", Message: "Tarix formatı yanlışdır."})
 	}
-	if eventType != "" && !validEventTypes[eventType] {
-		fields = append(fields, apperror.FieldError{Field: "type", Message: "Növ dəyəri yanlışdır."})
-	}
-	if len(fields) > 0 {
-		return nil, validationError(fields)
-	}
-
-	events, err := s.events.List(repository.EventFilter{From: from, To: to, Type: eventType})
-	if err != nil {
-		return nil, apperror.Internal()
-	}
-	return enrichWithTourTitles(s.tours, events)
+	return from, to, fields
 }
 
 // enrichWithTourTitles maps events to CalendarEvents, attaching each parent

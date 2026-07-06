@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronLeft, ChevronRight, CalendarX2 } from "lucide-react";
 import { PageHeader, PageBody } from "@/components/layout/page-header";
@@ -22,7 +23,10 @@ import {
   buildWeekDays,
   type CalendarView,
 } from "@/components/calendar";
-import { useCalendarEvents } from "@/lib/hooks/use-calendar-events";
+import {
+  useCalendarEvents,
+  useCalendarTours,
+} from "@/lib/hooks/use-calendar-events";
 import { useIsDesktop } from "@/lib/hooks/use-media-query";
 import {
   monthName,
@@ -33,7 +37,7 @@ import {
   parseDateISO,
 } from "@/lib/utils/date";
 import { az } from "@/lib/i18n/az";
-import type { CalendarQuery, EventType, EventWithTour } from "@/lib/types";
+import type { CalendarQuery, EventType, EventWithTour, Tour } from "@/lib/types";
 
 /** Period heading for the toolbar, per view + anchor. */
 function periodHeading(view: CalendarView, anchorISO: string): string {
@@ -52,6 +56,7 @@ function periodHeading(view: CalendarView, anchorISO: string): string {
 }
 
 export default function CalendarPage() {
+  const router = useRouter();
   const isDesktop = useIsDesktop();
 
   // Mobile defaults to the agenda/timeline view; desktop to the month grid.
@@ -83,10 +88,23 @@ export default function CalendarPage() {
   );
 
   const { data: events = [], isLoading, isError } = useCalendarEvents(query);
+  const {
+    data: tours = [],
+    isLoading: toursLoading,
+    isError: toursError,
+  } = useCalendarTours({ from: range.from, to: range.to });
+
+  const loading = isLoading || toursLoading;
+  const error = isError || toursError;
+  const hasItems = events.length > 0 || tours.length > 0;
 
   const openEvent = (event: EventWithTour) => {
     setSelected(event);
     setDetailOpen(true);
+  };
+
+  const openTour = (tour: Tour) => {
+    router.push(`/tours/${tour.id}`);
   };
 
   const drillToDay = (dateISO: string) => {
@@ -154,9 +172,9 @@ export default function CalendarPage() {
         </div>
 
         {/* Content */}
-        {isLoading ? (
+        {loading ? (
           <CalendarSkeleton view={view} />
-        ) : isError ? (
+        ) : error ? (
           <EmptyState
             icon={CalendarX2}
             title={az.common.error_title}
@@ -167,7 +185,7 @@ export default function CalendarPage() {
               </Button>
             }
           />
-        ) : view === "agenda" && events.length === 0 ? (
+        ) : view === "agenda" && !hasItems ? (
           // Grid views (month/week/day) render their own empty days, so they
           // must ALWAYS draw the structure — only the agenda list collapses to
           // a full empty state when the window has no events.
@@ -189,7 +207,9 @@ export default function CalendarPage() {
                 <MonthView
                   anchorISO={anchor}
                   events={events}
+                  tours={tours}
                   onSelectEvent={openEvent}
+                  onSelectTour={openTour}
                   onSelectDay={drillToDay}
                 />
               )}
@@ -197,7 +217,9 @@ export default function CalendarPage() {
                 <WeekView
                   anchorISO={anchor}
                   events={events}
+                  tours={tours}
                   onSelectEvent={openEvent}
+                  onSelectTour={openTour}
                   onSelectDay={drillToDay}
                 />
               )}
@@ -205,11 +227,18 @@ export default function CalendarPage() {
                 <DayView
                   anchorISO={anchor}
                   events={events}
+                  tours={tours}
                   onSelectEvent={openEvent}
+                  onSelectTour={openTour}
                 />
               )}
               {view === "agenda" && (
-                <AgendaView events={events} onSelectEvent={openEvent} />
+                <AgendaView
+                  events={events}
+                  tours={tours}
+                  onSelectEvent={openEvent}
+                  onSelectTour={openTour}
+                />
               )}
             </motion.div>
           </AnimatePresence>

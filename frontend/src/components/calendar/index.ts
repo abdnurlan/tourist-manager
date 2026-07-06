@@ -10,4 +10,8 @@ export {
   CalendarEventPill,
   type CalendarEventPillProps,
 } from "./calendar-event-pill";
+export {
+  CalendarTourPill,
+  type CalendarTourPillProps,
+} from "./calendar-tour-pill";
 export * from "./calendar-utils";

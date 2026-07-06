@@ -24,3 +24,12 @@ func (h *CalendarHandler) Events(c *fiber.Ctx) error {
 	}
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{"data": events})
 }
+
+// Tours handles GET /calendar/tours?from=&to= → { "data": [...] }.
+func (h *CalendarHandler) Tours(c *fiber.Ctx) error {
+	tours, err := h.calendar.Tours(c.Query("from"), c.Query("to"))
+	if err != nil {
+		return err
+	}
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{"data": tours})
+}

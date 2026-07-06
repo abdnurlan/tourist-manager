@@ -127,6 +127,7 @@ export default function ToursPage() {
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["tours"] });
+      queryClient.invalidateQueries({ queryKey: ["calendar"] });
     },
   });
 
@@ -160,6 +161,7 @@ export default function ToursPage() {
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["tours"] });
+      queryClient.invalidateQueries({ queryKey: ["calendar"] });
     },
   });
 
@@ -183,6 +185,7 @@ export default function ToursPage() {
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["tours"] });
+      queryClient.invalidateQueries({ queryKey: ["calendar"] });
     },
   });
 
