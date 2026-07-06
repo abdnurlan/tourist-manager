@@ -18,8 +18,9 @@ export const buttonVariants = cva(
         secondary:
           "bg-surface text-foreground border border-border shadow-xs hover:bg-surface-muted",
         ghost: "text-foreground hover:bg-surface-muted",
-        destructive: "bg-danger text-accent-foreground shadow-sm hover:opacity-90",
-        "destructive-ghost": "text-danger hover:bg-danger/10",
+        destructive: "bg-danger text-destructive-foreground shadow-sm hover:opacity-90",
+        "destructive-ghost":
+          "border border-danger/25 bg-danger/10 text-danger shadow-xs hover:bg-danger hover:text-destructive-foreground",
         link: "text-accent underline-offset-4 hover:underline px-0 h-auto",
         outline:
           "border border-border bg-transparent text-foreground hover:bg-surface-muted",
