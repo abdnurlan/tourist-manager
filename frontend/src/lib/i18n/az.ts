@@ -305,6 +305,8 @@ export const az = {
     export_title: "Aktiv turlar",
     export_subtitle: "Canlı proqram üçün çap/PDF xülasəsi",
     print: "Çap et",
+    download_pdf: "PDF yüklə",
+    preparing_pdf: "PDF hazırlanır...",
     generated_at: "Hazırlandı",
     active_tours_empty: "Aktiv tur yoxdur",
   },

@@ -37,9 +37,9 @@ export function TourDetailHeader({
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.32, ease: [0.16, 1, 0.3, 1] }}
     >
-      <TicketCard className="overflow-hidden shadow-md">
+      <TicketCard className="relative overflow-hidden shadow-md">
         {/* boarding-pass top rail */}
-        <div className="flex items-center justify-between gap-3 border-b border-dashed border-border px-5 py-2.5 pl-7 md:px-7 md:pl-9">
+        <div className="relative z-10 flex items-center justify-between gap-3 border-b border-dashed border-border px-5 py-2.5 pl-7 md:px-7 md:pl-9">
           <span className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground">
             <Plane className="size-3.5 text-accent" />
             {az.screen.tour_detail}
@@ -54,7 +54,7 @@ export function TourDetailHeader({
           </motion.span>
         </div>
 
-        <div className="flex flex-col gap-5 p-5 pl-7 md:flex-row md:items-end md:justify-between md:p-7 md:pl-9">
+        <div className="relative z-10 flex flex-col gap-5 p-5 pl-7 md:flex-row md:items-end md:justify-between md:p-7 md:pl-9">
           <div className="min-w-0 space-y-3.5">
             <h1 className="font-display text-h1 font-bold leading-tight tracking-tight text-foreground md:text-display">
               {tour.title}
@@ -101,7 +101,7 @@ export function TourDetailHeader({
         <Compass
           aria-hidden
           strokeWidth={1}
-          className="pointer-events-none absolute -bottom-6 -right-6 size-32 text-accent/[0.05]"
+          className="pointer-events-none absolute -bottom-6 -right-6 z-0 size-32 text-accent opacity-[0.04]"
         />
       </TicketCard>
     </motion.div>

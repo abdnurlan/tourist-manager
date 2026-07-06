@@ -1,12 +1,13 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { useQueries, useQuery } from "@tanstack/react-query";
 import {
   ArrowLeft,
   CalendarRange,
   Clock3,
+  Download,
   FileText,
   MapPin,
   Printer,
@@ -72,6 +73,8 @@ function nextEvents(events: Event[]): Event[] {
 }
 
 export default function ActiveToursExportPage() {
+  const sheetRef = useRef<HTMLElement | null>(null);
+  const [downloading, setDownloading] = useState(false);
   const generated = useMemo(() => generatedStamp(), []);
   const toursQuery = useQuery({
     queryKey: queryKeys.tours({ status: "active" }),
@@ -97,6 +100,47 @@ export default function ActiveToursExportPage() {
   const totalEvents = tours.reduce((sum, tour) => sum + (tour.events_count ?? 0), 0);
   const loading = toursQuery.isLoading || eventQueries.some((query) => query.isLoading);
   const error = toursQuery.isError || eventQueries.some((query) => query.isError);
+  const canExport = !loading && !error && tours.length > 0;
+
+  const downloadPdf = async () => {
+    if (!sheetRef.current) return;
+
+    setDownloading(true);
+    try {
+      const [{ default: html2canvas }, { default: jsPDF }] = await Promise.all([
+        import("html2canvas"),
+        import("jspdf"),
+      ]);
+
+      const canvas = await html2canvas(sheetRef.current, {
+        backgroundColor: "#ffffff",
+        scale: Math.min(2, window.devicePixelRatio || 1),
+        useCORS: true,
+      });
+
+      const pdf = new jsPDF("p", "mm", "a4");
+      const pageWidth = pdf.internal.pageSize.getWidth();
+      const pageHeight = pdf.internal.pageSize.getHeight();
+      const imgWidth = pageWidth;
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+      const imgData = canvas.toDataURL("image/png");
+
+      let y = 0;
+      pdf.addImage(imgData, "PNG", 0, y, imgWidth, imgHeight);
+
+      let remaining = imgHeight - pageHeight;
+      while (remaining > 0) {
+        y -= pageHeight;
+        pdf.addPage();
+        pdf.addImage(imgData, "PNG", 0, y, imgWidth, imgHeight);
+        remaining -= pageHeight;
+      }
+
+      pdf.save(`aktiv-turlar-${todayISO()}.pdf`);
+    } finally {
+      setDownloading(false);
+    }
+  };
 
   return (
     <PageTransition>
@@ -111,7 +155,23 @@ export default function ActiveToursExportPage() {
                 {az.action.back}
               </Link>
             </Button>
-            <Button size="sm" className="rounded-xl" onClick={() => window.print()}>
+            <Button
+              size="sm"
+              className="rounded-xl"
+              onClick={downloadPdf}
+              loading={downloading}
+              disabled={!canExport}
+            >
+              {!downloading && <Download className="size-4" />}
+              {downloading ? az.calendar.preparing_pdf : az.calendar.download_pdf}
+            </Button>
+            <Button
+              variant="secondary"
+              size="sm"
+              className="rounded-xl"
+              onClick={() => window.print()}
+              disabled={!canExport}
+            >
               <Printer className="size-4" />
               {az.calendar.print}
             </Button>
@@ -136,7 +196,10 @@ export default function ActiveToursExportPage() {
             subtitle={az.empty.tours.subtitle}
           />
         ) : (
-          <section className="export-sheet overflow-hidden rounded-lg border border-border bg-surface shadow-sm">
+          <section
+            ref={sheetRef}
+            className="export-sheet overflow-hidden rounded-lg border border-border bg-surface shadow-sm"
+          >
             <div className="relative border-b border-border bg-accent px-6 py-7 text-accent-foreground sm:px-8">
               <div className="absolute inset-y-0 right-0 w-1/3 bg-[radial-gradient(circle_at_70%_30%,rgba(233,121,13,0.35),transparent_48%)]" />
               <div className="relative flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
