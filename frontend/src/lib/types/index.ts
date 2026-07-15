@@ -184,6 +184,71 @@ export interface CreateGuestRequest {
 
 export type UpdateGuestRequest = Partial<CreateGuestRequest>;
 
+// ── Catalog tours (public marketing catalog) ──────────────────
+export type CatalogCategory = "mountain" | "history" | "nature" | "wellness" | "coast" | "offroad";
+export type LangMap = Record<string, string>;
+export interface CatalogDayPlan { title: string; description: string }
+
+export interface CatalogTour {
+  id: string;
+  slug: string;
+  category: CatalogCategory;
+  price: number;
+  rating: number;
+  duration: number;
+  group_size: string;
+  image_url: string;
+  published: boolean;
+  sort_order: number;
+  title: LangMap;
+  region: LangMap;
+  overview: LangMap;
+  highlights: Record<string, string[]>;
+  itinerary: Record<string, CatalogDayPlan[]>;
+  included: Record<string, string[]>;
+  excluded: Record<string, string[]>;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface CatalogTourPayload {
+  slug: string;
+  category: CatalogCategory;
+  price: number;
+  rating?: number;
+  duration?: number;
+  group_size?: string;
+  image_url?: string;
+  published?: boolean;
+  sort_order?: number;
+  title: LangMap;
+  region?: LangMap;
+  overview?: LangMap;
+  highlights?: Record<string, string[]>;
+  itinerary?: Record<string, CatalogDayPlan[]>;
+  included?: Record<string, string[]>;
+  excluded?: Record<string, string[]>;
+}
+
+// ── Bookings (public reservations) ─────────────────────────────
+export type BookingStatus = "new" | "confirmed" | "cancelled" | "completed";
+
+export interface Booking {
+  id: string;
+  catalog_tour_id: string | null;
+  tour_slug: string | null;
+  tour_title: string;
+  full_name: string;
+  phone: string | null;
+  email: string | null;
+  people: number;
+  date: string | null;
+  notes: string | null;
+  status: BookingStatus;
+  created_at: string;
+  updated_at: string;
+}
+
 // ── Generic envelopes ──────────────────────────────────────────
 export interface ListResponse<T> {
   data: T[];

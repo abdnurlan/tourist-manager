@@ -72,6 +72,14 @@ func EventNotFound() *AppError {
 	return New(http.StatusNotFound, "EVENT_NOT_FOUND", "Event tapılmadı.")
 }
 
+func CatalogTourNotFound() *AppError {
+	return New(http.StatusNotFound, "CATALOG_TOUR_NOT_FOUND", "Tur tapılmadı.")
+}
+
+func BookingNotFound() *AppError {
+	return New(http.StatusNotFound, "BOOKING_NOT_FOUND", "Rezervasiya tapılmadı.")
+}
+
 func Conflict() *AppError {
 	return New(http.StatusConflict, "CONFLICT", "Məlumat artıq mövcuddur.")
 }

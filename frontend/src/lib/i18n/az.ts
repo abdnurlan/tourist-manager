@@ -18,6 +18,8 @@ export const az = {
     search: "Axtarış",
     ai: "AI Köməkçi",
     settings: "Tənzimləmələr",
+    catalog: "Katalog",
+    reservations: "Rezervasiyalar",
   },
 
   // §9.3 Screen titles
@@ -485,6 +487,69 @@ export const az = {
     tours: "tur",
     event: "tədbir",
     events: "tədbir",
+  },
+
+  // Public catalog management (marketing tours shown on the landing site).
+  catalog: {
+    title: "Katalog turları",
+    subtitle: "Saytda göstərilən turlar",
+    add: "Tur əlavə et",
+    edit: "Turu redaktə et",
+    empty_title: "Hələ katalog turu yoxdur",
+    empty_subtitle: "Saytda göstərmək üçün ilk turu əlavə edin.",
+    delete_confirm: "Bu turu silmək istədiyinizə əminsiniz?",
+    created: "Tur əlavə olundu",
+    updated: "Tur yeniləndi",
+    deleted: "Tur silindi",
+    published: "Aktiv",
+    draft: "Gizli",
+    perPerson: "Bir nəfər üçün",
+    fields: {
+      slug: "Slug (URL)",
+      category: "Kateqoriya",
+      price: "Qiymət (₼)",
+      rating: "Reytinq",
+      duration: "Müddət (gün)",
+      group_size: "Qrup ölçüsü",
+      image_url: "Şəkil URL",
+      published: "Saytda göstər",
+      title_az: "Ad (AZ)",
+      region_az: "Bölgə (AZ)",
+      overview_az: "Təsvir (AZ)",
+    },
+    category: {
+      mountain: "Dağ",
+      history: "Tarix",
+      nature: "Təbiət",
+      wellness: "Müalicə",
+      coast: "Sahil",
+      offroad: "Offroad",
+    },
+    slug_required: "Slug tələb olunur",
+    title_required: "Ad tələb olunur",
+    price_required: "Qiymət tələb olunur",
+  },
+
+  // Reservations submitted from the landing site.
+  reservation: {
+    title: "Rezervasiyalar",
+    subtitle: "Saytdan gələn müraciətlər",
+    empty_title: "Hələ rezervasiya yoxdur",
+    empty_subtitle: "Saytdan rezervasiya gələndə burada görünəcək.",
+    delete_confirm: "Bu rezervasiyanı silmək istədiyinizə əminsiniz?",
+    deleted: "Rezervasiya silindi",
+    status_updated: "Status yeniləndi",
+    people: "nəfər",
+    for_tour: "Tur",
+    no_date: "Tarix qeyd olunmayıb",
+    contact: "Əlaqə",
+    all: "Hamısı",
+    status: {
+      new: "Yeni",
+      confirmed: "Təsdiqlənmiş",
+      cancelled: "Ləğv edilmiş",
+      completed: "Tamamlanmış",
+    },
   },
 } as const;
 

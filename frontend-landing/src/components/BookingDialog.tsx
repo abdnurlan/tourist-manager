@@ -30,6 +30,7 @@ import { Label } from "@/components/ui/label";
 import { BOOKING_COPY } from "@/lib/booking-i18n";
 import type { Lang } from "@/lib/tours-data";
 import { cn } from "@/lib/utils";
+import { submitBooking } from "@/lib/api/client";
 import { toast } from "sonner";
 
 const DATE_LOCALES = { az, en: enUS, he, ar, ru };
@@ -91,11 +92,27 @@ export function BookingDialog({ tour, open, lang, onOpenChange }: Props) {
   const canPay = card.replace(/\s/g, "").length >= 12 && expiry.length >= 4 && cvc.length >= 3;
 
   const handlePay = async () => {
+    if (!tour) return;
     setProcessing(true);
-    await new Promise((r) => setTimeout(r, 1400));
-    setProcessing(false);
-    setStep("success");
-    toast.success(copy.confirmed);
+    try {
+      // Simulated payment step, then persist the reservation to the backend.
+      await new Promise((r) => setTimeout(r, 1400));
+      await submitBooking({
+        tour_slug: tour.id,
+        tour_title: tour.title,
+        full_name: name.trim(),
+        email: email.trim() || null,
+        phone: phone.trim() || null,
+        people,
+        date: date ? format(date, "yyyy-MM-dd") : null,
+      });
+      setStep("success");
+      toast.success(copy.confirmed);
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : copy.confirmed);
+    } finally {
+      setProcessing(false);
+    }
   };
 
   if (!tour) return null;
