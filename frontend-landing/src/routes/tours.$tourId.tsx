@@ -1,11 +1,12 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, ArrowRight, Check, Clock, MapPin, Mountain, Star, Users, X } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, Clock, MapPin, Star, Users, X } from "lucide-react";
 import { BookingDialog, type BookingTour } from "@/components/BookingDialog";
 import { TOURS, T, LANGS, type Tour } from "@/lib/tours-data";
 import { useLanguage } from "@/hooks/use-language";
+import logoImg from "@/assets/logo.png";
 
 export const Route = createFileRoute("/tours/$tourId")({
   loader: ({ params }): { tour: Tour } => {
@@ -18,7 +19,7 @@ export const Route = createFileRoute("/tours/$tourId")({
     const loc = tour?.i18n.az;
     return {
       meta: [
-        { title: loc ? `${loc.title} — Səyahət AZ` : "Tur — Səyahət AZ" },
+        { title: loc ? `${loc.title} — M4STrip` : "Tur — M4STrip" },
         { name: "description", content: loc?.overview ?? "" },
         { property: "og:title", content: loc?.title ?? "" },
         { property: "og:description", content: loc?.overview ?? "" },
@@ -52,10 +53,18 @@ function TourDetail() {
   const { tour } = Route.useLoaderData() as { tour: Tour };
   const [lang, setLang] = useLanguage();
   const [booking, setBooking] = useState<BookingTour | null>(null);
+  const [scrolled, setScrolled] = useState(false);
 
   const t = T[lang];
   const dir = t.dir;
   const loc = tour.i18n[lang];
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 24);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   const openBooking = () =>
     setBooking({
@@ -70,10 +79,14 @@ function TourDetail() {
   return (
     <div dir={dir} lang={lang} className="min-h-screen text-foreground">
       {/* NAV */}
-      <header className="fixed top-4 left-1/2 z-30 w-[calc(100%-2rem)] max-w-6xl -translate-x-1/2">
-        <div className="glass glass-sheen flex items-center justify-between gap-4 rounded-full px-5 py-3">
-          <Link to="/" className="flex items-center gap-2 text-foreground">
-            <Mountain className="h-5 w-5" strokeWidth={1.5} />
+      <header className="fixed top-4 left-1/2 z-40 w-[calc(100%-2rem)] max-w-6xl -translate-x-1/2">
+        <div
+          className={`glass glass-sheen flex items-center justify-between gap-4 rounded-full px-5 py-3 transition-all duration-300 ${
+            scrolled ? "nav-scrolled py-2.5" : ""
+          }`}
+        >
+          <Link to="/" className="group flex items-center gap-2 text-foreground">
+            <img src={logoImg} alt={t.brand} width={36} height={36} className="h-9 w-9 shrink-0 object-contain transition-transform duration-300 group-hover:-translate-y-0.5" />
             <span className="font-display text-lg font-medium tracking-tight">{t.brand}</span>
           </Link>
           <div className="flex items-center gap-2">
@@ -82,9 +95,10 @@ function TourDetail() {
                 <button
                   key={l.code}
                   onClick={() => setLang(l.code)}
-                  className={`rounded-full px-2.5 py-1 transition ${
+                  className={`cursor-pointer rounded-full px-2.5 py-1 transition-all duration-300 ${
                     lang === l.code ? "bg-primary text-primary-foreground" : "text-foreground/70 hover:text-foreground"
                   }`}
+                  aria-pressed={lang === l.code}
                 >
                   {l.label}
                 </button>
@@ -98,18 +112,18 @@ function TourDetail() {
       <section className="relative h-[70vh] min-h-[520px] w-full overflow-hidden">
         <img src={tour.image} alt={loc.title} width={1920} height={1280} className="absolute inset-0 h-full w-full object-cover" />
         <div className="absolute inset-0" style={{ background: "var(--gradient-hero)" }} />
-        <div className="pointer-events-none absolute -left-20 top-1/3 h-72 w-72 rounded-full bg-accent/30 blur-3xl" />
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-2/3 bg-linear-to-t from-black/70 to-transparent" />
 
         <div className="relative z-10 mx-auto flex h-full max-w-6xl flex-col justify-end px-6 pb-12">
-          <Link to="/" className="glass mb-6 inline-flex w-fit items-center gap-2 rounded-full px-4 py-2 text-sm text-foreground hover:text-accent">
+          <Link to="/" className="mb-6 inline-flex w-fit items-center gap-2 rounded-full border border-white/25 bg-white/15 px-4 py-2 text-sm text-white backdrop-blur-md transition-colors hover:bg-white/25">
             {dir === "rtl" ? <ArrowRight className="h-4 w-4" /> : <ArrowLeft className="h-4 w-4" />}
             {t.detail.back}
           </Link>
-          <Badge className="glass mb-4 w-fit rounded-full text-foreground">{t.cats[tour.category]}</Badge>
-          <h1 className="max-w-4xl font-display text-4xl font-medium leading-[1.05] text-foreground md:text-6xl lg:text-7xl">
+          <Badge className="mb-4 w-fit rounded-full border-white/25 bg-white/15 text-white backdrop-blur-md">{t.cats[tour.category]}</Badge>
+          <h1 className="max-w-4xl font-display text-4xl font-medium leading-[1.05] text-white md:text-6xl lg:text-7xl">
             {loc.title}
           </h1>
-          <div className="mt-5 flex flex-wrap items-center gap-5 text-sm text-foreground/85">
+          <div className="mt-5 flex flex-wrap items-center gap-5 text-sm text-white/90">
             <span className="flex items-center gap-1.5"><MapPin className="h-4 w-4" /> {loc.region}</span>
             <span className="flex items-center gap-1.5"><Clock className="h-4 w-4" /> {tour.duration} {t.tours.days}</span>
             <span className="flex items-center gap-1.5"><Users className="h-4 w-4" /> {tour.groupSize} {t.tours.people}</span>
@@ -187,7 +201,7 @@ function TourDetail() {
               <div className="text-xs uppercase tracking-widest text-foreground/60">{t.tours.perPerson}</div>
               <div className="mt-1 font-display text-5xl font-medium text-accent">{tour.price} ₼</div>
 
-              <div className="mt-6 space-y-3 border-t border-white/10 pt-6 text-sm text-foreground/80">
+              <div className="mt-6 space-y-3 border-t border-border pt-6 text-sm text-foreground/80">
                 <div className="flex items-center justify-between">
                   <span className="flex items-center gap-2"><Clock className="h-4 w-4" /> {t.detail.duration}</span>
                   <span>{tour.duration} {t.tours.days}</span>
@@ -202,7 +216,7 @@ function TourDetail() {
                 </div>
               </div>
 
-              <Button size="lg" className="mt-6 w-full rounded-xl" onClick={openBooking}>
+              <Button size="lg" className="mt-6 w-full cursor-pointer rounded-xl transition-transform duration-300 hover:scale-[1.02] active:scale-95" onClick={openBooking}>
                 {t.detail.bookNow} <ArrowRight className={`h-4 w-4 ${dir === "rtl" ? "mr-1 rotate-180" : "ml-1"}`} />
               </Button>
             </div>

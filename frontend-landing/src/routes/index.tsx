@@ -18,7 +18,7 @@ const CURRENT_YEAR = 2026;
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Səyahət Azərbaycan — Daxili turlar və kəşf marşrutları" },
+      { title: "M4STrip — Azərbaycan üzrə daxili turlar və kəşf marşrutları" },
       { name: "description", content: "Azərbaycanın ən gözəl bölgələrinə daxili turlar: Şəki, Qəbələ, Xınalıq, Qobustan, Lənkəran və daha çoxu." },
     ],
   }),

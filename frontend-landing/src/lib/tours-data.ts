@@ -349,7 +349,7 @@ export const TOURS: Tour[] = [
 export const T = {
   az: {
     locale: "az-AZ", dir: "ltr" as const,
-    brand: "Səyahət AZ",
+    brand: "M4STrip",
     nav: { tours: "Turlar", how: "Necə işləyir", contact: "Əlaqə", book: "Rezervasiya" },
     hero: { badge: "Azərbaycanı kəşf et", title1: "Doğma torpağın", title2: "möcüzələri", subtitle: "Xınalığın dağlarından Lənkəranın çay bağlarınadək — sənin marşrutun, sənin tempinlə.", searchPh: "Bölgə və ya tur axtar...", cta: "Turları gör" },
     stats: [{ k: "40+", v: "Daxili marşrut" }, { k: "12", v: "Bölgə" }, { k: "8K+", v: "Məmnun turist" }, { k: "4.9", v: "Orta reytinq" }],
@@ -364,7 +364,7 @@ export const T = {
   },
   en: {
     locale: "en-US", dir: "ltr" as const,
-    brand: "Seyahet AZ",
+    brand: "M4STrip",
     nav: { tours: "Tours", how: "How it works", contact: "Contact", book: "Book now" },
     hero: { badge: "Discover Azerbaijan", title1: "Wonders of your", title2: "homeland", subtitle: "From the peaks of Khinalug to the tea gardens of Lankaran — your route, your pace.", searchPh: "Search a region or tour...", cta: "Browse tours" },
     stats: [{ k: "40+", v: "Domestic routes" }, { k: "12", v: "Regions" }, { k: "8K+", v: "Happy travelers" }, { k: "4.9", v: "Average rating" }],
@@ -379,7 +379,7 @@ export const T = {
   },
   he: {
     locale: "he-IL", dir: "rtl" as const,
-    brand: "סייאחט AZ",
+    brand: "M4STrip",
     nav: { tours: "טיולים", how: "איך זה עובד", contact: "צור קשר", book: "להזמין" },
     hero: { badge: "גלו את אזרבייג'ן", title1: "פלאי", title2: "המולדת", subtitle: "מפסגות חינלוק עד מטעי התה של לנקרן — המסלול שלכם, בקצב שלכם.", searchPh: "חיפוש אזור או טיול...", cta: "לכל הטיולים" },
     stats: [{ k: "40+", v: "מסלולים פנימיים" }, { k: "12", v: "אזורים" }, { k: "8K+", v: "מטיילים מרוצים" }, { k: "4.9", v: "דירוג ממוצע" }],
