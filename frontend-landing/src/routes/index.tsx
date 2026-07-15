@@ -3,15 +3,17 @@ import { useEffect, useMemo, useState, type CSSProperties } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { MapPin, Clock, Users, Star, ArrowRight, Mountain, Compass, Search, Phone, Mail, Menu, X } from "lucide-react";
+import { MapPin, Clock, Users, Star, ArrowRight, Mountain, Compass, Search, Phone, Instagram, Menu, X } from "lucide-react";
 import { BookingDialog, type BookingTour } from "@/components/BookingDialog";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { Reveal } from "@/components/Reveal";
 import { TestimonialsMarquee } from "@/components/ui/testimonials-marquee";
-import { TOURS, T, CAT_KEYS, LANGS, REVIEWS, type CategoryKey } from "@/lib/tours-data";
+import { TOURS, T, CAT_KEYS, REVIEWS, type CategoryKey } from "@/lib/tours-data";
 
 import { useLanguage } from "@/hooks/use-language";
 
 import heroImg from "@/assets/hero-mountains.jpg";
+import heroVideo from "@/assets/hero.mp4";
 import logoImg from "@/assets/logo.png";
 
 const CURRENT_YEAR = 2026;
@@ -57,17 +59,25 @@ function Index() {
   return (
     <div dir={dir} lang={lang} className="min-h-screen text-foreground">
       {/* NAV */}
-      <header className="fixed top-4 left-1/2 z-40 w-[calc(100%-2rem)] max-w-6xl -translate-x-1/2">
+      <header
+        className={`fixed left-1/2 z-40 w-[calc(100%-2rem)] -translate-x-1/2 transition-[top,max-width] duration-[400ms] ease-[cubic-bezier(.25,.46,.45,.94)] ${
+          scrolled ? "top-3 max-w-[860px]" : "top-4 max-w-6xl"
+        }`}
+      >
         <div
-          className={`glass glass-sheen flex items-center justify-between gap-4 rounded-full px-5 py-3 transition-all duration-300 ${
-            scrolled ? "nav-scrolled py-2.5" : ""
+          className={`glass glass-sheen flex items-center justify-between gap-4 rounded-full transition-[padding,box-shadow] duration-[400ms] ease-[cubic-bezier(.25,.46,.45,.94)] ${
+            scrolled ? "nav-scrolled px-4 py-2" : "px-5 py-3"
           }`}
         >
           <Link to="/" className="group flex items-center gap-2 text-foreground">
             <img src={logoImg} alt={t.brand} width={36} height={36} className="h-9 w-9 shrink-0 object-contain transition-transform duration-300 group-hover:-translate-y-0.5" />
             <span className="font-display text-lg font-medium tracking-tight">{t.brand}</span>
           </Link>
-          <nav className="hidden items-center gap-7 text-sm text-foreground/80 lg:flex">
+          <nav
+            className={`hidden items-center text-sm text-foreground/80 transition-[gap] duration-[400ms] ease-[cubic-bezier(.25,.46,.45,.94)] lg:flex ${
+              scrolled ? "gap-4" : "gap-7"
+            }`}
+          >
             {[
               { href: "#tours", label: t.nav.tours },
               { href: "#reviews", label: t.reviews.eyebrow },
@@ -84,20 +94,7 @@ function Index() {
             ))}
           </nav>
           <div className="flex items-center gap-2">
-            <div className="glass flex items-center gap-0.5 rounded-full p-0.5 text-xs">
-              {LANGS.map((l) => (
-                <button
-                  key={l.code}
-                  onClick={() => setLang(l.code)}
-                  className={`cursor-pointer rounded-full px-2.5 py-1 transition-all duration-300 ${
-                    lang === l.code ? "bg-primary text-primary-foreground" : "text-foreground/70 hover:text-foreground"
-                  }`}
-                  aria-pressed={lang === l.code}
-                >
-                  {l.label}
-                </button>
-              ))}
-            </div>
+            <LanguageSwitcher lang={lang} onChange={setLang} dir={dir} />
             <Button size="sm" className="hidden rounded-full transition-transform duration-300 hover:scale-[1.03] active:scale-95 sm:inline-flex">{t.nav.book}</Button>
             <button
               onClick={() => setMenuOpen((v) => !v)}
@@ -136,6 +133,18 @@ function Index() {
       {/* HERO */}
       <section className="relative h-[92vh] min-h-[640px] w-full overflow-hidden">
         <img src={heroImg} alt="" width={1920} height={1080} className="absolute inset-0 h-full w-full scale-105 object-cover" />
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          poster={heroImg}
+          aria-hidden="true"
+          className="absolute inset-0 h-full w-full scale-105 object-cover"
+        >
+          <source src={heroVideo} type="video/mp4" />
+        </video>
         <div className="absolute inset-0" style={{ background: "var(--gradient-hero)" }} />
         <div className="animate-float pointer-events-none absolute -left-20 top-1/3 h-72 w-72 rounded-full bg-accent/30 blur-3xl" />
         <div className="animate-float-alt pointer-events-none absolute right-0 top-20 h-80 w-80 rounded-full bg-primary/30 blur-3xl" />
@@ -316,8 +325,8 @@ function Index() {
               <Button size="lg" className="h-12 cursor-pointer rounded-xl transition-transform duration-300 hover:scale-[1.03] active:scale-95">{t.cta.btn}</Button>
             </div>
             <div className="mt-8 flex flex-wrap gap-6 text-sm text-foreground/85">
-              <a href="tel:+994000000000" className="flex items-center gap-2 transition-colors hover:text-foreground"><Phone className="h-4 w-4" /><span dir="ltr">+994 00 000 00 00</span></a>
-              <a href="mailto:hello@seyahet.az" className="flex items-center gap-2 transition-colors hover:text-foreground"><Mail className="h-4 w-4" /><span dir="ltr">hello@seyahet.az</span></a>
+              <a href="tel:+994519600212" className="flex items-center gap-2 transition-colors hover:text-foreground"><Phone className="h-4 w-4" /><span dir="ltr">051 960 02 12</span></a>
+              <a href="https://www.instagram.com/m4strip/" target="_blank" rel="noreferrer" aria-label="M4STrip Instagram" className="flex items-center gap-2 transition-colors hover:text-foreground"><Instagram className="h-4 w-4" /><span dir="ltr">@m4strip</span></a>
             </div>
           </div>
           <Mountain className="absolute -right-10 -bottom-10 h-72 w-72 text-foreground/10" strokeWidth={1} />
@@ -335,7 +344,7 @@ function Index() {
         </div>
       </footer>
 
-      <BookingDialog tour={bookingTour} open={!!bookingTour} onOpenChange={(o) => !o && setBookingTour(null)} />
+      <BookingDialog tour={bookingTour} open={!!bookingTour} lang={lang} onOpenChange={(o) => !o && setBookingTour(null)} />
     </div>
   );
 }

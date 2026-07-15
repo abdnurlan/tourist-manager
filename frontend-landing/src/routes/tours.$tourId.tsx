@@ -4,7 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, ArrowRight, Check, Clock, MapPin, Star, Users, X } from "lucide-react";
 import { BookingDialog, type BookingTour } from "@/components/BookingDialog";
-import { TOURS, T, LANGS, type Tour } from "@/lib/tours-data";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { TOURS, T, type Tour } from "@/lib/tours-data";
 import { useLanguage } from "@/hooks/use-language";
 import logoImg from "@/assets/logo.png";
 
@@ -79,10 +80,14 @@ function TourDetail() {
   return (
     <div dir={dir} lang={lang} className="min-h-screen text-foreground">
       {/* NAV */}
-      <header className="fixed top-4 left-1/2 z-40 w-[calc(100%-2rem)] max-w-6xl -translate-x-1/2">
+      <header
+        className={`fixed left-1/2 z-40 w-[calc(100%-2rem)] -translate-x-1/2 transition-[top,max-width] duration-[400ms] ease-[cubic-bezier(.25,.46,.45,.94)] ${
+          scrolled ? "top-3 max-w-[860px]" : "top-4 max-w-6xl"
+        }`}
+      >
         <div
-          className={`glass glass-sheen flex items-center justify-between gap-4 rounded-full px-5 py-3 transition-all duration-300 ${
-            scrolled ? "nav-scrolled py-2.5" : ""
+          className={`glass glass-sheen flex items-center justify-between gap-4 rounded-full transition-[padding,box-shadow] duration-[400ms] ease-[cubic-bezier(.25,.46,.45,.94)] ${
+            scrolled ? "nav-scrolled px-4 py-2" : "px-5 py-3"
           }`}
         >
           <Link to="/" className="group flex items-center gap-2 text-foreground">
@@ -90,20 +95,7 @@ function TourDetail() {
             <span className="font-display text-lg font-medium tracking-tight">{t.brand}</span>
           </Link>
           <div className="flex items-center gap-2">
-            <div className="glass flex items-center gap-0.5 rounded-full p-0.5 text-xs">
-              {LANGS.map((l) => (
-                <button
-                  key={l.code}
-                  onClick={() => setLang(l.code)}
-                  className={`cursor-pointer rounded-full px-2.5 py-1 transition-all duration-300 ${
-                    lang === l.code ? "bg-primary text-primary-foreground" : "text-foreground/70 hover:text-foreground"
-                  }`}
-                  aria-pressed={lang === l.code}
-                >
-                  {l.label}
-                </button>
-              ))}
-            </div>
+            <LanguageSwitcher lang={lang} onChange={setLang} dir={dir} />
           </div>
         </div>
       </header>
@@ -224,7 +216,7 @@ function TourDetail() {
         </div>
       </section>
 
-      <BookingDialog tour={booking} open={!!booking} onOpenChange={(o) => !o && setBooking(null)} />
+      <BookingDialog tour={booking} open={!!booking} lang={lang} onOpenChange={(o) => !o && setBooking(null)} />
     </div>
   );
 }

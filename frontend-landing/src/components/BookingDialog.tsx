@@ -1,16 +1,38 @@
 import { useMemo, useState } from "react";
 import { format } from "date-fns";
-import { az } from "date-fns/locale";
-import { CalendarIcon, MapPin, Clock, Users, ArrowRight, ArrowLeft, CheckCircle2, CreditCard, ShieldCheck, Minus, Plus } from "lucide-react";
+import { ar, az, enUS, he, ru } from "date-fns/locale";
+import {
+  CalendarIcon,
+  MapPin,
+  Clock,
+  Users,
+  ArrowRight,
+  ArrowLeft,
+  CheckCircle2,
+  CreditCard,
+  ShieldCheck,
+  Minus,
+  Plus,
+} from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { BOOKING_COPY } from "@/lib/booking-i18n";
+import type { Lang } from "@/lib/tours-data";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
+
+const DATE_LOCALES = { az, en: enUS, he, ar, ru };
 
 export type BookingTour = {
   id: string;
@@ -26,10 +48,11 @@ type Step = "details" | "payment" | "success";
 interface Props {
   tour: BookingTour | null;
   open: boolean;
+  lang: Lang;
   onOpenChange: (open: boolean) => void;
 }
 
-export function BookingDialog({ tour, open, onOpenChange }: Props) {
+export function BookingDialog({ tour, open, lang, onOpenChange }: Props) {
   const [step, setStep] = useState<Step>("details");
   const [date, setDate] = useState<Date | undefined>();
   const [people, setPeople] = useState(2);
@@ -40,6 +63,9 @@ export function BookingDialog({ tour, open, onOpenChange }: Props) {
   const [expiry, setExpiry] = useState("");
   const [cvc, setCvc] = useState("");
   const [processing, setProcessing] = useState(false);
+  const copy = BOOKING_COPY[lang];
+  const dateLocale = DATE_LOCALES[lang];
+  const isRtl = lang === "ar" || lang === "he";
 
   const total = useMemo(() => (tour ? tour.price * people : 0), [tour, people]);
 
@@ -69,14 +95,14 @@ export function BookingDialog({ tour, open, onOpenChange }: Props) {
     await new Promise((r) => setTimeout(r, 1400));
     setProcessing(false);
     setStep("success");
-    toast.success("Rezervasiya təsdiqləndi!");
+    toast.success(copy.confirmed);
   };
 
   if (!tour) return null;
 
   return (
     <Dialog open={open} onOpenChange={handleClose}>
-      <DialogContent className="max-w-2xl overflow-hidden p-0">
+      <DialogContent dir={isRtl ? "rtl" : "ltr"} className="max-w-2xl overflow-hidden p-0">
         {/* Header image */}
         <div className="relative h-44 w-full overflow-hidden">
           <img src={tour.image} alt={tour.title} className="h-full w-full object-cover" />
@@ -108,8 +134,10 @@ export function BookingDialog({ tour, open, onOpenChange }: Props) {
                 >
                   {done ? <CheckCircle2 className="h-3.5 w-3.5" /> : i + 1}
                 </div>
-                <span className={cn("text-muted-foreground", (active || done) && "text-foreground")}>
-                  {s === "details" ? "Detallar" : s === "payment" ? "Ödəniş" : "Təsdiq"}
+                <span
+                  className={cn("text-muted-foreground", (active || done) && "text-foreground")}
+                >
+                  {copy.steps[i]}
                 </span>
                 {i < 2 && <div className="mx-2 h-px w-8 bg-border" />}
               </div>
@@ -117,22 +145,27 @@ export function BookingDialog({ tour, open, onOpenChange }: Props) {
           })}
         </div>
 
-        <DialogDescription className="sr-only">Tur rezervasiyası</DialogDescription>
+        <DialogDescription className="sr-only">{copy.description}</DialogDescription>
 
         <div className="max-h-[60vh] overflow-y-auto px-6 pb-6 pt-4">
           {step === "details" && (
             <div className="space-y-5">
               {/* Date */}
               <div className="space-y-2">
-                <Label>Səyahət tarixi</Label>
+                <Label>{copy.travelDate}</Label>
                 <Popover>
                   <PopoverTrigger asChild>
                     <Button
                       variant="outline"
-                      className={cn("w-full justify-start text-left font-normal h-11", !date && "text-muted-foreground")}
+                      className={cn(
+                        "h-11 w-full justify-start gap-2 text-start font-normal",
+                        !date && "text-muted-foreground",
+                      )}
                     >
-                      <CalendarIcon className="mr-2 h-4 w-4" />
-                      {date ? format(date, "d MMMM yyyy, EEEE", { locale: az }) : "Tarix seç"}
+                      <CalendarIcon className="h-4 w-4" />
+                      {date
+                        ? format(date, "d MMMM yyyy, EEEE", { locale: dateLocale })
+                        : copy.selectDate}
                     </Button>
                   </PopoverTrigger>
                   <PopoverContent className="w-auto p-0" align="start">
@@ -142,7 +175,7 @@ export function BookingDialog({ tour, open, onOpenChange }: Props) {
                       onSelect={setDate}
                       disabled={(d) => d < new Date(new Date().setHours(0, 0, 0, 0))}
                       initialFocus
-                      locale={az}
+                      locale={dateLocale}
                       className={cn("p-3 pointer-events-auto")}
                     />
                   </PopoverContent>
@@ -151,17 +184,27 @@ export function BookingDialog({ tour, open, onOpenChange }: Props) {
 
               {/* People */}
               <div className="space-y-2">
-                <Label>Nəfər sayı</Label>
+                <Label>{copy.peopleCount}</Label>
                 <div className="flex h-11 items-center justify-between rounded-md border border-input bg-background px-3">
                   <span className="text-sm text-muted-foreground flex items-center gap-2">
-                    <Users className="h-4 w-4" /> {people} nəfər
+                    <Users className="h-4 w-4" /> {people} {copy.people}
                   </span>
                   <div className="flex items-center gap-1">
-                    <Button size="icon" variant="outline" className="h-8 w-8" onClick={() => setPeople(Math.max(1, people - 1))}>
+                    <Button
+                      size="icon"
+                      variant="outline"
+                      className="h-8 w-8"
+                      onClick={() => setPeople(Math.max(1, people - 1))}
+                    >
                       <Minus className="h-3.5 w-3.5" />
                     </Button>
                     <span className="w-8 text-center text-sm font-medium">{people}</span>
-                    <Button size="icon" variant="outline" className="h-8 w-8" onClick={() => setPeople(Math.min(20, people + 1))}>
+                    <Button
+                      size="icon"
+                      variant="outline"
+                      className="h-8 w-8"
+                      onClick={() => setPeople(Math.min(20, people + 1))}
+                    >
                       <Plus className="h-3.5 w-3.5" />
                     </Button>
                   </div>
@@ -170,32 +213,53 @@ export function BookingDialog({ tour, open, onOpenChange }: Props) {
 
               <div className="grid gap-4 sm:grid-cols-2">
                 <div className="space-y-2">
-                  <Label htmlFor="name">Ad və soyad</Label>
-                  <Input id="name" value={name} onChange={(e) => setName(e.target.value)} placeholder="Ayan Məmmədov" />
+                  <Label htmlFor="name">{copy.fullName}</Label>
+                  <Input
+                    id="name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder={copy.namePlaceholder}
+                  />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="phone">Telefon</Label>
-                  <Input id="phone" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+994 50 000 00 00" />
+                  <Label htmlFor="phone">{copy.phone}</Label>
+                  <Input
+                    id="phone"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    placeholder="+994 50 000 00 00"
+                  />
                 </div>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
-                <Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="sen@example.com" />
+                <Label htmlFor="email">{copy.email}</Label>
+                <Input
+                  id="email"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder={copy.emailPlaceholder}
+                />
               </div>
 
               {/* Summary */}
               <div className="flex items-center justify-between rounded-lg bg-secondary/60 p-4">
                 <div className="text-sm text-muted-foreground flex items-center gap-3">
-                  <Clock className="h-4 w-4" /> {tour.duration} · {people} nəfər
+                  <Clock className="h-4 w-4" /> {tour.duration} · {people} {copy.people}
                 </div>
-                <div className="text-right">
-                  <div className="text-xs text-muted-foreground">Cəmi</div>
+                <div className="text-end">
+                  <div className="text-xs text-muted-foreground">{copy.total}</div>
                   <div className="font-display text-xl font-medium text-primary">{total} ₼</div>
                 </div>
               </div>
 
-              <Button className="w-full h-11" disabled={!canContinue} onClick={() => setStep("payment")}>
-                Ödənişə keç <ArrowRight className="ml-1 h-4 w-4" />
+              <Button
+                className="w-full h-11"
+                disabled={!canContinue}
+                onClick={() => setStep("payment")}
+              >
+                {copy.continueToPayment}{" "}
+                {isRtl ? <ArrowLeft className="h-4 w-4" /> : <ArrowRight className="h-4 w-4" />}
               </Button>
             </div>
           )}
@@ -204,24 +268,31 @@ export function BookingDialog({ tour, open, onOpenChange }: Props) {
             <div className="space-y-5">
               <div className="rounded-lg border border-border p-4">
                 <div className="flex items-center justify-between text-sm">
-                  <span className="text-muted-foreground">Tarix</span>
-                  <span className="font-medium">{date && format(date, "d MMM yyyy", { locale: az })}</span>
+                  <span className="text-muted-foreground">{copy.date}</span>
+                  <span className="font-medium">
+                    {date && format(date, "d MMM yyyy", { locale: dateLocale })}
+                  </span>
                 </div>
                 <div className="mt-2 flex items-center justify-between text-sm">
-                  <span className="text-muted-foreground">Nəfər</span>
+                  <span className="text-muted-foreground">{copy.peopleCount}</span>
                   <span className="font-medium">{people}</span>
                 </div>
                 <div className="mt-3 flex items-center justify-between border-t border-border pt-3">
-                  <span className="text-sm text-muted-foreground">Ümumi məbləğ</span>
+                  <span className="text-sm text-muted-foreground">{copy.totalAmount}</span>
                   <span className="font-display text-2xl font-medium text-primary">{total} ₼</span>
                 </div>
               </div>
 
               <div className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="card">Kart nömrəsi</Label>
+                  <Label htmlFor="card">{copy.cardNumber}</Label>
                   <div className="relative">
-                    <CreditCard className="absolute left-3 top-3.5 h-4 w-4 text-muted-foreground" />
+                    <CreditCard
+                      className={cn(
+                        "absolute top-3.5 h-4 w-4 text-muted-foreground",
+                        isRtl ? "right-3" : "left-3",
+                      )}
+                    />
                     <Input
                       id="card"
                       value={card}
@@ -230,13 +301,13 @@ export function BookingDialog({ tour, open, onOpenChange }: Props) {
                         setCard(v.replace(/(\d{4})(?=\d)/g, "$1 "));
                       }}
                       placeholder="1234 5678 9012 3456"
-                      className="pl-9"
+                      className={isRtl ? "pr-9" : "pl-9"}
                     />
                   </div>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="expiry">Bitmə tarixi</Label>
+                    <Label htmlFor="expiry">{copy.expiry}</Label>
                     <Input
                       id="expiry"
                       value={expiry}
@@ -249,22 +320,28 @@ export function BookingDialog({ tour, open, onOpenChange }: Props) {
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="cvc">CVC</Label>
-                    <Input id="cvc" value={cvc} onChange={(e) => setCvc(e.target.value.replace(/\D/g, "").slice(0, 4))} placeholder="123" />
+                    <Input
+                      id="cvc"
+                      value={cvc}
+                      onChange={(e) => setCvc(e.target.value.replace(/\D/g, "").slice(0, 4))}
+                      placeholder="123"
+                    />
                   </div>
                 </div>
               </div>
 
               <div className="flex items-center gap-2 rounded-md bg-secondary/60 px-3 py-2 text-xs text-muted-foreground">
                 <ShieldCheck className="h-4 w-4 text-accent" />
-                Ödənişiniz şifrələnir. Bu demo rejimidir — real kartdan məbləğ tutulmur.
+                {copy.secureNote}
               </div>
 
               <div className="flex gap-3">
                 <Button variant="outline" className="flex-1" onClick={() => setStep("details")}>
-                  <ArrowLeft className="mr-1 h-4 w-4" /> Geri
+                  {isRtl ? <ArrowRight className="h-4 w-4" /> : <ArrowLeft className="h-4 w-4" />}{" "}
+                  {copy.back}
                 </Button>
                 <Button className="flex-1" disabled={!canPay || processing} onClick={handlePay}>
-                  {processing ? "Ödəniş edilir..." : `${total} ₼ ödə`}
+                  {processing ? copy.processing : `${copy.pay} ${total} ₼`}
                 </Button>
               </div>
             </div>
@@ -275,17 +352,33 @@ export function BookingDialog({ tour, open, onOpenChange }: Props) {
               <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-accent/20">
                 <CheckCircle2 className="h-9 w-9 text-accent" />
               </div>
-              <h3 className="mt-5 font-display text-2xl font-medium">Rezervasiya təsdiqləndi</h3>
+              <h3 className="mt-5 font-display text-2xl font-medium">{copy.confirmed}</h3>
               <p className="mt-2 text-sm text-muted-foreground">
-                Təsdiq detalları <span className="text-foreground font-medium">{email}</span> ünvanına göndərildi.
+                {copy.confirmationPrefix}{" "}
+                <span className="text-foreground font-medium">{email}</span>
+                {copy.confirmationSuffix}
               </p>
-              <div className="mx-auto mt-6 max-w-sm rounded-lg border border-border p-4 text-left text-sm">
-                <div className="flex justify-between"><span className="text-muted-foreground">Tur</span><span className="font-medium">{tour.title}</span></div>
-                <div className="mt-1 flex justify-between"><span className="text-muted-foreground">Tarix</span><span>{date && format(date, "d MMM yyyy", { locale: az })}</span></div>
-                <div className="mt-1 flex justify-between"><span className="text-muted-foreground">Nəfər</span><span>{people}</span></div>
-                <div className="mt-2 flex justify-between border-t border-border pt-2"><span className="text-muted-foreground">Məbləğ</span><span className="font-medium text-primary">{total} ₼</span></div>
+              <div className="mx-auto mt-6 max-w-sm rounded-lg border border-border p-4 text-start text-sm">
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">{copy.tour}</span>
+                  <span className="font-medium">{tour.title}</span>
+                </div>
+                <div className="mt-1 flex justify-between">
+                  <span className="text-muted-foreground">{copy.date}</span>
+                  <span>{date && format(date, "d MMM yyyy", { locale: dateLocale })}</span>
+                </div>
+                <div className="mt-1 flex justify-between">
+                  <span className="text-muted-foreground">{copy.peopleCount}</span>
+                  <span>{people}</span>
+                </div>
+                <div className="mt-2 flex justify-between border-t border-border pt-2">
+                  <span className="text-muted-foreground">{copy.amount}</span>
+                  <span className="font-medium text-primary">{total} ₼</span>
+                </div>
               </div>
-              <Button className="mt-6 w-full" onClick={() => handleClose(false)}>Bağla</Button>
+              <Button className="mt-6 w-full" onClick={() => handleClose(false)}>
+                {copy.close}
+              </Button>
             </div>
           )}
         </div>
