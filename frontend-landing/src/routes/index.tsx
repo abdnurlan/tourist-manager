@@ -3,9 +3,10 @@ import { useEffect, useMemo, useState, type CSSProperties } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { MapPin, Clock, Users, Star, ArrowRight, Mountain, Compass, Search, Phone, Mail, Quote, Menu, X } from "lucide-react";
+import { MapPin, Clock, Users, Star, ArrowRight, Mountain, Compass, Search, Phone, Mail, Menu, X } from "lucide-react";
 import { BookingDialog, type BookingTour } from "@/components/BookingDialog";
 import { Reveal } from "@/components/Reveal";
+import { TestimonialsMarquee } from "@/components/ui/testimonials-marquee";
 import { TOURS, T, CAT_KEYS, LANGS, REVIEWS, type CategoryKey } from "@/lib/tours-data";
 
 import { useLanguage } from "@/hooks/use-language";
@@ -164,12 +165,12 @@ function Index() {
       </section>
 
       {/* STATS */}
-      <section className="mx-auto -mt-14 max-w-7xl px-6">
-        <div className="glass glass-sheen relative z-10 grid grid-cols-2 gap-8 rounded-3xl px-8 py-10 md:grid-cols-4">
+      <section className="mx-auto -mt-16 max-w-7xl px-6">
+        <div className="relative z-10 grid grid-cols-2 gap-8 rounded-3xl border border-border bg-card px-8 py-10 shadow-(--shadow-soft) md:grid-cols-4">
           {t.stats.map((s) => (
             <div key={s.v}>
               <div className="font-display text-4xl font-medium text-accent md:text-5xl">{s.k}</div>
-              <div className="mt-1 text-sm text-foreground/70">{s.v}</div>
+              <div className="mt-1 text-sm text-muted-foreground">{s.v}</div>
             </div>
           ))}
         </div>
@@ -257,44 +258,25 @@ function Index() {
       </section>
 
       {/* REVIEWS */}
-      <section id="reviews" className="mx-auto max-w-7xl px-6 pb-4 pt-8">
-        <Reveal className="max-w-2xl">
-          <p className="mb-3 text-sm uppercase tracking-widest text-accent">{t.reviews.eyebrow}</p>
-          <h2 className="font-display text-4xl font-medium md:text-5xl">{t.reviews.title}</h2>
-          <p className="mt-4 text-foreground/75">{t.reviews.subtitle}</p>
-        </Reveal>
-
-        <Reveal stagger className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {REVIEWS.map((r, idx) => {
-            const rl = r.i18n[lang];
-            const tour = TOURS.find((tr) => tr.id === r.tourId);
-            const tourTitle = tour?.i18n[lang].title;
-            return (
-              <article key={r.id} style={{ "--i": idx } as CSSProperties} className="glass glass-sheen relative flex flex-col rounded-3xl p-7 transition-all duration-500 hover:-translate-y-1">
-                <Quote className={`absolute h-10 w-10 text-accent/30 ${dir === "rtl" ? "left-6 top-6 -scale-x-100" : "right-6 top-6"}`} strokeWidth={1.5} />
-                <div className="flex items-center gap-1 text-accent">
-                  {Array.from({ length: 5 }).map((_, i) => (
-                    <Star key={i} className={`h-4 w-4 ${i < r.rating ? "fill-accent" : "text-foreground/20"}`} />
-                  ))}
-                </div>
-                <p className="mt-4 flex-1 text-foreground/85 leading-relaxed">"{rl.text}"</p>
-                {tourTitle && (
-                  <div className="mt-5 text-xs text-foreground/60">
-                    {t.reviews.tourLabel}: <span className="text-foreground/80">{tourTitle}</span>
-                  </div>
-                )}
-                <div className="mt-5 flex items-center gap-3 border-t border-white/10 pt-5">
-                  <img src={r.avatar} alt={rl.name} loading="lazy" width={48} height={48} className="h-12 w-12 rounded-full object-cover" />
-                  <div>
-                    <div className="font-display text-base font-medium">{rl.name}</div>
-                    <div className="text-xs text-foreground/60">{rl.location}</div>
-                  </div>
-                </div>
-              </article>
-            );
-          })}
-        </Reveal>
-      </section>
+      <TestimonialsMarquee
+        eyebrow={t.reviews.eyebrow}
+        title={t.reviews.title}
+        subtitle={t.reviews.subtitle}
+        dir={dir}
+        testimonials={REVIEWS.map((r) => {
+          const rl = r.i18n[lang];
+          const tour = TOURS.find((tr) => tr.id === r.tourId);
+          const tourTitle = tour?.i18n[lang].title;
+          return {
+            id: r.id,
+            text: rl.text,
+            image: r.avatar,
+            name: rl.name,
+            role: tourTitle ? `${t.reviews.tourLabel}: ${tourTitle}` : rl.location,
+            rating: r.rating,
+          };
+        })}
+      />
 
       {/* HOW IT WORKS */}
 
