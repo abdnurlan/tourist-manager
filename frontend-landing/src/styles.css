@@ -38,46 +38,47 @@
 :root {
   --radius: 1rem;
 
-  /* Deep warm twilight base for glass to float on */
-  --background: oklch(0.16 0.03 50);
-  --foreground: oklch(0.97 0.012 85);
-  --card: oklch(1 0 0 / 0.06);
-  --card-foreground: oklch(0.97 0.012 85);
-  --popover: oklch(0.22 0.03 50 / 0.85);
-  --popover-foreground: oklch(0.97 0.012 85);
-  --primary: oklch(0.78 0.16 60);
-  --primary-foreground: oklch(0.18 0.03 50);
-  --secondary: oklch(1 0 0 / 0.08);
-  --secondary-foreground: oklch(0.97 0.012 85);
-  --muted: oklch(1 0 0 / 0.06);
-  --muted-foreground: oklch(0.78 0.02 70);
-  --accent: oklch(0.82 0.14 75);
-  --accent-foreground: oklch(0.18 0.03 50);
-  --destructive: oklch(0.65 0.22 28);
-  --destructive-foreground: oklch(0.98 0.01 85);
-  --border: oklch(1 0 0 / 0.14);
-  --input: oklch(1 0 0 / 0.12);
-  --ring: oklch(0.82 0.14 75);
+  /* ── "Səyahət Jurnalı" palette — matched to the admin app ──
+     Warm paper base, deep brand navy ink, sun-orange accent
+     (all drawn from the M4STrip logo). */
+  --background: #f6f1e7;          /* warm paper */
+  --foreground: #1c1917;          /* ink */
+  --card: #fffdf8;                /* surface */
+  --card-foreground: #1c1917;
+  --popover: #fffdf8;
+  --popover-foreground: #1c1917;
+  --primary: #01335e;            /* brand navy */
+  --primary-foreground: #f4f8fd;
+  --secondary: #efe6d4;          /* surface-muted */
+  --secondary-foreground: #1c1917;
+  --muted: #efe6d4;
+  --muted-foreground: #6f655a;
+  --accent: #e9790d;             /* sun-orange */
+  --accent-foreground: #fff6ec;
+  --destructive: #b3402f;
+  --destructive-foreground: #fff6ec;
+  --border: #e6dac4;
+  --input: #e6dac4;
+  --ring: #01335e;
 
   --font-display: "Fraunces", ui-serif, Georgia, serif;
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
 
-  /* Glassmorphism tokens */
-  --glass-bg: oklch(1 0 0 / 0.08);
-  --glass-bg-strong: oklch(1 0 0 / 0.14);
-  --glass-border: oklch(1 0 0 / 0.18);
-  --glass-highlight: linear-gradient(135deg, oklch(1 0 0 / 0.25) 0%, oklch(1 0 0 / 0.05) 40%, oklch(1 0 0 / 0) 100%);
-  --glass-blur: 22px;
-  --glass-shadow: 0 10px 40px -10px oklch(0 0 0 / 0.5), inset 0 1px 0 0 oklch(1 0 0 / 0.18);
+  /* Glass tokens — warm paper glass (light), for sticky nav & cards */
+  --glass-bg: color-mix(in srgb, #fffdf8 80%, transparent);
+  --glass-bg-strong: color-mix(in srgb, #fffdf8 92%, transparent);
+  --glass-border: #e6dac4;
+  --glass-highlight: linear-gradient(135deg, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0.15) 40%, rgba(255, 255, 255, 0) 100%);
+  --glass-blur: 16px;
+  --glass-shadow: 0 8px 32px rgba(28, 25, 23, 0.1);
 
-  --gradient-warm: linear-gradient(135deg, oklch(0.55 0.18 40 / 0.85), oklch(0.78 0.16 60 / 0.75));
-  --gradient-hero: linear-gradient(180deg, oklch(0.15 0.03 50 / 0.25) 0%, oklch(0.12 0.03 50 / 0.7) 100%);
+  --gradient-warm: linear-gradient(135deg, rgba(1, 51, 94, 0.9), rgba(233, 121, 13, 0.85));
+  --gradient-hero: linear-gradient(180deg, rgba(28, 25, 23, 0.15) 0%, rgba(28, 25, 23, 0.55) 100%);
   --gradient-ambient:
-    radial-gradient(60% 50% at 15% 10%, oklch(0.78 0.16 60 / 0.35), transparent 60%),
-    radial-gradient(50% 50% at 85% 20%, oklch(0.55 0.20 30 / 0.35), transparent 60%),
-    radial-gradient(70% 60% at 50% 100%, oklch(0.40 0.15 280 / 0.35), transparent 60%);
-  --shadow-soft: 0 30px 80px -30px oklch(0 0 0 / 0.55);
-  --shadow-card: 0 12px 40px -12px oklch(0 0 0 / 0.4);
+    radial-gradient(60% 50% at 15% 10%, rgba(233, 121, 13, 0.1), transparent 60%),
+    radial-gradient(50% 50% at 85% 20%, rgba(1, 51, 94, 0.1), transparent 60%);
+  --shadow-soft: 0 30px 80px -30px rgba(28, 25, 23, 0.35);
+  --shadow-card: 0 12px 40px -12px rgba(28, 25, 23, 0.2);
 }
 
 @layer base {

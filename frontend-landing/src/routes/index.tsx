@@ -11,6 +11,7 @@ import { TOURS, T, CAT_KEYS, LANGS, REVIEWS, type CategoryKey } from "@/lib/tour
 import { useLanguage } from "@/hooks/use-language";
 
 import heroImg from "@/assets/hero-mountains.jpg";
+import logoImg from "@/assets/logo.png";
 
 const CURRENT_YEAR = 2026;
 
@@ -62,7 +63,7 @@ function Index() {
           }`}
         >
           <Link to="/" className="group flex items-center gap-2 text-foreground">
-            <Mountain className="h-5 w-5 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:text-accent" strokeWidth={1.5} />
+            <img src={logoImg} alt={t.brand} width={36} height={36} className="h-9 w-9 shrink-0 object-contain transition-transform duration-300 group-hover:-translate-y-0.5" />
             <span className="font-display text-lg font-medium tracking-tight">{t.brand}</span>
           </Link>
           <nav className="hidden items-center gap-7 text-sm text-foreground/80 lg:flex">
@@ -139,20 +140,20 @@ function Index() {
         <div className="animate-float-alt pointer-events-none absolute right-0 top-20 h-80 w-80 rounded-full bg-primary/30 blur-3xl" />
 
         <div className="relative z-10 mx-auto flex h-full max-w-7xl flex-col justify-end px-6 pb-20 md:pb-28">
-          <Badge className="glass glass-sheen animate-fade-up mb-6 w-fit rounded-full px-4 py-1.5 text-foreground" style={{ animationDelay: "0.1s" }}>{t.hero.badge}</Badge>
-          <h1 className="animate-fade-up max-w-4xl font-display text-5xl font-medium leading-[1.05] text-foreground md:text-7xl lg:text-8xl" style={{ animationDelay: "0.2s" }}>
+          <Badge className="animate-fade-up mb-6 w-fit rounded-full border-white/25 bg-white/15 px-4 py-1.5 text-white backdrop-blur-md" style={{ animationDelay: "0.1s" }}>{t.hero.badge}</Badge>
+          <h1 className="animate-fade-up max-w-4xl font-display text-5xl font-medium leading-[1.05] text-white md:text-7xl lg:text-8xl" style={{ animationDelay: "0.2s" }}>
             {t.hero.title1} <em className="italic text-accent">{t.hero.title2}</em>
           </h1>
-          <p className="animate-fade-up mt-6 max-w-xl text-lg text-foreground/85 md:text-xl" style={{ animationDelay: "0.35s" }}>{t.hero.subtitle}</p>
+          <p className="animate-fade-up mt-6 max-w-xl text-lg text-white/90 md:text-xl" style={{ animationDelay: "0.35s" }}>{t.hero.subtitle}</p>
 
-          <div className="glass glass-sheen animate-fade-up mt-10 flex w-full max-w-2xl flex-col gap-3 rounded-2xl p-3 md:flex-row md:items-center" style={{ animationDelay: "0.5s" }}>
+          <div className="animate-fade-up mt-10 flex w-full max-w-2xl flex-col gap-3 rounded-2xl border border-white/20 bg-white/15 p-3 backdrop-blur-md md:flex-row md:items-center" style={{ animationDelay: "0.5s" }}>
             <div className="flex flex-1 items-center gap-2 px-3">
-              <Search className="h-5 w-5 text-foreground/70" />
+              <Search className="h-5 w-5 text-white/80" />
               <Input
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder={t.hero.searchPh}
-                className="border-0 bg-transparent text-foreground shadow-none placeholder:text-foreground/60 focus-visible:ring-0"
+                className="border-0 bg-transparent text-white shadow-none placeholder:text-white/70 focus-visible:ring-0"
               />
             </div>
             <Button size="lg" className="cursor-pointer rounded-xl transition-transform duration-300 hover:scale-[1.02] active:scale-95" onClick={() => document.getElementById("tours")?.scrollIntoView({ behavior: "smooth" })}>
@@ -163,15 +164,15 @@ function Index() {
       </section>
 
       {/* STATS */}
-      <section className="mx-auto max-w-7xl px-6 pt-16">
-        <Reveal stagger className="glass glass-sheen grid grid-cols-2 gap-8 rounded-3xl px-8 py-10 md:grid-cols-4">
-          {t.stats.map((s, i) => (
-            <div key={s.v} style={{ "--i": i } as CSSProperties}>
+      <section className="mx-auto -mt-14 max-w-7xl px-6">
+        <div className="glass glass-sheen relative z-10 grid grid-cols-2 gap-8 rounded-3xl px-8 py-10 md:grid-cols-4">
+          {t.stats.map((s) => (
+            <div key={s.v}>
               <div className="font-display text-4xl font-medium text-accent md:text-5xl">{s.k}</div>
               <div className="mt-1 text-sm text-foreground/70">{s.v}</div>
             </div>
           ))}
-        </Reveal>
+        </div>
       </section>
 
       {/* TOURS */}
@@ -345,7 +346,7 @@ function Index() {
       <footer>
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-6 py-10 text-sm text-foreground/70 md:flex-row">
           <div className="flex items-center gap-2">
-            <Mountain className="h-4 w-4" strokeWidth={1.5} />
+            <img src={logoImg} alt={t.brand} width={24} height={24} className="h-6 w-6 object-contain" />
             <span className="font-display text-base text-foreground">{t.brand}</span>
           </div>
           <p>© {CURRENT_YEAR} {t.brand}. {t.footer}</p>
