@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState, type CSSProperties } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
@@ -8,7 +9,8 @@ import { BookingDialog, type BookingTour } from "@/components/BookingDialog";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { Reveal } from "@/components/Reveal";
 import { TestimonialsMarquee } from "@/components/ui/testimonials-marquee";
-import { TOURS, T, CAT_KEYS, REVIEWS, type CategoryKey } from "@/lib/tours-data";
+import { T, CAT_KEYS, REVIEWS, type CategoryKey, type Tour } from "@/lib/tours-data";
+import { fetchCatalogTours } from "@/lib/api/client";
 
 import { useLanguage } from "@/hooks/use-language";
 
@@ -46,15 +48,20 @@ function Index() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  const { data: tours = [], isLoading } = useQuery({
+    queryKey: ["catalog-tours"],
+    queryFn: fetchCatalogTours,
+  });
+
   const filtered = useMemo(() => {
-    return TOURS.filter((tour) => {
+    return tours.filter((tour: Tour) => {
       const matchesCat = category === "all" || tour.category === category;
       const q = query.trim().toLowerCase();
       const loc = tour.i18n[lang];
       const matchesQuery = !q || loc.title.toLowerCase().includes(q) || loc.region.toLowerCase().includes(q);
       return matchesCat && matchesQuery;
     });
-  }, [category, query, lang]);
+  }, [tours, category, query, lang]);
 
   return (
     <div dir={dir} lang={lang} className="min-h-screen text-foreground">
@@ -209,6 +216,17 @@ function Index() {
         </Reveal>
 
         <div key={category + query} className="reveal-stagger is-revealed mt-12 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+          {isLoading &&
+            Array.from({ length: 6 }).map((_, i) => (
+              <div key={i} className="glass overflow-hidden rounded-3xl">
+                <div className="aspect-[4/5] animate-pulse bg-foreground/5" />
+                <div className="space-y-3 p-6">
+                  <div className="h-4 w-1/3 animate-pulse rounded bg-foreground/10" />
+                  <div className="h-6 w-2/3 animate-pulse rounded bg-foreground/10" />
+                  <div className="h-4 w-full animate-pulse rounded bg-foreground/5" />
+                </div>
+              </div>
+            ))}
           {filtered.map((tour, idx) => {
             const loc = tour.i18n[lang];
             return (
@@ -260,7 +278,7 @@ function Index() {
               </article>
             );
           })}
-          {filtered.length === 0 && (
+          {!isLoading && filtered.length === 0 && (
             <div className="glass col-span-full rounded-3xl py-20 text-center text-foreground/70">{t.tours.empty}</div>
           )}
         </div>
@@ -274,7 +292,7 @@ function Index() {
         dir={dir}
         testimonials={REVIEWS.map((r) => {
           const rl = r.i18n[lang];
-          const tour = TOURS.find((tr) => tr.id === r.tourId);
+          const tour = tours.find((tr) => tr.id === r.tourId);
           const tourTitle = tour?.i18n[lang].title;
           return {
             id: r.id,

@@ -5,13 +5,14 @@ import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, ArrowRight, Check, Clock, MapPin, Star, Users, X } from "lucide-react";
 import { BookingDialog, type BookingTour } from "@/components/BookingDialog";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
-import { TOURS, T, type Tour } from "@/lib/tours-data";
+import { T, type Tour } from "@/lib/tours-data";
+import { fetchCatalogTour } from "@/lib/api/client";
 import { useLanguage } from "@/hooks/use-language";
 import logoImg from "@/assets/logo.png";
 
 export const Route = createFileRoute("/tours/$tourId")({
-  loader: ({ params }): { tour: Tour } => {
-    const tour = TOURS.find((tr) => tr.id === params.tourId);
+  loader: async ({ params }): Promise<{ tour: Tour }> => {
+    const tour = await fetchCatalogTour(params.tourId);
     if (!tour) throw notFound();
     return { tour };
   },
