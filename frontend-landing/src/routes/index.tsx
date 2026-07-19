@@ -377,13 +377,34 @@ function Index() {
       </section>
 
       {/* FOOTER */}
-      <footer>
-        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-6 py-10 text-sm text-foreground/70 md:flex-row">
+      <footer className="border-t border-foreground/10">
+        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-3 px-6 py-10 text-sm text-foreground/70 md:flex-row">
           <div className="flex items-center gap-2">
             <img src={logoImg} alt={t.brand} width={24} height={24} className="h-6 w-6 object-contain" />
             <span className="font-display text-base text-foreground">{t.brand}</span>
           </div>
-          <p>© {CURRENT_YEAR} {t.brand}. {t.footer}</p>
+          <div className="flex flex-col items-center gap-1 text-center md:flex-row md:gap-4">
+            <p>© {CURRENT_YEAR} {t.brand}. {t.footer}</p>
+            <p>
+              {(() => {
+                const [before, after] = t.madeBy.split("{c}");
+                return (
+                  <>
+                    {before}
+                    <a
+                      href="https://codalov.co"
+                      target="_blank"
+                      rel="noreferrer"
+                      className="font-medium text-accent underline-offset-4 transition-colors hover:text-foreground hover:underline"
+                    >
+                      Codalov
+                    </a>
+                    {after}
+                  </>
+                );
+              })()}
+            </p>
+          </div>
         </div>
       </footer>
 
