@@ -2,6 +2,7 @@ package service
 
 import (
 	"strings"
+	"time"
 
 	"tourist-manager/backend/internal/models"
 	"tourist-manager/backend/internal/repository"
@@ -82,8 +83,64 @@ func (s *tourService) ListByCatalogTour(catalogTourID string) ([]models.Tour, er
 	}
 	for i := range tours {
 		s.enrich(&tours[i])
+		s.buildDays(&tours[i])
 	}
 	return tours, nil
+}
+
+// buildDays fills the tour's day-by-day plan: one entry per calendar date from
+// start to end, marked active when it has scheduled events (a program), else a
+// free/rest day. Events are grouped by their date.
+func (s *tourService) buildDays(t *models.Tour) {
+	events, err := s.events.ListByTour(t.ID)
+	if err != nil {
+		return
+	}
+	byDate := map[string][]models.TourDayEvent{}
+	for _, e := range events {
+		d := e.Date
+		if len(d) >= 10 {
+			d = d[:10]
+		}
+		byDate[d] = append(byDate[d], models.TourDayEvent{
+			Title: e.Title, Type: e.Type, Time: e.Time, Location: e.Location,
+		})
+	}
+
+	start := parseDay(t.StartDate)
+	end := parseDay(t.EndDate)
+	if start.IsZero() || end.IsZero() || end.Before(start) {
+		return
+	}
+	var days []models.TourDay
+	for d := start; !d.After(end); d = d.AddDate(0, 0, 1) {
+		key := d.Format("2006-01-02")
+		evs := byDate[key]
+		if evs == nil {
+			evs = []models.TourDayEvent{} // serialise as [] not null
+		}
+		days = append(days, models.TourDay{
+			Date:   key,
+			Active: len(evs) > 0,
+			Events: evs,
+		})
+		if len(days) > 366 { // safety
+			break
+		}
+	}
+	t.Days = days
+}
+
+// parseDay parses a YYYY-MM-DD (or RFC3339) date to a UTC time; zero on failure.
+func parseDay(s string) time.Time {
+	if len(s) >= 10 {
+		s = s[:10]
+	}
+	t, err := time.Parse("2006-01-02", s)
+	if err != nil {
+		return time.Time{}
+	}
+	return t
 }
 
 func (s *tourService) Create(in TourInput) (*models.Tour, error) {

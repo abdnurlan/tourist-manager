@@ -2,6 +2,22 @@ package models
 
 import "time"
 
+// TourDayEvent is a lightweight public view of an event on a tour day.
+type TourDayEvent struct {
+	Title    string  `json:"title"`
+	Type     string  `json:"type"`
+	Time     *string `json:"time"`
+	Location *string `json:"location"`
+}
+
+// TourDay is one calendar day of a tour: active when it has at least one event
+// (a scheduled program), otherwise a free/rest day.
+type TourDay struct {
+	Date   string         `json:"date"`   // YYYY-MM-DD
+	Active bool           `json:"active"` // true when the day has scheduled events
+	Events []TourDayEvent `json:"events"`
+}
+
 // Tour is the core entity: a date-ranged trip containing a daily timeline of
 // events. A tour may be linked to a CatalogTour (the public "template"): its
 // price is then inherited from the catalog and it becomes a bookable departure
@@ -22,6 +38,7 @@ type Tour struct {
 	Price         int       `json:"price"           gorm:"-"` // computed: inherited from linked catalog
 	CatalogSlug   string    `json:"catalog_slug"    gorm:"-"` // computed: linked catalog slug (landing link)
 	CatalogTitle  string    `json:"catalog_title"   gorm:"-"` // computed: linked catalog AZ title
+	Days          []TourDay `json:"days,omitempty"  gorm:"-"` // computed: day-by-day plan (public detail)
 	CreatedAt     time.Time `json:"created_at"      gorm:"autoCreateTime"`
 	UpdatedAt     time.Time `json:"updated_at"      gorm:"autoUpdateTime"`
 }
