@@ -12,16 +12,17 @@ export type TourLocale = {
   excluded: string[];
 };
 
-// A concrete dated departure of a tour (one bookable date with its own price
-// and remaining seats). Only open, future departures are returned to the site.
-export type Departure = {
-  id: string;
-  start_date: string;
-  end_date: string | null;
-  price: number | null;
+// A bookable dated departure = an internal Tour linked to this catalog tour.
+// Price is inherited from the catalog; remaining = capacity - bookedSeats.
+export type TourDate = {
+  id: string; // internal tour id
+  title: string;
+  startDate: string; // YYYY-MM-DD
+  endDate: string; // YYYY-MM-DD
   capacity: number;
-  booked: number;
-  status: string;
+  bookedSeats: number;
+  price: number;
+  status: string; // planned | active | completed | cancelled
 };
 
 export type Tour = {
@@ -34,7 +35,7 @@ export type Tour = {
   image: string;
   gallery?: string[];
   i18n: Record<Lang, TourLocale>;
-  departures: Departure[];
+  dates: TourDate[];
 };
 
 

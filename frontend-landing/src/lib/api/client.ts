@@ -1,4 +1,4 @@
-import type { CategoryKey, Departure, Lang, Tour, TourLocale } from "@/lib/tours-data";
+import type { CategoryKey, Lang, Tour, TourDate, TourLocale } from "@/lib/tours-data";
 
 // Public API base for the M4STrip backend.
 //   • Browser (client): VITE_API_URL — a host-reachable origin (localhost:8080).
@@ -33,6 +33,31 @@ interface ApiCatalogTour {
   excluded: Record<string, string[]>;
 }
 
+// Backend internal Tour linked to a catalog tour (a bookable dated departure).
+interface ApiLinkedTour {
+  id: string;
+  title: string;
+  start_date: string;
+  end_date: string;
+  capacity: number;
+  booked_seats: number;
+  price: number;
+  status: string;
+}
+
+function adaptDate(t: ApiLinkedTour): TourDate {
+  return {
+    id: t.id,
+    title: t.title,
+    startDate: (t.start_date ?? "").slice(0, 10),
+    endDate: (t.end_date ?? "").slice(0, 10),
+    capacity: t.capacity,
+    bookedSeats: t.booked_seats,
+    price: t.price,
+    status: t.status,
+  };
+}
+
 // Pick a language value, falling back to az → en → any.
 function pick<T>(m: Record<string, T> | null | undefined, lang: Lang): T | undefined {
   if (!m) return undefined;
@@ -62,7 +87,7 @@ function adapt(api: ApiCatalogTour): Tour {
     rating: api.rating,
     image: api.image_url,
     i18n,
-    departures: [],
+    dates: [],
   };
 }
 
@@ -74,14 +99,14 @@ export async function fetchCatalogTours(): Promise<Tour[]> {
   return (json.data ?? []).map(adapt);
 }
 
-/** GET /public/catalog-tours/:slug → single tour + open departures, or null. */
+/** GET /public/catalog-tours/:slug → single tour + linked dated tours, or null. */
 export async function fetchCatalogTour(slug: string): Promise<Tour | null> {
   const res = await fetch(`${API_BASE}/public/catalog-tours/${encodeURIComponent(slug)}`);
   if (res.status === 404) return null;
   if (!res.ok) throw new Error("Tur yüklənə bilmədi.");
-  const json = (await res.json()) as { tour: ApiCatalogTour; departures: Departure[] };
+  const json = (await res.json()) as { tour: ApiCatalogTour; tours: ApiLinkedTour[] };
   const tour = adapt(json.tour);
-  tour.departures = json.departures ?? [];
+  tour.dates = (json.tours ?? []).map(adaptDate);
   return tour;
 }
 
@@ -94,12 +119,15 @@ export interface CreateBookingBody {
   email?: string | null;
   people?: number;
   date?: string | null;
-  departure_id?: string | null;
+  tour_id?: string | null;
   notes?: string | null;
 }
 
+// Backend errors are a flat { code, message, fields? } (Azerbaijani message).
 export interface ApiErrorShape {
-  error?: { code: string; message: string };
+  code?: string;
+  message?: string;
+  fields?: { field: string; message: string }[];
 }
 
 /** POST /public/bookings — submit a reservation from the landing site. */
@@ -113,7 +141,8 @@ export async function submitBooking(body: CreateBookingBody): Promise<void> {
     let message = "Rezervasiya göndərilə bilmədi.";
     try {
       const data = (await res.json()) as ApiErrorShape;
-      if (data.error?.message) message = data.error.message;
+      // Prefer a field-level message (e.g. "yer qalmayıb"), then the top message.
+      message = data.fields?.[0]?.message ?? data.message ?? message;
     } catch {
       // ignore JSON parse failure, use default message
     }

@@ -7,21 +7,27 @@ import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, ArrowRight, Check, Clock, MapPin, Star, Users, X } from "lucide-react";
 import { BookingDialog, type BookingTour } from "@/components/BookingDialog";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
-import { T, type Departure, type Lang, type Tour } from "@/lib/tours-data";
+import { T, type Lang, type Tour, type TourDate } from "@/lib/tours-data";
 import { fetchCatalogTour } from "@/lib/api/client";
 import { useLanguage } from "@/hooks/use-language";
 import logoImg from "@/assets/logo.png";
 
 const DATE_LOCALES = { az, en: enUS, he, ar, ru };
 
-// Format a departure's date range in the active language, e.g. "15 – 18 okt 2026"
-// (or a single "15 okt 2026" when there's no end date).
-function fmtDepartureRange(d: Departure, lang: Lang): string {
+// Format a dated tour's range in the active language, e.g. "15 – 18 okt 2026"
+// (or a single "15 okt 2026" when start and end coincide).
+function fmtDateRange(d: TourDate, lang: Lang): string {
   const loc = DATE_LOCALES[lang];
-  const start = format(parseISO(d.start_date), "d MMM yyyy", { locale: loc });
-  if (!d.end_date) return start;
-  const end = format(parseISO(d.end_date), "d MMM yyyy", { locale: loc });
+  const start = format(parseISO(d.startDate), "d MMM yyyy", { locale: loc });
+  if (!d.endDate || d.endDate === d.startDate) return start;
+  const end = format(parseISO(d.endDate), "d MMM yyyy", { locale: loc });
   return `${start} – ${end}`;
+}
+
+// A date is bookable when it's not cancelled and hasn't started yet.
+function isBookable(d: TourDate): boolean {
+  const today = new Date().toISOString().slice(0, 10);
+  return d.status !== "cancelled" && d.startDate >= today && d.bookedSeats < d.capacity;
 }
 
 export const Route = createFileRoute("/tours/$tourId")({
@@ -70,8 +76,9 @@ function TourDetail() {
   const [lang, setLang] = useLanguage();
   const [booking, setBooking] = useState<BookingTour | null>(null);
   const [scrolled, setScrolled] = useState(false);
-  const [selected, setSelected] = useState<Departure | null>(
-    tour.departures.length > 0 ? tour.departures[0] : null,
+  const bookableDates = tour.dates.filter(isBookable);
+  const [selected, setSelected] = useState<TourDate | null>(
+    bookableDates.length > 0 ? bookableDates[0] : null,
   );
 
   const t = T[lang];
@@ -94,8 +101,8 @@ function TourDetail() {
       duration: `${tour.duration} ${t.tours.days}`,
       price: selected.price ?? tour.price,
       image: tour.image,
-      departureId: selected.id,
-      departureDate: selected.start_date,
+      tourId: selected.id,
+      departureDate: selected.startDate,
     });
   };
 
@@ -232,15 +239,16 @@ function TourDetail() {
                 </div>
               </div>
 
-              {/* Departure date picker */}
+              {/* Dated departure picker */}
               <div className="mt-6 border-t border-border pt-6">
                 <div className="text-xs uppercase tracking-widest text-foreground/60">{t.detail.dates}</div>
-                {tour.departures.length === 0 ? (
+                {bookableDates.length === 0 ? (
                   <p className="mt-3 text-sm text-foreground/70">{t.detail.noDates}</p>
                 ) : (
                   <ul className="mt-3 space-y-2">
-                    {tour.departures.map((d) => {
+                    {bookableDates.map((d) => {
                       const active = selected?.id === d.id;
+                      const remaining = d.capacity - d.bookedSeats;
                       return (
                         <li key={d.id}>
                           <button
@@ -256,10 +264,10 @@ function TourDetail() {
                               <span
                                 className={`h-3.5 w-3.5 rounded-full border ${active ? "border-accent bg-accent" : "border-foreground/40"}`}
                               />
-                              {fmtDepartureRange(d, lang)}
+                              {fmtDateRange(d, lang)}
                             </span>
                             <span className="text-foreground/70">
-                              {(d.price ?? tour.price)} ₼ · {d.capacity - d.booked} {t.detail.seats}
+                              {d.price} ₼ · {remaining} {t.detail.seats}
                             </span>
                           </button>
                         </li>

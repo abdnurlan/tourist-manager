@@ -42,9 +42,9 @@ export type BookingTour = {
   duration: string;
   price: number;
   image: string;
-  // Selected departure: when present the travel date is fixed to it and the
-  // per-person price is the departure's price.
-  departureId?: string;
+  // Selected dated tour: when present the travel date is fixed to it and the
+  // per-person price is that tour's (catalog-inherited) price.
+  tourId?: string;
   departureDate?: string; // YYYY-MM-DD
 };
 
@@ -115,7 +115,7 @@ export function BookingDialog({ tour, open, lang, onOpenChange }: Props) {
         phone: phone.trim() || null,
         people,
         date: date ? format(date, "yyyy-MM-dd") : null,
-        departure_id: tour.departureId ?? null,
+        tour_id: tour.tourId ?? null,
       });
       setStep("success");
       toast.success(copy.confirmed);
