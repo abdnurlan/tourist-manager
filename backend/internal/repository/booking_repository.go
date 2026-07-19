@@ -21,6 +21,8 @@ type BookingRepository interface {
 	Update(b *models.Booking) error
 	Delete(id string) error
 	CountByStatus(status string) (int64, error)
+	// SumPeopleByTour returns the total booked seats (Σ people) for a tour.
+	SumPeopleByTour(tourID string) (int64, error)
 }
 
 type bookingRepository struct {
@@ -70,4 +72,15 @@ func (r *bookingRepository) CountByStatus(status string) (int64, error) {
 	var count int64
 	err := r.db.Model(&models.Booking{}).Where("status = ?", status).Count(&count).Error
 	return count, err
+}
+
+func (r *bookingRepository) SumPeopleByTour(tourID string) (int64, error) {
+	var sum *int64
+	err := r.db.Model(&models.Booking{}).
+		Where("tour_id = ? AND status <> ?", tourID, "cancelled").
+		Select("COALESCE(SUM(people), 0)").Scan(&sum).Error
+	if err != nil || sum == nil {
+		return 0, err
+	}
+	return *sum, nil
 }

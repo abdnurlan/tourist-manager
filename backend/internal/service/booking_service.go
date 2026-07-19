@@ -93,7 +93,8 @@ func (s *bookingService) Create(in BookingInput) (*models.Booking, error) {
 		if err != nil {
 			return nil, apperror.TourNotFound()
 		}
-		booked, err := s.guests.CountByTour(t.ID)
+		// Booked seats = Σ people across this tour's bookings.
+		booked, err := s.bookings.SumPeopleByTour(t.ID)
 		if err != nil {
 			return nil, apperror.Internal()
 		}

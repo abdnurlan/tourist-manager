@@ -32,10 +32,11 @@ type TourService interface {
 }
 
 type tourService struct {
-	tours   repository.TourRepository
-	events  repository.EventRepository
-	guests  repository.GuestRepository
-	catalog repository.CatalogTourRepository
+	tours    repository.TourRepository
+	events   repository.EventRepository
+	guests   repository.GuestRepository
+	catalog  repository.CatalogTourRepository
+	bookings repository.BookingRepository
 }
 
 // NewTourService builds a TourService.
@@ -44,8 +45,9 @@ func NewTourService(
 	events repository.EventRepository,
 	guests repository.GuestRepository,
 	catalog repository.CatalogTourRepository,
+	bookings repository.BookingRepository,
 ) TourService {
-	return &tourService{tours: tours, events: events, guests: guests, catalog: catalog}
+	return &tourService{tours: tours, events: events, guests: guests, catalog: catalog, bookings: bookings}
 }
 
 func (s *tourService) List(filter repository.TourFilter) ([]models.Tour, error) {
@@ -238,6 +240,9 @@ func (s *tourService) enrich(t *models.Tour) {
 	}
 	if g, err := s.guests.CountByTour(t.ID); err == nil {
 		t.GuestsCount = g
+	}
+	if b, err := s.bookings.SumPeopleByTour(t.ID); err == nil {
+		t.BookedSeats = b
 	}
 	if t.CatalogTourID != nil {
 		if ct, err := s.catalog.FindByID(*t.CatalogTourID); err == nil {

@@ -72,7 +72,7 @@ func main() {
 
 	// 7. Services.
 	authSvc := service.NewAuthService(userRepo, cfg.JWTSecret)
-	tourSvc := service.NewTourService(tourRepo, eventRepo, guestRepo, catalogRepo)
+	tourSvc := service.NewTourService(tourRepo, eventRepo, guestRepo, catalogRepo, bookingRepo)
 	eventSvc := service.NewEventService(eventRepo, tourRepo)
 	guestSvc := service.NewGuestService(guestRepo, tourRepo)
 	dashboardSvc := service.NewDashboardService(tourRepo, eventRepo, reminderRepo, telegramRepo, cfg.TelegramMode, cfg.TelegramAllowedUserID != 0)

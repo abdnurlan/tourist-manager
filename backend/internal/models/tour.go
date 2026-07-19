@@ -17,7 +17,8 @@ type Tour struct {
 	Capacity      int       `json:"capacity"        gorm:"type:int;not null;default:12"` // seat limit
 	Events        []Event   `json:"-"               gorm:"foreignKey:TourID;constraint:OnDelete:CASCADE"`
 	EventsCount   int64     `json:"events_count"    gorm:"-"` // computed, not stored
-	GuestsCount   int64     `json:"guests_count"    gorm:"-"` // computed = booked seats
+	GuestsCount   int64     `json:"guests_count"    gorm:"-"` // computed: guest rows on this tour
+	BookedSeats   int64     `json:"booked_seats"    gorm:"-"` // computed: Σ people across bookings (landing "booked")
 	Price         int       `json:"price"           gorm:"-"` // computed: inherited from linked catalog
 	CatalogSlug   string    `json:"catalog_slug"    gorm:"-"` // computed: linked catalog slug (landing link)
 	CatalogTitle  string    `json:"catalog_title"   gorm:"-"` // computed: linked catalog AZ title
