@@ -1,8 +1,0 @@
-- generic [active]:
-  - generic [ref=e1]:
-    - img "M4STrip" [ref=e3]
-    - generic [ref=e6]:
-      - paragraph [ref=e7]: Tur Planlayıcı
-      - paragraph [ref=e9]: Yüklənir...
-  - region "Notifications alt+T"
-  - alert [ref=e10]

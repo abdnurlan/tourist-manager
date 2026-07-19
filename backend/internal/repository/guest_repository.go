@@ -15,6 +15,7 @@ type GuestRepository interface {
 	Create(guest *models.Guest) error
 	Update(guest *models.Guest) error
 	Delete(id string) error
+	CountByTour(tourID string) (int64, error)
 }
 
 type guestRepository struct {
@@ -54,4 +55,10 @@ func (r *guestRepository) Update(guest *models.Guest) error {
 
 func (r *guestRepository) Delete(id string) error {
 	return r.db.Where("id = ?", id).Delete(&models.Guest{}).Error
+}
+
+func (r *guestRepository) CountByTour(tourID string) (int64, error) {
+	var n int64
+	err := r.db.Model(&models.Guest{}).Where("tour_id = ?", tourID).Count(&n).Error
+	return n, err
 }

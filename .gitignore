@@ -90,3 +90,14 @@ desktop.ini
 coverage/
 *.cover
 .nyc_output/
+
+# Playwright MCP temp artifacts
+.playwright-mcp/
+
+# Frontend build output
+frontend-landing/.output/
+frontend-landing/.wrangler/
+frontend-landing/.nitro/
+
+# Brainstorming visual companion
+.superpowers/

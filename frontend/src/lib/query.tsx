@@ -57,4 +57,7 @@ export const queryKeys = {
   search: (q: string) => ["search", q] as const,
   aiHistory: ["ai", "history"] as const,
   me: ["auth", "me"] as const,
+  catalogTours: (filters?: unknown) => ["catalog-tours", filters ?? null] as const,
+  catalogTour: (id: string) => ["catalog-tour", id] as const,
+  bookings: (filters?: unknown) => ["bookings", filters ?? null] as const,
 };

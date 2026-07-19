@@ -20,7 +20,14 @@ import {
 } from "@/components/ui/select";
 
 import { az, tourStatusLabel } from "@/lib/i18n/az";
+import { useCatalogTours } from "@/lib/hooks/use-catalog-tours";
 import type { Tour, TourStatus, CreateTourRequest } from "@/lib/types";
+
+const NONE = "__none__"; // "kataloqsuz" sentinel for the Select (empty value not allowed)
+
+function catalogTitle(m: Record<string, string>): string {
+  return m.az || m.en || Object.values(m)[0] || "—";
+}
 
 const TOUR_STATUSES: TourStatus[] = [
   "planned",
@@ -44,6 +51,8 @@ const tourSchema = z
       .regex(ISO_DATE, { message: az.validation.invalid_date }),
     description: z.string().trim().optional(),
     status: z.enum(["planned", "active", "completed", "cancelled"]),
+    catalog_tour_id: z.string(), // NONE sentinel or a catalog id
+    capacity: z.coerce.number().int().min(1, { message: az.validation.capacity_min }),
   })
   .refine((v) => v.end_date >= v.start_date, {
     path: ["end_date"],
@@ -70,6 +79,8 @@ function defaultsFor(tour?: Tour | null): TourFormValues {
     end_date: tour?.end_date ?? "",
     description: tour?.description ?? "",
     status: tour?.status ?? "planned",
+    catalog_tour_id: tour?.catalog_tour_id ?? NONE,
+    capacity: tour?.capacity ?? 12,
   };
 }
 
@@ -86,6 +97,7 @@ export function TourForm({
   submitting,
 }: TourFormProps) {
   const isEdit = Boolean(tour);
+  const { data: catalogTours = [] } = useCatalogTours();
 
   const {
     register,
@@ -102,6 +114,8 @@ export function TourForm({
   });
 
   const startDate = watch("start_date");
+  const selectedCatalogId = watch("catalog_tour_id");
+  const selectedCatalog = catalogTours.find((c) => c.id === selectedCatalogId);
 
   // Picking a start date auto-fills the end date to the same day when end is
   // empty or now earlier — so a 1-day tour just needs one tap (start = end),
@@ -127,6 +141,8 @@ export function TourForm({
       end_date: values.end_date,
       description: description ? description : null,
       status: values.status,
+      catalog_tour_id: values.catalog_tour_id === NONE ? null : values.catalog_tour_id,
+      capacity: values.capacity,
     });
   });
 
@@ -240,6 +256,50 @@ export function TourForm({
               </Select>
             )}
           />
+        </div>
+
+        {/* Catalog tour link + capacity */}
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div className="space-y-1.5">
+            <Label>{az.field.catalog_tour}</Label>
+            <Controller
+              control={control}
+              name="catalog_tour_id"
+              render={({ field }) => (
+                <Select value={field.value} onValueChange={field.onChange}>
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value={NONE}>{az.field.catalog_none}</SelectItem>
+                    {catalogTours.map((c) => (
+                      <SelectItem key={c.id} value={c.id}>
+                        {catalogTitle(c.title)}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              )}
+            />
+            {selectedCatalog && (
+              <p className="text-xs text-muted-foreground">
+                {az.field.inherited_price}: <span className="font-medium text-accent">{selectedCatalog.price} ₼</span>
+              </p>
+            )}
+          </div>
+          <div className="space-y-1.5">
+            <Label htmlFor="tour-capacity">{az.field.capacity}</Label>
+            <Input
+              id="tour-capacity"
+              type="number"
+              min={1}
+              aria-invalid={Boolean(errors.capacity)}
+              {...register("capacity")}
+            />
+            {errors.capacity && (
+              <p className="text-xs text-danger">{errors.capacity.message}</p>
+            )}
+          </div>
         </div>
 
         {/* Description */}

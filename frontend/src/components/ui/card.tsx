@@ -14,7 +14,7 @@ const Card = React.forwardRef<
     className={cn(
       "rounded-lg border border-border bg-surface text-foreground shadow-sm",
       interactive &&
-        "transition-all duration-base ease-out hover:-translate-y-0.5 hover:shadow-md hover:border-accent/30",
+        "transition-[box-shadow,border-color] duration-base ease-out hover:shadow-md hover:border-accent/40",
       ticket && "ticket",
       className,
     )}

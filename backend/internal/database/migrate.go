@@ -21,6 +21,8 @@ var enumDDL = []string{
 	`DO $$ BEGIN CREATE TYPE event_source AS ENUM ('manual','telegram','ai'); EXCEPTION WHEN duplicate_object THEN null; END $$`,
 	`DO $$ BEGIN CREATE TYPE tg_direction AS ENUM ('in','out'); EXCEPTION WHEN duplicate_object THEN null; END $$`,
 	`DO $$ BEGIN CREATE TYPE tg_kind AS ENUM ('text','voice','photo','document','command'); EXCEPTION WHEN duplicate_object THEN null; END $$`,
+	`DO $$ BEGIN CREATE TYPE catalog_category AS ENUM ('mountain','history','nature','wellness','coast','offroad'); EXCEPTION WHEN duplicate_object THEN null; END $$`,
+	`DO $$ BEGIN CREATE TYPE booking_status AS ENUM ('new','confirmed','cancelled','completed'); EXCEPTION WHEN duplicate_object THEN null; END $$`,
 }
 
 // Migrate ensures enum types exist then runs GORM AutoMigrate for all six tables.
@@ -38,6 +40,8 @@ func Migrate(db *gorm.DB) error {
 		&models.Attachment{},
 		&models.TelegramMessage{},
 		&models.Reminder{},
+		&models.CatalogTour{},
+		&models.Booking{},
 	)
 }
 

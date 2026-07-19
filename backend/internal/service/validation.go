@@ -4,6 +4,7 @@ import (
 	"strings"
 	"time"
 
+	"tourist-manager/backend/internal/models"
 	"tourist-manager/backend/pkg/apperror"
 )
 
@@ -29,6 +30,15 @@ var validEventSources = map[string]bool{
 	"manual": true, "telegram": true, "ai": true,
 }
 
+var validCatalogCategories = map[string]bool{
+	"mountain": true, "history": true, "nature": true,
+	"wellness": true, "coast": true, "offroad": true,
+}
+
+var validBookingStatuses = map[string]bool{
+	"new": true, "confirmed": true, "cancelled": true, "completed": true,
+}
+
 // isValidDate reports whether s is a YYYY-MM-DD date.
 func isValidDate(s string) bool {
 	_, err := time.Parse("2006-01-02", s)
@@ -52,4 +62,47 @@ func trimPtr(p *string) string {
 // validationError builds a VALIDATION_ERROR carrying field-level details.
 func validationError(fields []apperror.FieldError) *apperror.AppError {
 	return apperror.ValidationError().WithFields(fields)
+}
+
+// trimSpace trims a plain string.
+func trimSpace(s string) string { return strings.TrimSpace(s) }
+
+// valOrDefault / *Int / *Bool return the pointed-to value or a fallback.
+func valOrDefault(p *float64, def float64) float64 {
+	if p == nil {
+		return def
+	}
+	return *p
+}
+func valOrDefaultInt(p *int, def int) int {
+	if p == nil {
+		return def
+	}
+	return *p
+}
+func valOrDefaultBool(p *bool, def bool) bool {
+	if p == nil {
+		return def
+	}
+	return *p
+}
+
+// orEmptyMap / *ListMap / *PlanMap coerce nil maps to empty (never-null jsonb).
+func orEmptyMap(m map[string]string) map[string]string {
+	if m == nil {
+		return map[string]string{}
+	}
+	return m
+}
+func orEmptyListMap(m map[string][]string) map[string][]string {
+	if m == nil {
+		return map[string][]string{}
+	}
+	return m
+}
+func orEmptyPlanMap(m map[string][]models.DayPlan) map[string][]models.DayPlan {
+	if m == nil {
+		return map[string][]models.DayPlan{}
+	}
+	return m
 }

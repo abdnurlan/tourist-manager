@@ -53,6 +53,12 @@ services:
       TELEGRAM_MODE: ${TELEGRAM_MODE}
       TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN}
       TELEGRAM_ALLOWED_USER_ID: ${TELEGRAM_ALLOWED_USER_ID}
+      # Yüklənən şəkillər: qovluq (volume) + mütləq URL üçün public origin.
+      UPLOAD_DIR: /data/uploads
+      PUBLIC_BASE_URL: ${PUBLIC_BASE_URL}
+    volumes:
+      # Yüklənən şəkillər — konteyner yenidən qurulanda da qalsın.
+      - uploads:/data/uploads
     networks:
       - turnet
     # Host-a port AÇILMIR — nginx daxili şəbəkədən proxy edir.
@@ -75,12 +81,33 @@ services:
       - turnet
     # Host-a port AÇILMIR — nginx daxili şəbəkədən proxy edir.
 
+  frontend-landing:
+    build:
+      context: ./frontend-landing
+      dockerfile: Dockerfile
+      args:
+        # Browser bundle calls the public API on the landing domain.
+        VITE_API_URL: ${LANDING_API_URL:-https://m4strip.com/api}
+    image: turplanlayici/frontend-landing:latest
+    container_name: turplanlayici_frontend_landing
+    restart: unless-stopped
+    depends_on:
+      - backend
+    environment:
+      # SSR route loaders run inside the container — reach backend by service name.
+      SSR_API_URL: http://backend:8080/api
+      PORT: "3001"
+    networks:
+      - turnet
+    # Host-a port AÇILMIR — nginx daxili şəbəkədən proxy edir.
+
   nginx:
     image: nginx:1.27-alpine
     container_name: turplanlayici_nginx
     restart: unless-stopped
     depends_on:
       - frontend
+      - frontend-landing
       - backend
     ports:
       - "80:80"
@@ -95,6 +122,8 @@ services:
 
 volumes:
   pgdata:
+    driver: local
+  uploads:
     driver: local
 
 networks:

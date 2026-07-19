@@ -10,10 +10,11 @@ import (
 
 // TourFilter holds optional list filters for tours.
 type TourFilter struct {
-	Status string // optional tour_status
-	Query  string // optional case-insensitive title/description match
-	From   string // optional YYYY-MM-DD lower bound, overlaps tour end_date
-	To     string // optional YYYY-MM-DD upper bound, overlaps tour start_date
+	Status        string // optional tour_status
+	Query         string // optional case-insensitive title/description match
+	From          string // optional YYYY-MM-DD lower bound, overlaps tour end_date
+	To            string // optional YYYY-MM-DD upper bound, overlaps tour start_date
+	CatalogTourID string // optional: only tours linked to this catalog tour
 }
 
 // TourRepository defines persistence operations for tours.
@@ -52,6 +53,9 @@ func (r *tourRepository) List(filter TourFilter) ([]models.Tour, error) {
 	}
 	if filter.To != "" {
 		q = q.Where("start_date <= ?", filter.To)
+	}
+	if filter.CatalogTourID != "" {
+		q = q.Where("catalog_tour_id = ?", filter.CatalogTourID)
 	}
 	err := q.Order("start_date DESC").Find(&tours).Error
 	return tours, err

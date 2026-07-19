@@ -12,15 +12,18 @@ import (
 
 // Handlers bundles every endpoint handler for registration.
 type Handlers struct {
-	Auth      *handler.AuthHandler
-	Dashboard *handler.DashboardHandler
-	Tour      *handler.TourHandler
-	Event     *handler.EventHandler
-	Guest     *handler.GuestHandler
-	Calendar  *handler.CalendarHandler
-	Search    *handler.SearchHandler
-	AI        *handler.AIHandler
-	Telegram  *handler.TelegramHandler
+	Auth        *handler.AuthHandler
+	Dashboard   *handler.DashboardHandler
+	Tour        *handler.TourHandler
+	Event       *handler.EventHandler
+	Guest       *handler.GuestHandler
+	Calendar    *handler.CalendarHandler
+	Search      *handler.SearchHandler
+	AI          *handler.AIHandler
+	Telegram    *handler.TelegramHandler
+	CatalogTour *handler.CatalogTourHandler
+	Booking     *handler.BookingHandler
+	Upload      *handler.UploadHandler
 }
 
 // New builds the Fiber app, mounts global middleware, and registers every route
@@ -39,6 +42,13 @@ func New(cfg *config.Config, h Handlers) *fiber.App {
 		AllowMethods: "GET, POST, PATCH, DELETE, OPTIONS",
 	}))
 
+	// Uploaded images — served statically at /uploads (public, no auth) so the
+	// landing site and admin can render them directly by URL.
+	app.Static("/uploads", cfg.UploadDir, fiber.Static{
+		ByteRange: true,
+		MaxAge:    86400,
+	})
+
 	api := app.Group("/api")
 
 	// Health (public).
@@ -49,6 +59,11 @@ func New(cfg *config.Config, h Handlers) *fiber.App {
 	// Public routes.
 	api.Post("/auth/login", h.Auth.Login)
 	api.Post("/telegram/webhook", h.Telegram.Webhook)
+
+	// Public catalog + booking (consumed by the landing site, no auth).
+	api.Get("/public/catalog-tours", h.CatalogTour.ListPublic)
+	api.Get("/public/catalog-tours/:slug", h.CatalogTour.GetPublicBySlug)
+	api.Post("/public/bookings", h.Booking.Create)
 
 	// Protected routes.
 	auth := middleware.AuthRequired(cfg.JWTSecret)
@@ -83,6 +98,21 @@ func New(cfg *config.Config, h Handlers) *fiber.App {
 	api.Post("/ai/chat", auth, h.AI.Chat)
 	api.Post("/ai/voice", auth, h.AI.Voice)
 	api.Get("/ai/history", auth, h.AI.History)
+
+	// Catalog tours (admin management of the public catalog).
+	api.Get("/catalog-tours", auth, h.CatalogTour.List)
+	api.Post("/catalog-tours", auth, h.CatalogTour.Create)
+	api.Get("/catalog-tours/:id", auth, h.CatalogTour.Get)
+	api.Patch("/catalog-tours/:id", auth, h.CatalogTour.Update)
+	api.Delete("/catalog-tours/:id", auth, h.CatalogTour.Delete)
+
+	// Image upload (admin) — returns { "url": "/uploads/<name>" }.
+	api.Post("/uploads", auth, h.Upload.UploadImage)
+
+	// Bookings (admin management of reservations).
+	api.Get("/bookings", auth, h.Booking.List)
+	api.Patch("/bookings/:id", auth, h.Booking.UpdateStatus)
+	api.Delete("/bookings/:id", auth, h.Booking.Delete)
 
 	return app
 }

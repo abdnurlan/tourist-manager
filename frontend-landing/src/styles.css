@@ -1,0 +1,239 @@
+@import "tailwindcss" source(none);
+@import "tw-animate-css";
+@source "../src";
+
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --font-display: var(--font-display);
+  --font-sans: var(--font-sans);
+}
+
+:root {
+  --radius: 1rem;
+
+  /* ── "Səyahət Jurnalı" palette — matched to the admin app ──
+     Warm paper base, deep brand navy ink, sun-orange accent
+     (all drawn from the M4STrip logo). */
+  --background: #f6f1e7;          /* warm paper */
+  --foreground: #1c1917;          /* ink */
+  --card: #fffdf8;                /* surface */
+  --card-foreground: #1c1917;
+  --popover: #fffdf8;
+  --popover-foreground: #1c1917;
+  --primary: #01335e;            /* brand navy */
+  --primary-foreground: #f4f8fd;
+  --secondary: #efe6d4;          /* surface-muted */
+  --secondary-foreground: #1c1917;
+  --muted: #efe6d4;
+  --muted-foreground: #6f655a;
+  --accent: #e9790d;             /* sun-orange */
+  --accent-foreground: #fff6ec;
+  --destructive: #b3402f;
+  --destructive-foreground: #fff6ec;
+  --border: #e6dac4;
+  --input: #e6dac4;
+  --ring: #01335e;
+
+  /* "Heebo" carries the Hebrew glyphs (primary market); Inter covers Latin. */
+  --font-display: "Fraunces", "Heebo", ui-serif, Georgia, serif;
+  --font-sans: "Inter", "Heebo", ui-sans-serif, system-ui, sans-serif;
+
+  /* Glass tokens — warm paper glass (light), for sticky nav & cards */
+  --glass-bg: color-mix(in srgb, #fffdf8 80%, transparent);
+  --glass-bg-strong: color-mix(in srgb, #fffdf8 92%, transparent);
+  --glass-border: #e6dac4;
+  --glass-highlight: linear-gradient(135deg, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0.15) 40%, rgba(255, 255, 255, 0) 100%);
+  --glass-blur: 16px;
+  --glass-shadow: 0 8px 32px rgba(28, 25, 23, 0.1);
+
+  --gradient-warm: linear-gradient(135deg, rgba(1, 51, 94, 0.9), rgba(233, 121, 13, 0.85));
+  --gradient-hero: linear-gradient(180deg, rgba(28, 25, 23, 0.15) 0%, rgba(28, 25, 23, 0.55) 100%);
+  --gradient-ambient:
+    radial-gradient(60% 50% at 15% 10%, rgba(233, 121, 13, 0.1), transparent 60%),
+    radial-gradient(50% 50% at 85% 20%, rgba(1, 51, 94, 0.1), transparent 60%);
+  --shadow-soft: 0 30px 80px -30px rgba(28, 25, 23, 0.35);
+  --shadow-card: 0 12px 40px -12px rgba(28, 25, 23, 0.2);
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+
+  html, body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    font-feature-settings: "ss01", "cv11";
+  }
+
+  body {
+    background-image: var(--gradient-ambient);
+    background-attachment: fixed;
+    background-size: cover;
+    min-height: 100vh;
+  }
+
+  h1, h2, h3, h4, h5 {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+  }
+}
+
+@layer components {
+  .glass {
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--glass-blur)) saturate(160%);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(160%);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
+  }
+  .glass-strong {
+    background: var(--glass-bg-strong);
+    backdrop-filter: blur(28px) saturate(180%);
+    -webkit-backdrop-filter: blur(28px) saturate(180%);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
+  }
+  .glass-sheen {
+    position: relative;
+    isolation: isolate;
+  }
+  .glass-sheen::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: var(--glass-highlight);
+    pointer-events: none;
+    mix-blend-mode: overlay;
+    opacity: 0.7;
+  }
+}
+
+@layer utilities {
+  /* ---- Scroll reveal ---- */
+  .reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition:
+      opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: opacity, transform;
+  }
+  .reveal.is-revealed {
+    opacity: 1;
+    transform: none;
+  }
+  /* Staggered children: set --i on each child */
+  .reveal-stagger > * {
+    opacity: 0;
+    transform: translateY(24px);
+    transition:
+      opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+    transition-delay: calc(var(--i, 0) * 70ms);
+    will-change: opacity, transform;
+  }
+  .reveal-stagger.is-revealed > * {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* ---- Ambient floating orbs ---- */
+  @keyframes float-slow {
+    0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+    50% { transform: translate3d(24px, -32px, 0) scale(1.08); }
+  }
+  @keyframes float-slow-alt {
+    0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+    50% { transform: translate3d(-30px, 24px, 0) scale(0.94); }
+  }
+  .animate-float { animation: float-slow 14s ease-in-out infinite; }
+  .animate-float-alt { animation: float-slow-alt 18s ease-in-out infinite; }
+
+  /* ---- Hero content entrance ---- */
+  @keyframes fade-up {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: none; }
+  }
+  .animate-fade-up {
+    animation: fade-up 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  /* ---- Sheen sweep across glass on hover ---- */
+  .sheen-sweep { position: relative; overflow: hidden; }
+  .sheen-sweep::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -75%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(
+      100deg,
+      transparent 0%,
+      oklch(1 0 0 / 0.22) 50%,
+      transparent 100%
+    );
+    transform: skewX(-18deg);
+    transition: left 0.7s ease;
+    pointer-events: none;
+    z-index: 2;
+  }
+  .sheen-sweep:hover::after { left: 130%; }
+
+  /* ---- Nav scrolled state ---- */
+  .nav-scrolled {
+    box-shadow: 0 12px 40px -12px oklch(0 0 0 / 0.55);
+  }
+
+  /* ---- Mobile menu slide ---- */
+  @keyframes menu-in {
+    from { opacity: 0; transform: translateY(-8px) scale(0.98); }
+    to { opacity: 1; transform: none; }
+  }
+  .animate-menu-in { animation: menu-in 0.25s cubic-bezier(0.22, 1, 0.36, 1) both; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+  .reveal,
+  .reveal-stagger > * {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}

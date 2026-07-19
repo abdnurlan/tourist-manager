@@ -30,6 +30,14 @@ type Config struct {
 	TelegramMode          string // "webhook" | "polling"
 	TelegramBotToken      string
 	TelegramAllowedUserID int64
+
+	// Uploads — directory where uploaded images are stored on disk.
+	UploadDir string
+	// PublicBaseURL is the backend's externally reachable origin (no trailing
+	// slash), used to build absolute URLs for uploaded files so both frontends
+	// can load them regardless of their own origin. Empty → fall back to the
+	// request's own scheme+host.
+	PublicBaseURL string
 }
 
 // Load reads configuration from the environment (loading backend/.env if present)
@@ -49,6 +57,8 @@ func Load() *Config {
 		TelegramMode:          getEnv("TELEGRAM_MODE", "polling"),
 		TelegramBotToken:      getEnv("TELEGRAM_BOT_TOKEN", ""),
 		TelegramAllowedUserID: getEnvInt64("TELEGRAM_ALLOWED_USER_ID", 0),
+		UploadDir:             getEnv("UPLOAD_DIR", "./uploads"),
+		PublicBaseURL:         strings.TrimRight(getEnv("PUBLIC_BASE_URL", ""), "/"),
 	}
 
 	return cfg

@@ -2,6 +2,7 @@ package service
 
 import (
 	"strings"
+	"time"
 
 	"tourist-manager/backend/internal/models"
 	"tourist-manager/backend/internal/repository"
@@ -10,11 +11,13 @@ import (
 
 // TourInput carries create/update fields for a tour (nil = leave unchanged on update).
 type TourInput struct {
-	Title       *string
-	StartDate   *string
-	EndDate     *string
-	Description *string
-	Status      *string
+	Title         *string
+	StartDate     *string
+	EndDate       *string
+	Description   *string
+	Status        *string
+	CatalogTourID *string
+	Capacity      *int
 }
 
 // TourService implements tour business logic.
@@ -24,16 +27,28 @@ type TourService interface {
 	Create(in TourInput) (*models.Tour, error)
 	Update(id string, in TourInput) (*models.Tour, error)
 	Delete(id string) error
+	// ListByCatalogTour returns every tour linked to a catalog tour, newest date
+	// first, enriched with price/guests. Used by the public landing detail.
+	ListByCatalogTour(catalogTourID string) ([]models.Tour, error)
 }
 
 type tourService struct {
-	tours  repository.TourRepository
-	events repository.EventRepository
+	tours    repository.TourRepository
+	events   repository.EventRepository
+	guests   repository.GuestRepository
+	catalog  repository.CatalogTourRepository
+	bookings repository.BookingRepository
 }
 
 // NewTourService builds a TourService.
-func NewTourService(tours repository.TourRepository, events repository.EventRepository) TourService {
-	return &tourService{tours: tours, events: events}
+func NewTourService(
+	tours repository.TourRepository,
+	events repository.EventRepository,
+	guests repository.GuestRepository,
+	catalog repository.CatalogTourRepository,
+	bookings repository.BookingRepository,
+) TourService {
+	return &tourService{tours: tours, events: events, guests: guests, catalog: catalog, bookings: bookings}
 }
 
 func (s *tourService) List(filter repository.TourFilter) ([]models.Tour, error) {
@@ -47,7 +62,7 @@ func (s *tourService) List(filter repository.TourFilter) ([]models.Tour, error) 
 		return nil, apperror.Internal()
 	}
 	for i := range tours {
-		s.enrichEventsCount(&tours[i])
+		s.enrich(&tours[i])
 	}
 	return tours, nil
 }
@@ -57,8 +72,75 @@ func (s *tourService) Get(id string) (*models.Tour, error) {
 	if err != nil {
 		return nil, apperror.TourNotFound()
 	}
-	s.enrichEventsCount(t)
+	s.enrich(t)
 	return t, nil
+}
+
+func (s *tourService) ListByCatalogTour(catalogTourID string) ([]models.Tour, error) {
+	tours, err := s.tours.List(repository.TourFilter{CatalogTourID: catalogTourID})
+	if err != nil {
+		return nil, apperror.Internal()
+	}
+	for i := range tours {
+		s.enrich(&tours[i])
+		s.buildDays(&tours[i])
+	}
+	return tours, nil
+}
+
+// buildDays fills the tour's day-by-day plan: one entry per calendar date from
+// start to end, marked active when it has scheduled events (a program), else a
+// free/rest day. Events are grouped by their date.
+func (s *tourService) buildDays(t *models.Tour) {
+	events, err := s.events.ListByTour(t.ID)
+	if err != nil {
+		return
+	}
+	byDate := map[string][]models.TourDayEvent{}
+	for _, e := range events {
+		d := e.Date
+		if len(d) >= 10 {
+			d = d[:10]
+		}
+		byDate[d] = append(byDate[d], models.TourDayEvent{
+			Title: e.Title, Type: e.Type, Time: e.Time, Location: e.Location,
+		})
+	}
+
+	start := parseDay(t.StartDate)
+	end := parseDay(t.EndDate)
+	if start.IsZero() || end.IsZero() || end.Before(start) {
+		return
+	}
+	var days []models.TourDay
+	for d := start; !d.After(end); d = d.AddDate(0, 0, 1) {
+		key := d.Format("2006-01-02")
+		evs := byDate[key]
+		if evs == nil {
+			evs = []models.TourDayEvent{} // serialise as [] not null
+		}
+		days = append(days, models.TourDay{
+			Date:   key,
+			Active: len(evs) > 0,
+			Events: evs,
+		})
+		if len(days) > 366 { // safety
+			break
+		}
+	}
+	t.Days = days
+}
+
+// parseDay parses a YYYY-MM-DD (or RFC3339) date to a UTC time; zero on failure.
+func parseDay(s string) time.Time {
+	if len(s) >= 10 {
+		s = s[:10]
+	}
+	t, err := time.Parse("2006-01-02", s)
+	if err != nil {
+		return time.Time{}
+	}
+	return t
 }
 
 func (s *tourService) Create(in TourInput) (*models.Tour, error) {
@@ -91,21 +173,38 @@ func (s *tourService) Create(in TourInput) (*models.Tour, error) {
 		fields = append(fields, apperror.FieldError{Field: "status", Message: "Status dəyəri yanlışdır."})
 	}
 
+	// Linked catalog tour must exist when provided.
+	var catalogID *string
+	if cid := trimPtr(in.CatalogTourID); cid != "" {
+		if _, err := s.catalog.FindByID(cid); err != nil {
+			fields = append(fields, apperror.FieldError{Field: "catalog_tour_id", Message: "Seçilmiş kataloq turu tapılmadı."})
+		} else {
+			catalogID = &cid
+		}
+	}
+
+	capacity := 12
+	if in.Capacity != nil && *in.Capacity > 0 {
+		capacity = *in.Capacity
+	}
+
 	if len(fields) > 0 {
 		return nil, validationError(fields)
 	}
 
 	tour := &models.Tour{
-		Title:       title,
-		StartDate:   start,
-		EndDate:     end,
-		Description: in.Description,
-		Status:      status,
+		Title:         title,
+		StartDate:     start,
+		EndDate:       end,
+		Description:   in.Description,
+		Status:        status,
+		CatalogTourID: catalogID,
+		Capacity:      capacity,
 	}
 	if err := s.tours.Create(tour); err != nil {
 		return nil, apperror.Internal()
 	}
-	tour.EventsCount = 0
+	s.enrich(tour)
 	return tour, nil
 }
 
@@ -155,6 +254,19 @@ func (s *tourService) Update(id string, in TourInput) (*models.Tour, error) {
 			tour.Status = status
 		}
 	}
+	if in.CatalogTourID != nil {
+		cid := strings.TrimSpace(*in.CatalogTourID)
+		if cid == "" {
+			tour.CatalogTourID = nil
+		} else if _, err := s.catalog.FindByID(cid); err != nil {
+			fields = append(fields, apperror.FieldError{Field: "catalog_tour_id", Message: "Seçilmiş kataloq turu tapılmadı."})
+		} else {
+			tour.CatalogTourID = &cid
+		}
+	}
+	if in.Capacity != nil && *in.Capacity > 0 {
+		tour.Capacity = *in.Capacity
+	}
 
 	if len(fields) > 0 {
 		return nil, validationError(fields)
@@ -163,7 +275,7 @@ func (s *tourService) Update(id string, in TourInput) (*models.Tour, error) {
 	if err := s.tours.Update(tour); err != nil {
 		return nil, apperror.Internal()
 	}
-	s.enrichEventsCount(tour)
+	s.enrich(tour)
 	return tour, nil
 }
 
@@ -177,12 +289,29 @@ func (s *tourService) Delete(id string) error {
 	return nil
 }
 
-// enrichEventsCount populates the computed EventsCount field (0 on error).
-func (s *tourService) enrichEventsCount(t *models.Tour) {
-	n, err := s.tours.EventsCount(t.ID)
-	if err != nil {
-		t.EventsCount = 0
-		return
+// enrich populates the computed fields: events count, guests count (= booked
+// seats) and — when linked — the price/slug/title inherited from the catalog tour.
+func (s *tourService) enrich(t *models.Tour) {
+	if n, err := s.tours.EventsCount(t.ID); err == nil {
+		t.EventsCount = n
 	}
-	t.EventsCount = n
+	if g, err := s.guests.CountByTour(t.ID); err == nil {
+		t.GuestsCount = g
+	}
+	if b, err := s.bookings.SumPeopleByTour(t.ID); err == nil {
+		t.BookedSeats = b
+	}
+	if t.CatalogTourID != nil {
+		if ct, err := s.catalog.FindByID(*t.CatalogTourID); err == nil {
+			t.Price = ct.Price
+			t.CatalogSlug = ct.Slug
+			if az, ok := ct.Title["az"]; ok && az != "" {
+				t.CatalogTitle = az
+			} else if en, ok := ct.Title["en"]; ok {
+				t.CatalogTitle = en
+			} else {
+				t.CatalogTitle = ct.Slug
+			}
+		}
+	}
 }
