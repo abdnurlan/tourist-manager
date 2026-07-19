@@ -234,7 +234,7 @@ function Index() {
                 <Link to="/tours/$tourId" params={{ tourId: tour.id }} className="block">
                   <div className="relative aspect-[4/5] overflow-hidden">
                     <img src={tour.image} alt={loc.title} loading="lazy" width={1024} height={1280} className="h-full w-full object-cover transition duration-700 group-hover:scale-105" />
-                    <Badge className={`glass absolute top-4 rounded-full text-foreground ${dir === "rtl" ? "right-4" : "left-4"}`}>
+                    <Badge className={`glass absolute top-4 rounded-full text-white ${dir === "rtl" ? "right-4" : "left-4"}`}>
                       {t.cats[tour.category]}
                     </Badge>
                     <div className={`glass absolute top-4 flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-medium text-foreground ${dir === "rtl" ? "left-4" : "right-4"}`}>
