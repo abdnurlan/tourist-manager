@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState, type CSSProperties } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
@@ -336,12 +337,36 @@ function Index() {
           <div className="pointer-events-none absolute inset-0" style={{ background: "var(--gradient-warm)", opacity: 0.5 }} />
           <div className="animate-float pointer-events-none absolute -right-20 -top-20 h-80 w-80 rounded-full bg-accent/40 blur-3xl" />
           <div className="relative z-10 max-w-2xl">
-            <h2 className="font-display text-4xl font-medium text-foreground md:text-5xl">{t.cta.title}</h2>
-            <p className="mt-4 text-foreground/85">{t.cta.subtitle}</p>
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <Input placeholder={t.cta.ph} className="glass h-12 rounded-xl border-0 text-foreground placeholder:text-foreground/60" />
-              <Button size="lg" className="h-12 cursor-pointer rounded-xl transition-transform duration-300 hover:scale-[1.03] active:scale-95">{t.cta.btn}</Button>
-            </div>
+            <h2 className="font-display text-4xl font-semibold tracking-tight text-foreground md:text-5xl">{t.cta.title}</h2>
+            <p className="mt-4 max-w-xl text-lg leading-relaxed text-foreground/80">{t.cta.subtitle}</p>
+            <form
+              className="mt-8 flex flex-col gap-3 sm:flex-row"
+              onSubmit={(e) => {
+                e.preventDefault();
+                const v = new FormData(e.currentTarget).get("contact")?.toString().trim();
+                if (v) toast.success(t.cta.sent ?? "Sorğunuz göndərildi ✓");
+                e.currentTarget.reset();
+              }}
+            >
+              <Input
+                name="contact"
+                type="text"
+                inputMode="email"
+                autoComplete="email"
+                required
+                placeholder={t.cta.ph}
+                aria-label={t.cta.ph}
+                className="h-12 flex-1 rounded-xl border border-foreground/15 bg-background/70 text-foreground shadow-sm backdrop-blur placeholder:text-foreground/50 focus-visible:border-accent focus-visible:ring-2 focus-visible:ring-accent/40"
+              />
+              <Button
+                type="submit"
+                size="lg"
+                className="group h-12 shrink-0 cursor-pointer rounded-xl px-7 font-semibold shadow-md transition-[transform,box-shadow] duration-200 hover:shadow-lg active:scale-[0.98]"
+              >
+                {t.cta.btn}
+                <ArrowRight className={`h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5 ${dir === "rtl" ? "mr-1.5 rotate-180" : "ml-1.5"}`} />
+              </Button>
+            </form>
             <div className="mt-8 flex flex-wrap gap-6 text-sm text-foreground/85">
               <a href="tel:+994519600212" className="flex items-center gap-2 transition-colors hover:text-foreground"><Phone className="h-4 w-4" /><span dir="ltr">051 960 02 12</span></a>
               <a href="https://www.instagram.com/m4strip/" target="_blank" rel="noreferrer" aria-label="M4STrip Instagram" className="flex items-center gap-2 transition-colors hover:text-foreground"><Instagram className="h-4 w-4" /><span dir="ltr">@m4strip</span></a>
