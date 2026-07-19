@@ -230,7 +230,7 @@ function Index() {
           {filtered.map((tour, idx) => {
             const loc = tour.i18n[lang];
             return (
-              <article key={tour.id} style={{ "--i": idx % 6 } as CSSProperties} className="glass glass-sheen sheen-sweep group overflow-hidden rounded-3xl transition-all duration-500 hover:-translate-y-1.5 hover:shadow-[var(--shadow-soft)]">
+              <article key={tour.id} style={{ "--i": idx % 6 } as CSSProperties} className="glass glass-sheen sheen-sweep group overflow-hidden rounded-3xl ring-1 ring-transparent transition-[box-shadow,--tw-ring-color] duration-300 hover:shadow-[var(--shadow-soft)] hover:ring-accent/30">
                 <Link to="/tours/$tourId" params={{ tourId: tour.id }} className="block">
                   <div className="relative aspect-[4/5] overflow-hidden">
                     <img src={tour.image} alt={loc.title} loading="lazy" width={1024} height={1280} className="h-full w-full object-cover transition duration-700 group-hover:scale-105" />
@@ -247,23 +247,23 @@ function Index() {
                     <div className="flex items-center gap-1.5 text-xs text-foreground/70">
                       <MapPin className="h-3.5 w-3.5" /> {loc.region}
                     </div>
-                    <h3 className="mt-2 font-display text-2xl font-medium leading-tight transition group-hover:text-accent">{loc.title}</h3>
+                    <h3 className="mt-2 font-display text-2xl font-semibold leading-tight tracking-tight transition-colors duration-200 group-hover:text-accent">{loc.title}</h3>
                   </Link>
-                  <ul className="mt-4 space-y-1.5 text-sm text-foreground/75">
-                    {loc.highlights.map((h) => (
-                      <li key={h} className="flex items-start gap-2">
-                        <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-accent" /> {h}
+                  <ul className="mt-4 space-y-2 text-sm text-foreground/70">
+                    {loc.highlights.slice(0, 3).map((h) => (
+                      <li key={h} className="flex items-start gap-2.5">
+                        <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-accent/70" /> {h}
                       </li>
                     ))}
                   </ul>
-                  <div className="mt-5 flex items-center gap-4 text-xs text-foreground/70">
-                    <span className="flex items-center gap-1"><Clock className="h-3.5 w-3.5" /> {tour.duration} {t.tours.days}</span>
-                    <span className="flex items-center gap-1"><Users className="h-3.5 w-3.5" /> {tour.groupSize} {t.tours.people}</span>
+                  <div className="mt-5 flex items-center gap-4 text-xs font-medium text-foreground/60">
+                    <span className="flex items-center gap-1.5"><Clock className="h-3.5 w-3.5" /> {tour.duration} {t.tours.days}</span>
+                    <span className="flex items-center gap-1.5"><Users className="h-3.5 w-3.5" /> {tour.groupSize} {t.tours.people}</span>
                   </div>
-                  <div className="mt-6 flex items-end justify-between border-t border-white/10 pt-5">
+                  <div className="mt-6 flex items-end justify-between border-t border-foreground/10 pt-5">
                     <div>
-                      <div className="text-xs text-foreground/70">{t.tours.perPerson}</div>
-                      <div className="font-display text-2xl font-medium text-accent">{tour.price} ₼</div>
+                      <div className="text-xs font-medium uppercase tracking-wide text-foreground/50">{t.tours.perPerson}</div>
+                      <div className="mt-0.5 font-display text-3xl font-semibold tabular-nums text-accent">{tour.price} ₼</div>
                     </div>
                     <div className="flex gap-2">
                       <Button asChild size="sm" variant="secondary" className="cursor-pointer rounded-full transition-transform duration-300 hover:scale-[1.03] active:scale-95">
@@ -318,7 +318,7 @@ function Index() {
             {t.how.steps.map((s, i) => {
               const Icon = [Compass, Users, Mountain][i];
               return (
-                <div key={s.t} style={{ "--i": i } as CSSProperties} className="glass glass-sheen group relative rounded-3xl p-8 transition-all duration-500 hover:-translate-y-1.5">
+                <div key={s.t} style={{ "--i": i } as CSSProperties} className="glass glass-sheen group relative rounded-3xl p-8 ring-1 ring-transparent transition-[box-shadow,--tw-ring-color] duration-300 hover:shadow-[var(--shadow-soft)] hover:ring-accent/25">
                   <div className={`absolute -top-2 font-display text-7xl text-accent/40 transition-colors duration-300 group-hover:text-accent/60 ${dir === "rtl" ? "left-6" : "right-6"}`}>0{i + 1}</div>
                   <Icon className="h-8 w-8 text-accent transition-transform duration-300 group-hover:scale-110" strokeWidth={1.5} />
                   <h3 className="mt-5 font-display text-2xl font-medium">{s.t}</h3>
