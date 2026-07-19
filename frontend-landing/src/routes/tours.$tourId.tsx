@@ -30,6 +30,11 @@ function isBookable(d: TourDate): boolean {
   return d.status !== "cancelled" && d.startDate >= today && d.bookedSeats < d.capacity;
 }
 
+// Weekday + day/month for a single program day, e.g. "Cümə, 12 apr".
+function fmtDay(iso: string, lang: Lang): string {
+  return format(parseISO(iso), "EEE, d MMM", { locale: DATE_LOCALES[lang] });
+}
+
 export const Route = createFileRoute("/tours/$tourId")({
   loader: async ({ params }): Promise<{ tour: Tour }> => {
     const tour = await fetchCatalogTour(params.tourId);
@@ -180,6 +185,63 @@ function TourDetail() {
                 ))}
               </ol>
             </div>
+
+            {/* Day-by-day program for the selected date (active vs free days) */}
+            {selected && selected.days.length > 0 && (
+              <div className="glass glass-sheen rounded-3xl p-8">
+                <div className="flex flex-wrap items-baseline justify-between gap-2">
+                  <h2 className="font-display text-2xl font-medium md:text-3xl">{t.detail.schedule}</h2>
+                  <span className="text-sm text-foreground/60">
+                    {fmtDateRange(selected, lang)}
+                  </span>
+                </div>
+                <p className="mt-1 text-sm text-foreground/60">
+                  {selected.days.filter((d) => d.active).length} {t.detail.activeDays} ·{" "}
+                  {selected.days.filter((d) => !d.active).length} {t.detail.restDays}
+                </p>
+                <ul className="mt-6 space-y-3">
+                  {selected.days.map((d) => (
+                    <li
+                      key={d.date}
+                      className={`rounded-2xl border p-4 ${
+                        d.active
+                          ? "border-accent/40 bg-accent/5"
+                          : "border-border bg-foreground/[0.02] opacity-70"
+                      }`}
+                    >
+                      <div className="flex items-center gap-2">
+                        <span
+                          className={`h-2.5 w-2.5 rounded-full ${d.active ? "bg-accent" : "bg-foreground/30"}`}
+                        />
+                        <span className="font-medium">{fmtDay(d.date, lang)}</span>
+                        {!d.active && (
+                          <span className="text-sm text-foreground/50">· {t.detail.restDay}</span>
+                        )}
+                      </div>
+                      {d.active && (
+                        <ul className="mt-3 space-y-2 ps-5">
+                          {d.events.map((e, i) => (
+                            <li key={i} className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-foreground/80">
+                              {e.time && (
+                                <span className="inline-flex items-center gap-1 font-medium text-accent">
+                                  <Clock className="h-3.5 w-3.5" /> {e.time}
+                                </span>
+                              )}
+                              <span>{e.title}</span>
+                              {e.location && (
+                                <span className="inline-flex items-center gap-1 text-foreground/55">
+                                  <MapPin className="h-3.5 w-3.5" /> {e.location}
+                                </span>
+                              )}
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
 
             {/* Included / Excluded */}
             <div className="grid gap-6 sm:grid-cols-2">

@@ -1,4 +1,4 @@
-import type { CategoryKey, Lang, Tour, TourDate, TourLocale } from "@/lib/tours-data";
+import type { CategoryKey, Lang, Tour, TourDate, TourDay, TourLocale } from "@/lib/tours-data";
 
 // Public API base for the M4STrip backend.
 //   • Browser (client): VITE_API_URL — a host-reachable origin (localhost:8080).
@@ -34,6 +34,12 @@ interface ApiCatalogTour {
 }
 
 // Backend internal Tour linked to a catalog tour (a bookable dated departure).
+interface ApiTourDay {
+  date: string;
+  active: boolean;
+  events: { title: string; type: string; time: string | null; location: string | null }[];
+}
+
 interface ApiLinkedTour {
   id: string;
   title: string;
@@ -43,9 +49,20 @@ interface ApiLinkedTour {
   booked_seats: number;
   price: number;
   status: string;
+  days?: ApiTourDay[];
 }
 
 function adaptDate(t: ApiLinkedTour): TourDate {
+  const days: TourDay[] = (t.days ?? []).map((d) => ({
+    date: (d.date ?? "").slice(0, 10),
+    active: d.active,
+    events: (d.events ?? []).map((e) => ({
+      title: e.title,
+      type: e.type,
+      time: e.time,
+      location: e.location,
+    })),
+  }));
   return {
     id: t.id,
     title: t.title,
@@ -55,6 +72,7 @@ function adaptDate(t: ApiLinkedTour): TourDate {
     bookedSeats: t.booked_seats,
     price: t.price,
     status: t.status,
+    days,
   };
 }
 
