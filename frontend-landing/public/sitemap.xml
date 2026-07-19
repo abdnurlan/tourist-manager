@@ -2,13 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://tour.m4strip.com/</loc>
+    <loc>https://m4strip.com/</loc>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
-    <xhtml:link rel="alternate" hreflang="he" href="https://tour.m4strip.com/" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://tour.m4strip.com/" />
-    <xhtml:link rel="alternate" hreflang="az" href="https://tour.m4strip.com/" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://tour.m4strip.com/" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://tour.m4strip.com/" />
+    <xhtml:link rel="alternate" hreflang="he" href="https://m4strip.com/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://m4strip.com/" />
+    <xhtml:link rel="alternate" hreflang="az" href="https://m4strip.com/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://m4strip.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://m4strip.com/" />
   </url>
 </urlset>

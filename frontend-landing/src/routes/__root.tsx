@@ -75,8 +75,8 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
 
 // Hebrew-first SEO metadata for the inbound market (Israel → Azerbaijan).
 const SEO = {
-  url: "https://tour.m4strip.com",
-  image: "https://tour.m4strip.com/og-image.jpg",
+  url: "https://m4strip.com",
+  image: "https://m4strip.com/og-image.jpg",
   title: "M4STrip — טיולים מאורגנים לאזרבייג'ן | מדריכים דוברי עברית",
   description:
     "חברת תיירות פנימה לאזרבייג'ן: טיולים מאורגנים לבאקו, שקי, גבלה וחיינלק עם מדריכים דוברי עברית, קבוצות קטנות ומסלולים בהתאמה אישית. הזמינו עכשיו.",
