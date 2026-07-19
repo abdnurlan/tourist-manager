@@ -98,3 +98,6 @@ coverage/
 frontend-landing/.output/
 frontend-landing/.wrangler/
 frontend-landing/.nitro/
+
+# Brainstorming visual companion
+.superpowers/
