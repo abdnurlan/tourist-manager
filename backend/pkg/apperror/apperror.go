@@ -84,6 +84,14 @@ func Conflict() *AppError {
 	return New(http.StatusConflict, "CONFLICT", "Məlumat artıq mövcuddur.")
 }
 
+func DepartureNotFound() *AppError {
+	return New(http.StatusNotFound, "DEPARTURE_NOT_FOUND", "Tarix tapılmadı.")
+}
+
+func DepartureFull() *AppError {
+	return New(http.StatusConflict, "DEPARTURE_FULL", "Bu tarix üçün yer qalmayıb.")
+}
+
 func Unprocessable() *AppError {
 	return New(http.StatusUnprocessableEntity, "UNPROCESSABLE", "Məlumat emal edilə bilmədi.")
 }

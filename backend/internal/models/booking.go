@@ -14,6 +14,8 @@ type Booking struct {
 	Email         *string `json:"email"           gorm:"type:text"`
 	People        int     `json:"people"          gorm:"type:int;not null;default:1"`
 	Date          *string `json:"date"            gorm:"type:date"` // YYYY-MM-DD, optional
+	DepartureID   *string `json:"departure_id"    gorm:"type:uuid;index"` // nullable: linked departure
+	DepartureDate *string `json:"departure_date"  gorm:"type:date"`       // snapshot of departure start
 	Notes         *string `json:"notes"           gorm:"type:text"`
 	Status        string  `json:"status"          gorm:"type:booking_status;not null;default:'new'"`
 	CreatedAt     time.Time `json:"created_at"    gorm:"autoCreateTime"`

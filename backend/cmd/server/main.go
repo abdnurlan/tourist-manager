@@ -66,6 +66,7 @@ func main() {
 	telegramRepo := repository.NewTelegramRepository(db)
 	catalogRepo := repository.NewCatalogTourRepository(db)
 	bookingRepo := repository.NewBookingRepository(db)
+	departureRepo := repository.NewDepartureRepository(db)
 
 	// 6. AI client (boundary).
 	aiClient := ai.NewAIService(cfg.OpenAIAPIKey)
@@ -79,7 +80,8 @@ func main() {
 	calendarSvc := service.NewCalendarService(eventRepo, tourRepo)
 	searchSvc := service.NewSearchService(tourRepo, eventRepo)
 	catalogSvc := service.NewCatalogTourService(catalogRepo)
-	bookingSvc := service.NewBookingService(bookingRepo, catalogRepo)
+	departureSvc := service.NewDepartureService(departureRepo, catalogRepo)
+	bookingSvc := service.NewBookingService(bookingRepo, catalogRepo, departureRepo)
 
 	// AI agent: tool-calling assistant shared by the web chat and the Telegram bot.
 	agent := service.NewAIAgent(aiClient, tourSvc, eventSvc, tourRepo, eventRepo, telegramRepo)
@@ -102,17 +104,19 @@ func main() {
 
 	// 9. Handlers.
 	handlers := router.Handlers{
-		Auth:      handler.NewAuthHandler(authSvc),
-		Dashboard: handler.NewDashboardHandler(dashboardSvc),
-		Tour:      handler.NewTourHandler(tourSvc),
-		Event:     handler.NewEventHandler(eventSvc),
-		Guest:     handler.NewGuestHandler(guestSvc),
+		Auth:        handler.NewAuthHandler(authSvc),
+		Dashboard:   handler.NewDashboardHandler(dashboardSvc),
+		Tour:        handler.NewTourHandler(tourSvc),
+		Event:       handler.NewEventHandler(eventSvc),
+		Guest:       handler.NewGuestHandler(guestSvc),
 		Calendar:    handler.NewCalendarHandler(calendarSvc),
 		Search:      handler.NewSearchHandler(searchSvc),
 		AI:          handler.NewAIHandler(aiSvc),
 		Telegram:    handler.NewTelegramHandler(bot),
-		CatalogTour: handler.NewCatalogTourHandler(catalogSvc),
+		CatalogTour: handler.NewCatalogTourHandler(catalogSvc, departureSvc),
 		Booking:     handler.NewBookingHandler(bookingSvc),
+		Upload:      handler.NewUploadHandler(cfg.UploadDir, "/uploads", cfg.PublicBaseURL),
+		Departure:   handler.NewDepartureHandler(departureSvc),
 	}
 
 	// 10. Router.

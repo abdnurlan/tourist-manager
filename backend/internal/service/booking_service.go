@@ -1,6 +1,8 @@
 package service
 
 import (
+	"errors"
+
 	"tourist-manager/backend/internal/models"
 	"tourist-manager/backend/internal/repository"
 	"tourist-manager/backend/pkg/apperror"
@@ -18,6 +20,7 @@ type BookingInput struct {
 	Email         *string
 	People        *int
 	Date          *string
+	DepartureID   *string
 	Notes         *string
 }
 
@@ -30,13 +33,14 @@ type BookingService interface {
 }
 
 type bookingService struct {
-	bookings repository.BookingRepository
-	catalog  repository.CatalogTourRepository
+	bookings   repository.BookingRepository
+	catalog    repository.CatalogTourRepository
+	departures repository.DepartureRepository
 }
 
 // NewBookingService builds a BookingService.
-func NewBookingService(bookings repository.BookingRepository, catalog repository.CatalogTourRepository) BookingService {
-	return &bookingService{bookings: bookings, catalog: catalog}
+func NewBookingService(bookings repository.BookingRepository, catalog repository.CatalogTourRepository, departures repository.DepartureRepository) BookingService {
+	return &bookingService{bookings: bookings, catalog: catalog, departures: departures}
 }
 
 func (s *bookingService) List(f repository.BookingFilter) ([]models.Booking, error) {
@@ -72,14 +76,34 @@ func (s *bookingService) Create(in BookingInput) (*models.Booking, error) {
 		people = *in.People
 	}
 
+	// If a departure is specified, reserve seats transactionally and snapshot its
+	// start date. Overbooking fails with 409; a missing departure fails with 404.
+	var depDate *string
+	if depID := trimPtr(in.DepartureID); depID != "" {
+		updated, err := s.departures.IncrementBooked(depID, people)
+		if err != nil {
+			if errors.Is(err, repository.ErrDepartureFull) {
+				return nil, apperror.DepartureFull()
+			}
+			if errors.Is(err, repository.ErrNotFound) {
+				return nil, apperror.DepartureNotFound()
+			}
+			return nil, apperror.Internal()
+		}
+		d := updated.StartDate
+		depDate = &d
+	}
+
 	booking := &models.Booking{
-		FullName: name,
-		Phone:    phone,
-		Email:    email,
-		People:   people,
-		Date:     cleanPtr(in.Date),
-		Notes:    cleanPtr(in.Notes),
-		Status:   "new",
+		FullName:      name,
+		Phone:         phone,
+		Email:         email,
+		People:        people,
+		Date:          cleanPtr(in.Date),
+		DepartureID:   cleanPtr(in.DepartureID),
+		DepartureDate: depDate,
+		Notes:         cleanPtr(in.Notes),
+		Status:        "new",
 	}
 
 	// Resolve the catalog tour by id or slug (snapshot its title + slug). All are

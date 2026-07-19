@@ -12,17 +12,19 @@ import (
 
 // Handlers bundles every endpoint handler for registration.
 type Handlers struct {
-	Auth      *handler.AuthHandler
-	Dashboard *handler.DashboardHandler
-	Tour      *handler.TourHandler
-	Event     *handler.EventHandler
-	Guest     *handler.GuestHandler
+	Auth        *handler.AuthHandler
+	Dashboard   *handler.DashboardHandler
+	Tour        *handler.TourHandler
+	Event       *handler.EventHandler
+	Guest       *handler.GuestHandler
 	Calendar    *handler.CalendarHandler
 	Search      *handler.SearchHandler
 	AI          *handler.AIHandler
 	Telegram    *handler.TelegramHandler
 	CatalogTour *handler.CatalogTourHandler
 	Booking     *handler.BookingHandler
+	Upload      *handler.UploadHandler
+	Departure   *handler.DepartureHandler
 }
 
 // New builds the Fiber app, mounts global middleware, and registers every route
@@ -40,6 +42,13 @@ func New(cfg *config.Config, h Handlers) *fiber.App {
 		AllowHeaders: "Origin, Content-Type, Accept, Authorization",
 		AllowMethods: "GET, POST, PATCH, DELETE, OPTIONS",
 	}))
+
+	// Uploaded images — served statically at /uploads (public, no auth) so the
+	// landing site and admin can render them directly by URL.
+	app.Static("/uploads", cfg.UploadDir, fiber.Static{
+		ByteRange: true,
+		MaxAge:    86400,
+	})
 
 	api := app.Group("/api")
 
@@ -97,6 +106,15 @@ func New(cfg *config.Config, h Handlers) *fiber.App {
 	api.Get("/catalog-tours/:id", auth, h.CatalogTour.Get)
 	api.Patch("/catalog-tours/:id", auth, h.CatalogTour.Update)
 	api.Delete("/catalog-tours/:id", auth, h.CatalogTour.Delete)
+
+	// Tour departures (admin management of dated departures).
+	api.Get("/catalog-tours/:id/departures", auth, h.Departure.ListByTour)
+	api.Post("/catalog-tours/:id/departures", auth, h.Departure.Create)
+	api.Patch("/departures/:id", auth, h.Departure.Update)
+	api.Delete("/departures/:id", auth, h.Departure.Delete)
+
+	// Image upload (admin) — returns { "url": "/uploads/<name>" }.
+	api.Post("/uploads", auth, h.Upload.UploadImage)
 
 	// Bookings (admin management of reservations).
 	api.Get("/bookings", auth, h.Booking.List)
