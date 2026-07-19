@@ -76,9 +76,9 @@ export const T = {
     locale: "en-US", dir: "ltr" as const,
     brand: "M4STrip",
     nav: { tours: "Tours", how: "How it works", contact: "Contact", book: "Book now" },
-    hero: { badge: "Discover Azerbaijan", title1: "Wonders of your", title2: "homeland", subtitle: "From the peaks of Khinalug to the tea gardens of Lankaran — your route, your pace.", searchPh: "Search a region or tour...", cta: "Browse tours" },
-    stats: [{ k: "40+", v: "Domestic routes" }, { k: "12", v: "Regions" }, { k: "8K+", v: "Happy travelers" }, { k: "4.9", v: "Average rating" }],
-    tours: { eyebrow: "Tours", title: "Pick your route", subtitle: "Tours crafted for every season — local guides, small groups, your pace.", perPerson: "Per person", book: "Book", details: "View details", empty: "No tours match your search.", days: "days", people: "people" },
+    hero: { badge: "Guided tours to Azerbaijan", title1: "Azerbaijan", title2: "awaits you", subtitle: "Organized tours to Azerbaijan — from the peaks of Khinalug to vibrant Baku. Expert local guides, small groups, tailor-made itineraries.", searchPh: "Search a region or tour...", cta: "Browse tours" },
+    stats: [{ k: "40+", v: "Organized routes" }, { k: "12", v: "Regions" }, { k: "8K+", v: "Happy travelers" }, { k: "4.9", v: "Average rating" }],
+    tours: { eyebrow: "Tours", title: "Pick your route", subtitle: "Organized tours for every season — expert guides, small groups, your pace.", perPerson: "Per person", book: "Book", details: "View details", empty: "No tours match your search.", days: "days", people: "people" },
     cats: { all: "All", mountain: "Mountain", history: "History", nature: "Nature", wellness: "Wellness", coast: "Coast", offroad: "Offroad" },
     how: { eyebrow: "How it works", title: "Ready to travel in three simple steps", steps: [{ t: "Pick a route", d: "Choose a tour from the catalog or request a custom itinerary." }, { t: "Confirm the group", d: "Set the date, group size and add-ons with ease." }, { t: "Set off", d: "Your local guide meets you — the rest is for you to discover." }] },
     cta: { title: "Let's build a custom itinerary", subtitle: "Tell us the date, budget and interests — we'll send a tailored offer within 24 hours.", ph: "Email or WhatsApp", btn: "Get offer", sent: "Request sent ✓" },
@@ -91,12 +91,12 @@ export const T = {
     locale: "he-IL", dir: "rtl" as const,
     brand: "M4STrip",
     nav: { tours: "טיולים", how: "איך זה עובד", contact: "צור קשר", book: "להזמין" },
-    hero: { badge: "גלו את אזרבייג'ן", title1: "פלאי", title2: "המולדת", subtitle: "מפסגות חינלוק עד מטעי התה של לנקרן — המסלול שלכם, בקצב שלכם.", searchPh: "חיפוש אזור או טיול...", cta: "לכל הטיולים" },
-    stats: [{ k: "40+", v: "מסלולים פנימיים" }, { k: "12", v: "אזורים" }, { k: "8K+", v: "מטיילים מרוצים" }, { k: "4.9", v: "דירוג ממוצע" }],
-    tours: { eyebrow: "טיולים", title: "בחרו את המסלול", subtitle: "טיולים לכל עונה — מדריכים מקומיים, קבוצות קטנות, הקצב שלכם.", perPerson: "לאדם", book: "הזמן", details: "לפרטים", empty: "לא נמצאו טיולים מתאימים.", days: "ימים", people: "אנשים" },
+    hero: { badge: "מדריכים דוברי עברית", title1: "אזרבייג'ן", title2: "מחכה לכם", subtitle: "טיולים מאורגנים לאזרבייג'ן — מפסגות חינלוק ועד באקו התוססת. מדריכים דוברי עברית, קבוצות קטנות ומסלול בהתאמה אישית.", searchPh: "חיפוש אזור או טיול...", cta: "לכל הטיולים" },
+    stats: [{ k: "40+", v: "מסלולים מאורגנים" }, { k: "12", v: "אזורים" }, { k: "8K+", v: "מטיילים ישראלים" }, { k: "4.9", v: "דירוג ממוצע" }],
+    tours: { eyebrow: "טיולים", title: "בחרו את המסלול", subtitle: "טיולים מאורגנים לכל עונה — מדריכים דוברי עברית, קבוצות קטנות, בקצב שלכם.", perPerson: "לאדם", book: "הזמן", details: "לפרטים", empty: "לא נמצאו טיולים מתאימים.", days: "ימים", people: "אנשים" },
     cats: { all: "הכל", mountain: "הרים", history: "היסטוריה", nature: "טבע", wellness: "בריאות", coast: "חוף", offroad: "אופרוד" },
-    how: { eyebrow: "איך זה עובד", title: "מוכנים לדרך בשלושה צעדים פשוטים", steps: [{ t: "בחרו מסלול", d: "בחרו טיול מהקטלוג או בקשו מסלול מותאם אישית." }, { t: "אשרו את הקבוצה", d: "קבעו תאריך, גודל קבוצה ושירותים נוספים בקלות." }, { t: "צאו לדרך", d: "המדריך המקומי יקבל אתכם — והשאר נתון לכם לגלות." }] },
-    cta: { title: "נבנה לכם מסלול אישי", subtitle: "ספרו לנו על התאריך, התקציב והתחומים — תוך 24 שעות נשלח הצעה מותאמת.", ph: "אימייל או וואטסאפ", btn: "קבלו הצעה", sent: "הבקשה נשלחה ✓" },
+    how: { eyebrow: "איך זה עובד", title: "מוכנים לדרך בשלושה צעדים פשוטים", steps: [{ t: "בחרו מסלול", d: "בחרו טיול מהקטלוג או בקשו מסלול מותאם אישית לקבוצה שלכם." }, { t: "אשרו את הקבוצה", d: "קבעו תאריך, גודל קבוצה ושירותים נוספים בקלות." }, { t: "נחתם ויוצאים", d: "המדריך דובר העברית מקבל אתכם בשדה התעופה — והשאר נתון לכם לגלות." }] },
+    cta: { title: "נבנה לכם מסלול אישי לאזרבייג'ן", subtitle: "ספרו לנו על התאריך, גודל הקבוצה והתחומים — תוך 24 שעות נשלח הצעה מותאמת בעברית.", ph: "אימייל או וואטסאפ", btn: "קבלו הצעה", sent: "הבקשה נשלחה ✓" },
     footer: "כל הזכויות שמורות.", madeBy: "האתר נבנה על ידי {c}",
     detail: { back: "חזרה", overview: "סקירה", itinerary: "מסלול", included: "מה כלול", excluded: "לא כלול", bookNow: "הזמן עכשיו", duration: "משך", group: "קבוצה", rating: "דירוג", price: "מחיר", notFound: "הטיול לא נמצא", dates: "תאריכים זמינים", noDates: "אין תאריכים פתוחים כרגע", seats: "מקומות", schedule: "תוכנית יומית", restDay: "יום חופשי", activeDays: "ימי פעילות", restDays: "ימים חופשיים" },
     reviews: { eyebrow: "ביקורות", title: "מה המטיילים שלנו אומרים", subtitle: "רשמים מהאורחים שטיילו איתנו.", tourLabel: "טיול" },
@@ -121,7 +121,7 @@ export const T = {
     locale: "ru-RU", dir: "ltr" as const,
     brand: "M4STrip",
     nav: { tours: "Туры", how: "Как это работает", contact: "Контакты", book: "Забронировать" },
-    hero: { badge: "Откройте Азербайджан", title1: "Чудеса вашей", title2: "родины", subtitle: "От вершин Хыналыга до чайных плантаций Ленкорани — ваш маршрут, ваш темп.", searchPh: "Поиск региона или тура...", cta: "Смотреть туры" },
+    hero: { badge: "Организованные туры в Азербайджан", title1: "Азербайджан", title2: "ждёт вас", subtitle: "Организованные туры в Азербайджан — от вершин Хыналыга до яркого Баку. Опытные гиды, малые группы, индивидуальные маршруты.", searchPh: "Поиск региона или тура...", cta: "Смотреть туры" },
     stats: [{ k: "40+", v: "Маршрутов по стране" }, { k: "12", v: "Регионов" }, { k: "8K+", v: "Довольных туристов" }, { k: "4.9", v: "Средний рейтинг" }],
     tours: { eyebrow: "Туры", title: "Выберите маршрут", subtitle: "Туры на любой сезон — местные гиды, небольшие группы, ваш темп.", perPerson: "За человека", book: "Забронировать", details: "Подробнее", empty: "По вашему запросу туров не найдено.", days: "дней", people: "чел." },
     cats: { all: "Все", mountain: "Горы", history: "История", nature: "Природа", wellness: "Оздоровление", coast: "Побережье", offroad: "Внедорожье" },
@@ -224,10 +224,12 @@ export const LANGS: Array<{ code: Lang; label: string; native: string }> = [
 
 const VALID_LANGS: Lang[] = ["az", "en", "he", "ar", "ru"];
 const LANG_KEY = "seyahet-lang";
+// Default is Hebrew (he) — the primary inbound market (Israel → Azerbaijan).
+export const DEFAULT_LANG: Lang = "he";
 export function getStoredLang(): Lang {
-  if (typeof window === "undefined") return "az";
+  if (typeof window === "undefined") return DEFAULT_LANG;
   const v = window.localStorage.getItem(LANG_KEY) as Lang | null;
-  return v && VALID_LANGS.includes(v) ? v : "az";
+  return v && VALID_LANGS.includes(v) ? v : DEFAULT_LANG;
 }
 export function setStoredLang(lang: Lang) {
   if (typeof window !== "undefined") window.localStorage.setItem(LANG_KEY, lang);

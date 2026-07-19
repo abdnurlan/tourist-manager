@@ -73,31 +73,77 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   );
 }
 
+// Hebrew-first SEO metadata for the inbound market (Israel → Azerbaijan).
+const SEO = {
+  url: "https://tour.m4strip.com",
+  image: "https://tour.m4strip.com/og-image.jpg",
+  title: "M4STrip — טיולים מאורגנים לאזרבייג'ן | מדריכים דוברי עברית",
+  description:
+    "חברת תיירות פנימה לאזרבייג'ן: טיולים מאורגנים לבאקו, שקי, גבלה וחיינלק עם מדריכים דוברי עברית, קבוצות קטנות ומסלולים בהתאמה אישית. הזמינו עכשיו.",
+  keywords:
+    "טיולים לאזרבייג'ן, טיול מאורגן אזרבייג'ן, באקו, שקי, גבלה, מדריך דובר עברית, תיירות אזרבייג'ן, חבילות נופש",
+};
+
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
   head: () => ({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "M4STrip — Azərbaycan üzrə daxili turlar və kəşf marşrutları" },
-      { name: "description", content: "Azərbaycanın ən gözəl bölgələrinə daxili turlar: Şəki, Qəbələ, Xınalıq, Qobustan, Lənkəran və daha çoxu." },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "M4STrip — Azərbaycan üzrə daxili turlar və kəşf marşrutları" },
-      { property: "og:description", content: "Azərbaycanın ən gözəl bölgələrinə daxili turlar: Şəki, Qəbələ, Xınalıq, Qobustan, Lənkəran və daha çoxu." },
+      // Hebrew-first (primary inbound market: Israel → Azerbaijan).
+      { title: SEO.title },
+      { name: "description", content: SEO.description },
+      { name: "keywords", content: SEO.keywords },
+      { name: "author", content: "M4STrip" },
+      { name: "robots", content: "index, follow" },
+      // Open Graph (he_IL locale, with az/en/ru alternates).
+      { property: "og:site_name", content: "M4STrip" },
+      { property: "og:title", content: SEO.title },
+      { property: "og:description", content: SEO.description },
       { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-      { name: "twitter:site", content: "@Lovable" },
-      { name: "twitter:title", content: "M4STrip — Azərbaycan üzrə daxili turlar və kəşf marşrutları" },
-      { name: "twitter:description", content: "Azərbaycanın ən gözəl bölgələrinə daxili turlar: Şəki, Qəbələ, Xınalıq, Qobustan, Lənkəran və daha çoxu." },
-      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/4ffd35ed-5c35-4c9d-83fd-93f045dfe9b3/id-preview-81fd6fae--1dbe733d-b6ae-4def-8849-2ecf4561a8ef.lovable.app-1783793296645.png" },
-      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/4ffd35ed-5c35-4c9d-83fd-93f045dfe9b3/id-preview-81fd6fae--1dbe733d-b6ae-4def-8849-2ecf4561a8ef.lovable.app-1783793296645.png" },
+      { property: "og:url", content: SEO.url },
+      { property: "og:locale", content: "he_IL" },
+      { property: "og:locale:alternate", content: "en_US" },
+      { property: "og:locale:alternate", content: "az_AZ" },
+      { property: "og:locale:alternate", content: "ru_RU" },
+      { property: "og:image", content: SEO.image },
+      { property: "og:image:alt", content: SEO.title },
+      // Twitter / X.
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: SEO.title },
+      { name: "twitter:description", content: SEO.description },
+      { name: "twitter:image", content: SEO.image },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
+      { rel: "canonical", href: SEO.url },
+      // hreflang alternates for the multilingual audience.
+      { rel: "alternate", hrefLang: "he", href: SEO.url },
+      { rel: "alternate", hrefLang: "en", href: SEO.url },
+      { rel: "alternate", hrefLang: "az", href: SEO.url },
+      { rel: "alternate", hrefLang: "ru", href: SEO.url },
+      { rel: "alternate", hrefLang: "x-default", href: SEO.url },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
-      { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@300;400;500;600;700&display=swap" },
+      { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Heebo:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" },
     ],
-
+    // schema.org TravelAgency structured data (rich results).
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "TravelAgency",
+          name: "M4STrip",
+          description: SEO.description,
+          url: SEO.url,
+          image: SEO.image,
+          areaServed: { "@type": "Country", name: "Azerbaijan" },
+          knowsLanguage: ["he", "en", "az", "ru"],
+          telephone: "+994519600212",
+          sameAs: ["https://www.instagram.com/m4strip/"],
+        }),
+      },
+    ],
   }),
   shellComponent: RootShell,
   component: RootComponent,
@@ -107,7 +153,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="az" dir="ltr">
+    <html lang="he" dir="rtl">
       <head>
         <HeadContent />
       </head>

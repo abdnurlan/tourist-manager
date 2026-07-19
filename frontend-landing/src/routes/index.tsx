@@ -22,12 +22,7 @@ import logoImg from "@/assets/logo.png";
 const CURRENT_YEAR = 2026;
 
 export const Route = createFileRoute("/")({
-  head: () => ({
-    meta: [
-      { title: "M4STrip — Azərbaycan üzrə daxili turlar və kəşf marşrutları" },
-      { name: "description", content: "Azərbaycanın ən gözəl bölgələrinə daxili turlar: Şəki, Qəbələ, Xınalıq, Qobustan, Lənkəran və daha çoxu." },
-    ],
-  }),
+  // Home page inherits the Hebrew-first SEO from the root route; no override.
   component: Index,
 });
 

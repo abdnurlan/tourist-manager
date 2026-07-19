@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getStoredLang, setStoredLang, type Lang } from "@/lib/tours-data";
+import { DEFAULT_LANG, getStoredLang, setStoredLang, type Lang } from "@/lib/tours-data";
 
 const RTL_LANGS: Lang[] = ["ar", "he"];
 
@@ -9,7 +9,7 @@ function syncDocumentLanguage(lang: Lang) {
 }
 
 export function useLanguage() {
-  const [lang, setLang] = useState<Lang>("az");
+  const [lang, setLang] = useState<Lang>(DEFAULT_LANG);
 
   useEffect(() => {
     const storedLang = getStoredLang();

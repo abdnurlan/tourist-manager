@@ -61,8 +61,9 @@
   --input: #e6dac4;
   --ring: #01335e;
 
-  --font-display: "Fraunces", ui-serif, Georgia, serif;
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  /* "Heebo" carries the Hebrew glyphs (primary market); Inter covers Latin. */
+  --font-display: "Fraunces", "Heebo", ui-serif, Georgia, serif;
+  --font-sans: "Inter", "Heebo", ui-sans-serif, system-ui, sans-serif;
 
   /* Glass tokens — warm paper glass (light), for sticky nav & cards */
   --glass-bg: color-mix(in srgb, #fffdf8 80%, transparent);
