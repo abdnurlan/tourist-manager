@@ -90,6 +90,7 @@ func (s *bookingService) Create(in BookingInput) (*models.Booking, error) {
 			}
 			return nil, apperror.Internal()
 		}
+		updated.Normalize()
 		d := updated.StartDate
 		depDate = &d
 	}

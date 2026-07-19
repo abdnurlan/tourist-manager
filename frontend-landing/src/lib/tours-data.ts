@@ -12,6 +12,18 @@ export type TourLocale = {
   excluded: string[];
 };
 
+// A concrete dated departure of a tour (one bookable date with its own price
+// and remaining seats). Only open, future departures are returned to the site.
+export type Departure = {
+  id: string;
+  start_date: string;
+  end_date: string | null;
+  price: number | null;
+  capacity: number;
+  booked: number;
+  status: string;
+};
+
 export type Tour = {
   id: string;
   category: CategoryKey;
@@ -22,6 +34,7 @@ export type Tour = {
   image: string;
   gallery?: string[];
   i18n: Record<Lang, TourLocale>;
+  departures: Departure[];
 };
 
 
@@ -37,7 +50,7 @@ export const T = {
     how: { eyebrow: "Necə işləyir", title: "Üç sadə addımda səyahətə hazır", steps: [{ t: "Marşrutu seç", d: "Kataloqdan ilgi sahənə uyğun turu seç və ya bizdən fərdi marşrut istə." }, { t: "Qrupu təsdiqlə", d: "Tarixi, qrup ölçüsünü və əlavə xidmətləri rahatlıqla seç." }, { t: "Yola çıx", d: "Yerli bələdçi sizi qarşılayır — qalanı kəşf etmək sizə qalır." }] },
     cta: { title: "Fərdi marşrut hazırlayaq", subtitle: "Tarixi, büdcəni və maraqlarını bildir — 24 saat ərzində sənə uyğun tur təklifi göndərək.", ph: "Email və ya WhatsApp", btn: "Təklif al" },
     footer: "Bütün hüquqlar qorunur.",
-    detail: { back: "Geri", overview: "Tura ümumi baxış", itinerary: "Marşrut", included: "Qiymətə daxildir", excluded: "Qiymətə daxil deyil", bookNow: "İndi rezerv et", duration: "Müddət", group: "Qrup", rating: "Reytinq", price: "Qiymət", notFound: "Tur tapılmadı" },
+    detail: { back: "Geri", overview: "Tura ümumi baxış", itinerary: "Marşrut", included: "Qiymətə daxildir", excluded: "Qiymətə daxil deyil", bookNow: "İndi rezerv et", duration: "Müddət", group: "Qrup", rating: "Reytinq", price: "Qiymət", notFound: "Tur tapılmadı", dates: "Mövcud tarixlər", noDates: "Hazırda açıq tarix yoxdur", seats: "yer" },
     reviews: { eyebrow: "Rəylər", title: "Müştəri rəyləri", subtitle: "Bizimlə səyahət edən qonaqlarımızın təəssüratları.", tourLabel: "Tur" },
 
   },
@@ -52,7 +65,7 @@ export const T = {
     how: { eyebrow: "How it works", title: "Ready to travel in three simple steps", steps: [{ t: "Pick a route", d: "Choose a tour from the catalog or request a custom itinerary." }, { t: "Confirm the group", d: "Set the date, group size and add-ons with ease." }, { t: "Set off", d: "Your local guide meets you — the rest is for you to discover." }] },
     cta: { title: "Let's build a custom itinerary", subtitle: "Tell us the date, budget and interests — we'll send a tailored offer within 24 hours.", ph: "Email or WhatsApp", btn: "Get offer" },
     footer: "All rights reserved.",
-    detail: { back: "Back", overview: "Overview", itinerary: "Itinerary", included: "What's included", excluded: "Not included", bookNow: "Book now", duration: "Duration", group: "Group", rating: "Rating", price: "Price", notFound: "Tour not found" },
+    detail: { back: "Back", overview: "Overview", itinerary: "Itinerary", included: "What's included", excluded: "Not included", bookNow: "Book now", duration: "Duration", group: "Group", rating: "Rating", price: "Price", notFound: "Tour not found", dates: "Available dates", noDates: "No open dates right now", seats: "seats" },
     reviews: { eyebrow: "Reviews", title: "What our travelers say", subtitle: "Impressions from guests who traveled with us.", tourLabel: "Tour" },
 
   },
@@ -67,7 +80,7 @@ export const T = {
     how: { eyebrow: "איך זה עובד", title: "מוכנים לדרך בשלושה צעדים פשוטים", steps: [{ t: "בחרו מסלול", d: "בחרו טיול מהקטלוג או בקשו מסלול מותאם אישית." }, { t: "אשרו את הקבוצה", d: "קבעו תאריך, גודל קבוצה ושירותים נוספים בקלות." }, { t: "צאו לדרך", d: "המדריך המקומי יקבל אתכם — והשאר נתון לכם לגלות." }] },
     cta: { title: "נבנה לכם מסלול אישי", subtitle: "ספרו לנו על התאריך, התקציב והתחומים — תוך 24 שעות נשלח הצעה מותאמת.", ph: "אימייל או וואטסאפ", btn: "קבלו הצעה" },
     footer: "כל הזכויות שמורות.",
-    detail: { back: "חזרה", overview: "סקירה", itinerary: "מסלול", included: "מה כלול", excluded: "לא כלול", bookNow: "הזמן עכשיו", duration: "משך", group: "קבוצה", rating: "דירוג", price: "מחיר", notFound: "הטיול לא נמצא" },
+    detail: { back: "חזרה", overview: "סקירה", itinerary: "מסלול", included: "מה כלול", excluded: "לא כלול", bookNow: "הזמן עכשיו", duration: "משך", group: "קבוצה", rating: "דירוג", price: "מחיר", notFound: "הטיול לא נמצא", dates: "תאריכים זמינים", noDates: "אין תאריכים פתוחים כרגע", seats: "מקומות" },
     reviews: { eyebrow: "ביקורות", title: "מה המטיילים שלנו אומרים", subtitle: "רשמים מהאורחים שטיילו איתנו.", tourLabel: "טיול" },
 
   },
@@ -82,7 +95,7 @@ export const T = {
     how: { eyebrow: "كيف نعمل", title: "جاهز للسفر في ثلاث خطوات بسيطة", steps: [{ t: "اختر مساراً", d: "اختر جولة من الكتالوج أو اطلب مساراً مخصصاً." }, { t: "أكّد المجموعة", d: "حدّد التاريخ وحجم المجموعة والخدمات الإضافية بكل سهولة." }, { t: "انطلق", d: "يستقبلك مرشدك المحلي — والباقي متروك لك لتكتشفه." }] },
     cta: { title: "لنصمّم لك مساراً مخصصاً", subtitle: "أخبرنا بالتاريخ والميزانية واهتماماتك — وسنرسل لك عرضاً مخصصاً خلال 24 ساعة.", ph: "البريد الإلكتروني أو واتساب", btn: "احصل على عرض" },
     footer: "جميع الحقوق محفوظة.",
-    detail: { back: "رجوع", overview: "نظرة عامة", itinerary: "المسار", included: "ما يشمله السعر", excluded: "غير مشمول", bookNow: "احجز الآن", duration: "المدة", group: "المجموعة", rating: "التقييم", price: "السعر", notFound: "الجولة غير موجودة" },
+    detail: { back: "رجوع", overview: "نظرة عامة", itinerary: "المسار", included: "ما يشمله السعر", excluded: "غير مشمول", bookNow: "احجز الآن", duration: "المدة", group: "المجموعة", rating: "التقييم", price: "السعر", notFound: "الجولة غير موجودة", dates: "التواريخ المتاحة", noDates: "لا توجد تواريخ متاحة حالياً", seats: "مقاعد" },
     reviews: { eyebrow: "التقييمات", title: "ماذا يقول مسافرونا", subtitle: "انطباعات من ضيوف سافروا معنا.", tourLabel: "الجولة" },
 
   },
@@ -97,7 +110,7 @@ export const T = {
     how: { eyebrow: "Как это работает", title: "Готовы к путешествию за три простых шага", steps: [{ t: "Выберите маршрут", d: "Выберите тур из каталога или закажите индивидуальный маршрут." }, { t: "Подтвердите группу", d: "Легко выберите дату, размер группы и дополнительные услуги." }, { t: "Отправляйтесь", d: "Вас встречает местный гид — остальное вам предстоит открыть." }] },
     cta: { title: "Составим индивидуальный маршрут", subtitle: "Сообщите дату, бюджет и интересы — в течение 24 часов пришлём персональное предложение.", ph: "Email или WhatsApp", btn: "Получить предложение" },
     footer: "Все права защищены.",
-    detail: { back: "Назад", overview: "Обзор", itinerary: "Маршрут", included: "Что включено", excluded: "Не включено", bookNow: "Забронировать", duration: "Длительность", group: "Группа", rating: "Рейтинг", price: "Цена", notFound: "Тур не найден" },
+    detail: { back: "Назад", overview: "Обзор", itinerary: "Маршрут", included: "Что включено", excluded: "Не включено", bookNow: "Забронировать", duration: "Длительность", group: "Группа", rating: "Рейтинг", price: "Цена", notFound: "Тур не найден", dates: "Доступные даты", noDates: "Сейчас нет открытых дат", seats: "мест" },
     reviews: { eyebrow: "Отзывы", title: "Что говорят наши путешественники", subtitle: "Впечатления гостей, путешествовавших с нами.", tourLabel: "Тур" },
 
   },

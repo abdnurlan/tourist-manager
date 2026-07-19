@@ -39,11 +39,12 @@ func NewDepartureService(repo repository.DepartureRepository, catalog repository
 
 func today() string { return time.Now().Format("2006-01-02") }
 
-// stampStatus overwrites each departure's Status with its effective status so
-// callers/JSON always see the up-to-date value (past → closed).
+// stampStatus normalises dates and overwrites each departure's Status with its
+// effective status so callers/JSON always see clean, up-to-date values.
 func stampStatus(list []models.TourDeparture) {
 	t := today()
 	for i := range list {
+		list[i].Normalize()
 		list[i].Status = list[i].EffectiveStatus(t)
 	}
 }
@@ -66,6 +67,7 @@ func (s *departureService) ListPublicByTour(catalogTourID string) ([]models.Tour
 	out := make([]models.TourDeparture, 0, len(all))
 	for _, d := range all {
 		if d.EffectiveStatus(t) == "open" {
+			d.Normalize()
 			d.Status = "open"
 			out = append(out, d)
 		}
@@ -113,6 +115,7 @@ func (s *departureService) Create(catalogTourID string, in DepartureInput) (*mod
 	if err := s.repo.Create(d); err != nil {
 		return nil, apperror.Internal()
 	}
+	d.Normalize()
 	d.Status = d.EffectiveStatus(today())
 	return d, nil
 }
@@ -155,6 +158,7 @@ func (s *departureService) Update(id string, in DepartureInput) (*models.TourDep
 	if err := s.repo.Update(d); err != nil {
 		return nil, apperror.Internal()
 	}
+	d.Normalize()
 	d.Status = d.EffectiveStatus(today())
 	return d, nil
 }

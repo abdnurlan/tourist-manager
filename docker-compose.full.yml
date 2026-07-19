@@ -1,0 +1,128 @@
+# ─────────────────────────────────────────────────────────────
+# M4STrip — TAM stack (DB + backend + 2 frontend) DEV orchestration
+#
+# İstifadə:
+#   docker compose -f docker-compose.full.yml up --build
+#
+# Servislər:
+#   • db               : PostgreSQL 16            → localhost:5432
+#   • backend          : Go/Fiber + Air (HMR)     → localhost:8080
+#   • frontend (admin) : Next.js next dev (HMR)   → localhost:3000
+#   • frontend-landing : TanStack/Vite dev (HMR)  → localhost:3001
+#
+# Mənbə kod host-dan bind-mount edilir — hər dəyişiklik dərhal əks olunur.
+# ─────────────────────────────────────────────────────────────
+
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: m4strip_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: tourist_manager
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata_full:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d tourist_manager"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    networks:
+      - turnet
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.dev
+    container_name: m4strip_backend
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file:
+      - ./backend/.env
+    environment:
+      # Compose service adı ilə DB host-unu override et.
+      DATABASE_URL: postgres://postgres:postgres@db:5432/tourist_manager?sslmode=disable
+      PORT: "8080"
+      # Hər iki frontend origin-inə icazə ver (admin 3000, landing 3001).
+      CORS_ORIGINS: http://localhost:3000,http://127.0.0.1:3000,http://localhost:3001,http://127.0.0.1:3001
+      # Yüklənən şəkillər üçün qovluq (uploads volume-una bağlıdır).
+      UPLOAD_DIR: /data/uploads
+      # Yüklənən şəkil URL-ləri mütləq olsun deyə backend-in host origin-i
+      # (brauzer həm admin, həm landing tərəfdən bu ünvandan yükləyir).
+      PUBLIC_BASE_URL: http://localhost:8080
+    volumes:
+      - ./backend:/src
+      - backend_tmp:/src/tmp
+      # Yüklənən şəkillər — rebuild-dən sonra da qalsın.
+      - uploads:/data/uploads
+    ports:
+      - "8080:8080"
+    networks:
+      - turnet
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    container_name: m4strip_frontend_admin
+    restart: unless-stopped
+    depends_on:
+      - backend
+    environment:
+      # Brauzerdən çağırılır — host maşının localhost-u.
+      NEXT_PUBLIC_API_URL: http://localhost:8080/api
+      WATCHPACK_POLLING: "true"
+      CHOKIDAR_USEPOLLING: "true"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+      - /app/.next
+    ports:
+      - "3000:3000"
+    networks:
+      - turnet
+
+  frontend-landing:
+    build:
+      context: ./frontend-landing
+      dockerfile: Dockerfile.dev
+    container_name: m4strip_frontend_landing
+    restart: unless-stopped
+    depends_on:
+      - backend
+    environment:
+      # Brauzerdən çağırılır — host maşının localhost-u.
+      VITE_API_URL: http://localhost:8080/api
+      # SSR (route loaders run inside the container) — reach backend by service name.
+      SSR_API_URL: http://backend:8080/api
+      CHOKIDAR_USEPOLLING: "true"
+    volumes:
+      - ./frontend-landing:/app
+      # node_modules və build artefaktları konteynerə xas qalsın.
+      - /app/node_modules
+      - /app/.output
+      - /app/.tanstack
+      - /app/.nitro
+    ports:
+      - "3001:3001"
+    networks:
+      - turnet
+
+volumes:
+  pgdata_full:
+    driver: local
+  backend_tmp:
+    driver: local
+  uploads:
+    driver: local
+
+networks:
+  turnet:
+    driver: bridge

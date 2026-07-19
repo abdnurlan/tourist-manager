@@ -22,6 +22,25 @@ type TourDeparture struct {
 
 func (TourDeparture) TableName() string { return "tour_departures" }
 
+// dateOnly trims a possibly RFC3339 date string ("2026-10-15T00:00:00Z") to a
+// bare "2026-10-15". The Postgres date column round-trips as a full timestamp
+// through GORM's string mapping, so normalise it before it reaches clients.
+func dateOnly(s string) string {
+	if len(s) >= 10 {
+		return s[:10]
+	}
+	return s
+}
+
+// Normalize collapses the date fields to bare YYYY-MM-DD form in place.
+func (d *TourDeparture) Normalize() {
+	d.StartDate = dateOnly(d.StartDate)
+	if d.EndDate != nil {
+		e := dateOnly(*d.EndDate)
+		d.EndDate = &e
+	}
+}
+
 // Remaining is capacity minus booked, never below zero.
 func (d TourDeparture) Remaining() int {
 	r := d.Capacity - d.Booked

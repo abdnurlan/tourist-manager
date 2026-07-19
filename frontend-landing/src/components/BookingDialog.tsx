@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { format } from "date-fns";
 import { ar, az, enUS, he, ru } from "date-fns/locale";
 import {
@@ -42,6 +42,10 @@ export type BookingTour = {
   duration: string;
   price: number;
   image: string;
+  // Selected departure: when present the travel date is fixed to it and the
+  // per-person price is the departure's price.
+  departureId?: string;
+  departureDate?: string; // YYYY-MM-DD
 };
 
 type Step = "details" | "payment" | "success";
@@ -54,8 +58,9 @@ interface Props {
 }
 
 export function BookingDialog({ tour, open, lang, onOpenChange }: Props) {
+  const lockedDate = tour?.departureDate ? new Date(tour.departureDate) : undefined;
   const [step, setStep] = useState<Step>("details");
-  const [date, setDate] = useState<Date | undefined>();
+  const [date, setDate] = useState<Date | undefined>(lockedDate);
   const [people, setPeople] = useState(2);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -70,9 +75,14 @@ export function BookingDialog({ tour, open, lang, onOpenChange }: Props) {
 
   const total = useMemo(() => (tour ? tour.price * people : 0), [tour, people]);
 
+  // When a departure-bound tour is opened, lock the travel date to the departure.
+  useEffect(() => {
+    if (tour?.departureDate) setDate(new Date(tour.departureDate));
+  }, [tour?.departureDate]);
+
   const reset = () => {
     setStep("details");
-    setDate(undefined);
+    setDate(lockedDate);
     setPeople(2);
     setName("");
     setEmail("");
@@ -105,6 +115,7 @@ export function BookingDialog({ tour, open, lang, onOpenChange }: Props) {
         phone: phone.trim() || null,
         people,
         date: date ? format(date, "yyyy-MM-dd") : null,
+        departure_id: tour.departureId ?? null,
       });
       setStep("success");
       toast.success(copy.confirmed);
@@ -167,36 +178,43 @@ export function BookingDialog({ tour, open, lang, onOpenChange }: Props) {
         <div className="max-h-[60vh] overflow-y-auto px-6 pb-6 pt-4">
           {step === "details" && (
             <div className="space-y-5">
-              {/* Date */}
+              {/* Date — locked to the selected departure, or free-choice fallback */}
               <div className="space-y-2">
                 <Label>{copy.travelDate}</Label>
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <Button
-                      variant="outline"
-                      className={cn(
-                        "h-11 w-full justify-start gap-2 text-start font-normal",
-                        !date && "text-muted-foreground",
-                      )}
-                    >
-                      <CalendarIcon className="h-4 w-4" />
-                      {date
-                        ? format(date, "d MMMM yyyy, EEEE", { locale: dateLocale })
-                        : copy.selectDate}
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0" align="start">
-                    <Calendar
-                      mode="single"
-                      selected={date}
-                      onSelect={setDate}
-                      disabled={(d) => d < new Date(new Date().setHours(0, 0, 0, 0))}
-                      initialFocus
-                      locale={dateLocale}
-                      className={cn("p-3 pointer-events-auto")}
-                    />
-                  </PopoverContent>
-                </Popover>
+                {tour.departureDate ? (
+                  <div className="flex h-11 items-center gap-2 rounded-md border border-input bg-secondary/40 px-3 text-sm font-medium">
+                    <CalendarIcon className="h-4 w-4 text-accent" />
+                    {date && format(date, "d MMMM yyyy, EEEE", { locale: dateLocale })}
+                  </div>
+                ) : (
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className={cn(
+                          "h-11 w-full justify-start gap-2 text-start font-normal",
+                          !date && "text-muted-foreground",
+                        )}
+                      >
+                        <CalendarIcon className="h-4 w-4" />
+                        {date
+                          ? format(date, "d MMMM yyyy, EEEE", { locale: dateLocale })
+                          : copy.selectDate}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <Calendar
+                        mode="single"
+                        selected={date}
+                        onSelect={setDate}
+                        disabled={(d) => d < new Date(new Date().setHours(0, 0, 0, 0))}
+                        initialFocus
+                        locale={dateLocale}
+                        className={cn("p-3 pointer-events-auto")}
+                      />
+                    </PopoverContent>
+                  </Popover>
+                )}
               </div>
 
               {/* People */}

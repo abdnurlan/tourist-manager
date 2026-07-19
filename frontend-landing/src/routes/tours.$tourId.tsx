@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, ArrowRight, Check, Clock, MapPin, Star, Users, X } from "lucide-react";
 import { BookingDialog, type BookingTour } from "@/components/BookingDialog";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
-import { T, type Tour } from "@/lib/tours-data";
+import { T, type Departure, type Tour } from "@/lib/tours-data";
 import { fetchCatalogTour } from "@/lib/api/client";
 import { useLanguage } from "@/hooks/use-language";
 import logoImg from "@/assets/logo.png";
@@ -56,6 +56,9 @@ function TourDetail() {
   const [lang, setLang] = useLanguage();
   const [booking, setBooking] = useState<BookingTour | null>(null);
   const [scrolled, setScrolled] = useState(false);
+  const [selected, setSelected] = useState<Departure | null>(
+    tour.departures.length > 0 ? tour.departures[0] : null,
+  );
 
   const t = T[lang];
   const dir = t.dir;
@@ -68,15 +71,19 @@ function TourDetail() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const openBooking = () =>
+  const openBooking = () => {
+    if (!selected) return;
     setBooking({
       id: tour.id,
       title: loc.title,
       region: loc.region,
       duration: `${tour.duration} ${t.tours.days}`,
-      price: tour.price,
+      price: selected.price ?? tour.price,
       image: tour.image,
+      departureId: selected.id,
+      departureDate: selected.start_date,
     });
+  };
 
   return (
     <div dir={dir} lang={lang} className="min-h-screen text-foreground">
@@ -192,7 +199,9 @@ function TourDetail() {
           <aside className="lg:col-span-1">
             <div className="glass-strong glass-sheen sticky top-28 rounded-3xl p-8">
               <div className="text-xs uppercase tracking-widest text-foreground/60">{t.tours.perPerson}</div>
-              <div className="mt-1 font-display text-5xl font-medium text-accent">{tour.price} ₼</div>
+              <div className="mt-1 font-display text-5xl font-medium text-accent">
+                {(selected?.price ?? tour.price)} ₼
+              </div>
 
               <div className="mt-6 space-y-3 border-t border-border pt-6 text-sm text-foreground/80">
                 <div className="flex items-center justify-between">
@@ -209,7 +218,50 @@ function TourDetail() {
                 </div>
               </div>
 
-              <Button size="lg" className="mt-6 w-full cursor-pointer rounded-xl transition-transform duration-300 hover:scale-[1.02] active:scale-95" onClick={openBooking}>
+              {/* Departure date picker */}
+              <div className="mt-6 border-t border-border pt-6">
+                <div className="text-xs uppercase tracking-widest text-foreground/60">{t.detail.dates}</div>
+                {tour.departures.length === 0 ? (
+                  <p className="mt-3 text-sm text-foreground/70">{t.detail.noDates}</p>
+                ) : (
+                  <ul className="mt-3 space-y-2">
+                    {tour.departures.map((d) => {
+                      const active = selected?.id === d.id;
+                      return (
+                        <li key={d.id}>
+                          <button
+                            type="button"
+                            onClick={() => setSelected(d)}
+                            className={`flex w-full items-center justify-between rounded-xl border px-3 py-2.5 text-sm transition-colors ${
+                              active
+                                ? "border-accent bg-accent/10 text-foreground"
+                                : "border-border text-foreground/80 hover:border-accent/50"
+                            }`}
+                          >
+                            <span className="flex items-center gap-2">
+                              <span
+                                className={`h-3.5 w-3.5 rounded-full border ${active ? "border-accent bg-accent" : "border-foreground/40"}`}
+                              />
+                              {d.start_date}
+                              {d.end_date ? ` – ${d.end_date}` : ""}
+                            </span>
+                            <span className="text-foreground/70">
+                              {(d.price ?? tour.price)} ₼ · {d.capacity - d.booked} {t.detail.seats}
+                            </span>
+                          </button>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                )}
+              </div>
+
+              <Button
+                size="lg"
+                disabled={!selected}
+                className="mt-6 w-full cursor-pointer rounded-xl transition-transform duration-300 hover:scale-[1.02] active:scale-95 disabled:cursor-not-allowed disabled:opacity-50"
+                onClick={openBooking}
+              >
                 {t.detail.bookNow} <ArrowRight className={`h-4 w-4 ${dir === "rtl" ? "mr-1 rotate-180" : "ml-1"}`} />
               </Button>
             </div>

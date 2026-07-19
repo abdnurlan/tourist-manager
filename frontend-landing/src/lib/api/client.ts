@@ -1,10 +1,15 @@
-import type { CategoryKey, Lang, Tour, TourLocale } from "@/lib/tours-data";
+import type { CategoryKey, Departure, Lang, Tour, TourLocale } from "@/lib/tours-data";
 
-// Public API base for the M4STrip backend. Configurable via VITE_API_URL,
-// falls back to the local dev backend.
-const API_BASE =
-  (import.meta.env.VITE_API_URL as string | undefined)?.replace(/\/$/, "") ??
-  "http://localhost:8080/api";
+// Public API base for the M4STrip backend.
+//   • Browser (client): VITE_API_URL — a host-reachable origin (localhost:8080).
+//   • SSR (server, e.g. route loaders): the browser origin is not reachable from
+//     inside the container, so use SSR_API_URL (the Docker service name), falling
+//     back to VITE_API_URL for non-containerised runs.
+const rawBase = import.meta.env.SSR
+  ? (typeof process !== "undefined" ? process.env.SSR_API_URL : undefined) ??
+    (import.meta.env.VITE_API_URL as string | undefined)
+  : (import.meta.env.VITE_API_URL as string | undefined);
+const API_BASE = (rawBase ?? "http://localhost:8080/api").replace(/\/$/, "");
 
 const LANGS: Lang[] = ["az", "en", "ru", "ar", "he"];
 
@@ -57,6 +62,7 @@ function adapt(api: ApiCatalogTour): Tour {
     rating: api.rating,
     image: api.image_url,
     i18n,
+    departures: [],
   };
 }
 
@@ -68,13 +74,15 @@ export async function fetchCatalogTours(): Promise<Tour[]> {
   return (json.data ?? []).map(adapt);
 }
 
-/** GET /public/catalog-tours/:slug → single tour, or null if not found. */
+/** GET /public/catalog-tours/:slug → single tour + open departures, or null. */
 export async function fetchCatalogTour(slug: string): Promise<Tour | null> {
   const res = await fetch(`${API_BASE}/public/catalog-tours/${encodeURIComponent(slug)}`);
   if (res.status === 404) return null;
   if (!res.ok) throw new Error("Tur yüklənə bilmədi.");
-  const json = (await res.json()) as ApiCatalogTour;
-  return adapt(json);
+  const json = (await res.json()) as { tour: ApiCatalogTour; departures: Departure[] };
+  const tour = adapt(json.tour);
+  tour.departures = json.departures ?? [];
+  return tour;
 }
 
 export interface CreateBookingBody {
@@ -86,6 +94,7 @@ export interface CreateBookingBody {
   email?: string | null;
   people?: number;
   date?: string | null;
+  departure_id?: string | null;
   notes?: string | null;
 }
 
