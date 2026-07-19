@@ -1,6 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { ImagePlus, Loader2, X } from "lucide-react";
+import { uploadImage } from "@/lib/api/uploads";
 import { BottomSheetForm } from "@/components/shared/bottom-sheet-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -92,6 +94,8 @@ export function CatalogTourForm({ open, onOpenChange, tour, onSubmit, submitting
   const [s, setS] = useState<FormState>(emptyState());
   const [showLangs, setShowLangs] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [uploading, setUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const formId = "catalog-tour-form";
 
   useEffect(() => {
@@ -99,8 +103,26 @@ export function CatalogTourForm({ open, onOpenChange, tour, onSubmit, submitting
       setS(tour ? fromTour(tour) : emptyState());
       setErrors({});
       setShowLangs(false);
+      setUploading(false);
     }
   }, [open, tour]);
+
+  async function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    // Allow re-selecting the same file next time.
+    e.target.value = "";
+    if (!file) return;
+    setUploading(true);
+    setErrors((prev) => ({ ...prev, image: "" }));
+    try {
+      const url = await uploadImage(file);
+      setS((prev) => ({ ...prev, image_url: url }));
+    } catch {
+      setErrors((prev) => ({ ...prev, image: az.catalog.fields.image_upload_error }));
+    } finally {
+      setUploading(false);
+    }
+  }
 
   function setLang(field: "title" | "region" | "overview", code: string, val: string) {
     setS((prev) => ({ ...prev, [field]: { ...prev[field], [code]: val } }));
@@ -196,8 +218,67 @@ export function CatalogTourForm({ open, onOpenChange, tour, onSubmit, submitting
           </GField>
         </div>
 
-        <GField label={az.catalog.fields.image_url}>
-          <Input value={s.image_url} onChange={(e) => setS({ ...s, image_url: e.target.value })} placeholder="https://..." />
+        <GField label={az.catalog.fields.image_url} error={errors.image}>
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/png,image/jpeg,image/webp,image/gif,image/avif"
+            className="hidden"
+            onChange={handleFileChange}
+          />
+          {s.image_url ? (
+            <div className="flex items-center gap-3">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={s.image_url}
+                alt=""
+                className="h-16 w-24 shrink-0 rounded-lg border border-border object-cover"
+              />
+              <div className="flex flex-1 flex-wrap gap-2">
+                <Button
+                  type="button"
+                  variant="secondary"
+                  size="sm"
+                  disabled={uploading}
+                  onClick={() => fileInputRef.current?.click()}
+                >
+                  {uploading ? (
+                    <>
+                      <Loader2 className="mr-1.5 h-4 w-4 animate-spin" />
+                      {az.catalog.fields.image_uploading}
+                    </>
+                  ) : (
+                    az.catalog.fields.image_change
+                  )}
+                </Button>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  disabled={uploading}
+                  onClick={() => setS({ ...s, image_url: "" })}
+                >
+                  <X className="mr-1 h-4 w-4" />
+                  {az.catalog.fields.image_remove}
+                </Button>
+              </div>
+            </div>
+          ) : (
+            <button
+              type="button"
+              disabled={uploading}
+              onClick={() => fileInputRef.current?.click()}
+              className="flex w-full flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-border bg-surface-muted/40 px-4 py-6 text-sm text-muted-foreground transition hover:border-accent hover:text-accent disabled:opacity-60"
+            >
+              {uploading ? (
+                <Loader2 className="h-6 w-6 animate-spin" />
+              ) : (
+                <ImagePlus className="h-6 w-6" />
+              )}
+              <span>{uploading ? az.catalog.fields.image_uploading : az.catalog.fields.image_choose}</span>
+              <span className="text-xs">{az.catalog.fields.image_hint}</span>
+            </button>
+          )}
         </GField>
 
         <GField label={az.catalog.fields.overview_az}>

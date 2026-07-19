@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Compass, Plus, Star, Clock, Users, Pencil, Trash2, EyeOff } from "lucide-react";
+import { Compass, Plus, Star, Clock, Users, Pencil, Trash2, EyeOff, CalendarDays } from "lucide-react";
 
 import { PageHeader, PageBody } from "@/components/layout/page-header";
 import { PageTransition, StaggerList, StaggerItem } from "@/components/shared/page-transition";
@@ -10,6 +10,7 @@ import { ConfirmDialog } from "@/components/shared/confirm-dialog";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { CatalogTourForm } from "@/components/catalog/catalog-tour-form";
+import { DeparturesPanel } from "@/components/catalog/departures-panel";
 
 import {
   useCatalogTours,
@@ -29,6 +30,7 @@ export default function CatalogPage() {
   const [formOpen, setFormOpen] = useState(false);
   const [editing, setEditing] = useState<CatalogTour | null>(null);
   const [deleting, setDeleting] = useState<CatalogTour | null>(null);
+  const [managing, setManaging] = useState<CatalogTour | null>(null);
 
   const { data: tours, isLoading, isError, refetch } = useCatalogTours();
   const createTour = useCreateCatalogTour();
@@ -158,6 +160,15 @@ export default function CatalogPage() {
                         <Button
                           variant="ghost"
                           size="icon-sm"
+                          aria-label={az.catalog.departures.manage}
+                          title={az.catalog.departures.manage}
+                          onClick={() => setManaging(t)}
+                        >
+                          <CalendarDays className="size-4" />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="icon-sm"
                           aria-label={az.action.edit}
                           onClick={() => openEdit(t)}
                         >
@@ -209,6 +220,15 @@ export default function CatalogPage() {
         description={az.catalog.delete_confirm}
         loading={removeTour.isPending}
       />
+
+      {managing && (
+        <DeparturesPanel
+          open={Boolean(managing)}
+          onOpenChange={(o) => !o && setManaging(null)}
+          tourId={managing.id}
+          basePrice={managing.price}
+        />
+      )}
     </PageTransition>
   );
 }

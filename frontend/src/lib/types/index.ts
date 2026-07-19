@@ -243,10 +243,37 @@ export interface Booking {
   email: string | null;
   people: number;
   date: string | null;
+  departure_id: string | null;
+  departure_date: string | null;
   notes: string | null;
   status: BookingStatus;
   created_at: string;
   updated_at: string;
+}
+
+// ── Tour departures (dated bookable departures of a catalog tour) ──
+export type DepartureStatus = "open" | "full" | "closed";
+
+export interface Departure {
+  id: string;
+  catalog_tour_id: string;
+  start_date: string;
+  end_date: string | null;
+  price: number | null;
+  capacity: number;
+  booked: number;
+  status: DepartureStatus;
+  sort_order: number;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface DeparturePayload {
+  start_date: string;
+  end_date?: string | null;
+  price?: number | null;
+  capacity?: number;
+  sort_order?: number;
 }
 
 // ── Generic envelopes ──────────────────────────────────────────
