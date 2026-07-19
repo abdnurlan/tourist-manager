@@ -1,12 +1,15 @@
 package service
 
 import (
-	"errors"
+	"strconv"
 
 	"tourist-manager/backend/internal/models"
 	"tourist-manager/backend/internal/repository"
 	"tourist-manager/backend/pkg/apperror"
 )
+
+// itoa is a tiny int→string helper for guest notes.
+func itoa(n int) string { return strconv.Itoa(n) }
 
 // BookingInput carries a public reservation submission. The tour may be
 // referenced by catalog id or by slug (the landing site uses slugs); either
@@ -20,7 +23,7 @@ type BookingInput struct {
 	Email         *string
 	People        *int
 	Date          *string
-	DepartureID   *string
+	TourID        *string // linked internal tour (bookable departure)
 	Notes         *string
 }
 
@@ -33,14 +36,20 @@ type BookingService interface {
 }
 
 type bookingService struct {
-	bookings   repository.BookingRepository
-	catalog    repository.CatalogTourRepository
-	departures repository.DepartureRepository
+	bookings repository.BookingRepository
+	catalog  repository.CatalogTourRepository
+	tours    repository.TourRepository
+	guests   repository.GuestRepository
 }
 
 // NewBookingService builds a BookingService.
-func NewBookingService(bookings repository.BookingRepository, catalog repository.CatalogTourRepository, departures repository.DepartureRepository) BookingService {
-	return &bookingService{bookings: bookings, catalog: catalog, departures: departures}
+func NewBookingService(
+	bookings repository.BookingRepository,
+	catalog repository.CatalogTourRepository,
+	tours repository.TourRepository,
+	guests repository.GuestRepository,
+) BookingService {
+	return &bookingService{bookings: bookings, catalog: catalog, tours: tours, guests: guests}
 }
 
 func (s *bookingService) List(f repository.BookingFilter) ([]models.Booking, error) {
@@ -76,35 +85,39 @@ func (s *bookingService) Create(in BookingInput) (*models.Booking, error) {
 		people = *in.People
 	}
 
-	// If a departure is specified, reserve seats transactionally and snapshot its
-	// start date. Overbooking fails with 409; a missing departure fails with 404.
-	var depDate *string
-	if depID := trimPtr(in.DepartureID); depID != "" {
-		updated, err := s.departures.IncrementBooked(depID, people)
+	// If a specific tour (bookable departure) is chosen, verify it exists and has
+	// room; the guest is added to that tour after the booking is saved.
+	var linkedTour *models.Tour
+	if tid := trimPtr(in.TourID); tid != "" {
+		t, err := s.tours.FindByID(tid)
 		if err != nil {
-			if errors.Is(err, repository.ErrDepartureFull) {
-				return nil, apperror.DepartureFull()
-			}
-			if errors.Is(err, repository.ErrNotFound) {
-				return nil, apperror.DepartureNotFound()
-			}
+			return nil, apperror.TourNotFound()
+		}
+		booked, err := s.guests.CountByTour(t.ID)
+		if err != nil {
 			return nil, apperror.Internal()
 		}
-		updated.Normalize()
-		d := updated.StartDate
-		depDate = &d
+		if int(booked)+people > t.Capacity {
+			return nil, apperror.Conflict().WithFields([]apperror.FieldError{
+				{Field: "tour_id", Message: "Bu tur üçün yer qalmayıb"},
+			})
+		}
+		linkedTour = t
 	}
 
 	booking := &models.Booking{
-		FullName:      name,
-		Phone:         phone,
-		Email:         email,
-		People:        people,
-		Date:          cleanPtr(in.Date),
-		DepartureID:   cleanPtr(in.DepartureID),
-		DepartureDate: depDate,
-		Notes:         cleanPtr(in.Notes),
-		Status:        "new",
+		FullName: name,
+		Phone:    phone,
+		Email:    email,
+		People:   people,
+		Date:     cleanPtr(in.Date),
+		Notes:    cleanPtr(in.Notes),
+		Status:   "new",
+	}
+	if linkedTour != nil {
+		booking.TourID = &linkedTour.ID
+		d := linkedTour.StartDate
+		booking.Date = &d // snapshot the tour's start date as the booking date
 	}
 
 	// Resolve the catalog tour by id or slug (snapshot its title + slug). All are
@@ -146,6 +159,24 @@ func (s *bookingService) Create(in BookingInput) (*models.Booking, error) {
 	if err := s.bookings.Create(booking); err != nil {
 		return nil, apperror.Internal()
 	}
+
+	// Auto-create a guest on the linked tour so the reservation immediately shows
+	// up in the tour's guest list. People count is noted for the admin.
+	if linkedTour != nil {
+		note := "Sayt bronu"
+		if people > 1 {
+			note = "Sayt bronu · " + itoa(people) + " nəfər"
+		}
+		guest := &models.Guest{
+			TourID:   linkedTour.ID,
+			FullName: name,
+			Phone:    phone,
+			Notes:    &note,
+		}
+		// Best-effort: a guest failure must not fail an already-saved booking.
+		_ = s.guests.Create(guest)
+	}
+
 	return booking, nil
 }
 

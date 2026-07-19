@@ -44,13 +44,13 @@ func (r CatalogTourRequest) toInput() service.CatalogTourInput {
 
 // CatalogTourHandler handles catalog-tour endpoints (public read + admin write).
 type CatalogTourHandler struct {
-	svc        service.CatalogTourService
-	departures service.DepartureService
+	svc   service.CatalogTourService
+	tours service.TourService
 }
 
 // NewCatalogTourHandler builds a CatalogTourHandler.
-func NewCatalogTourHandler(svc service.CatalogTourService, departures service.DepartureService) *CatalogTourHandler {
-	return &CatalogTourHandler{svc: svc, departures: departures}
+func NewCatalogTourHandler(svc service.CatalogTourService, tours service.TourService) *CatalogTourHandler {
+	return &CatalogTourHandler{svc: svc, tours: tours}
 }
 
 // ListPublic handles GET /public/catalog-tours → published only → { "data": [...] }.
@@ -65,7 +65,7 @@ func (h *CatalogTourHandler) ListPublic(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{"data": tours})
 }
 
-// GetPublicBySlug handles GET /public/catalog-tours/:slug (tour + open departures).
+// GetPublicBySlug handles GET /public/catalog-tours/:slug (tour + linked tours).
 func (h *CatalogTourHandler) GetPublicBySlug(c *fiber.Ctx) error {
 	tour, err := h.svc.GetBySlug(c.Params("slug"))
 	if err != nil {
@@ -74,13 +74,13 @@ func (h *CatalogTourHandler) GetPublicBySlug(c *fiber.Ctx) error {
 	if !tour.Published {
 		return apperror.CatalogTourNotFound()
 	}
-	deps, err := h.departures.ListPublicByTour(tour.ID)
+	linked, err := h.tours.ListByCatalogTour(tour.ID)
 	if err != nil {
 		return err
 	}
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{
-		"tour":       tour,
-		"departures": deps,
+		"tour":  tour,
+		"tours": linked,
 	})
 }
 

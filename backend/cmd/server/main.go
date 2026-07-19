@@ -66,22 +66,20 @@ func main() {
 	telegramRepo := repository.NewTelegramRepository(db)
 	catalogRepo := repository.NewCatalogTourRepository(db)
 	bookingRepo := repository.NewBookingRepository(db)
-	departureRepo := repository.NewDepartureRepository(db)
 
 	// 6. AI client (boundary).
 	aiClient := ai.NewAIService(cfg.OpenAIAPIKey)
 
 	// 7. Services.
 	authSvc := service.NewAuthService(userRepo, cfg.JWTSecret)
-	tourSvc := service.NewTourService(tourRepo, eventRepo)
+	tourSvc := service.NewTourService(tourRepo, eventRepo, guestRepo, catalogRepo)
 	eventSvc := service.NewEventService(eventRepo, tourRepo)
 	guestSvc := service.NewGuestService(guestRepo, tourRepo)
 	dashboardSvc := service.NewDashboardService(tourRepo, eventRepo, reminderRepo, telegramRepo, cfg.TelegramMode, cfg.TelegramAllowedUserID != 0)
 	calendarSvc := service.NewCalendarService(eventRepo, tourRepo)
 	searchSvc := service.NewSearchService(tourRepo, eventRepo)
 	catalogSvc := service.NewCatalogTourService(catalogRepo)
-	departureSvc := service.NewDepartureService(departureRepo, catalogRepo)
-	bookingSvc := service.NewBookingService(bookingRepo, catalogRepo, departureRepo)
+	bookingSvc := service.NewBookingService(bookingRepo, catalogRepo, tourRepo, guestRepo)
 
 	// AI agent: tool-calling assistant shared by the web chat and the Telegram bot.
 	agent := service.NewAIAgent(aiClient, tourSvc, eventSvc, tourRepo, eventRepo, telegramRepo)
@@ -113,10 +111,9 @@ func main() {
 		Search:      handler.NewSearchHandler(searchSvc),
 		AI:          handler.NewAIHandler(aiSvc),
 		Telegram:    handler.NewTelegramHandler(bot),
-		CatalogTour: handler.NewCatalogTourHandler(catalogSvc, departureSvc),
+		CatalogTour: handler.NewCatalogTourHandler(catalogSvc, tourSvc),
 		Booking:     handler.NewBookingHandler(bookingSvc),
 		Upload:      handler.NewUploadHandler(cfg.UploadDir, "/uploads", cfg.PublicBaseURL),
-		Departure:   handler.NewDepartureHandler(departureSvc),
 	}
 
 	// 10. Router.

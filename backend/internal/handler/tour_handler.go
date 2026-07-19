@@ -11,20 +11,24 @@ import (
 
 // CreateTourRequest is the POST /tours body.
 type CreateTourRequest struct {
-	Title       string  `json:"title"       validate:"required"`
-	StartDate   string  `json:"start_date"  validate:"required"`
-	EndDate     string  `json:"end_date"    validate:"required"`
-	Description *string `json:"description"`
-	Status      *string `json:"status"`
+	Title         string  `json:"title"       validate:"required"`
+	StartDate     string  `json:"start_date"  validate:"required"`
+	EndDate       string  `json:"end_date"    validate:"required"`
+	Description   *string `json:"description"`
+	Status        *string `json:"status"`
+	CatalogTourID *string `json:"catalog_tour_id"`
+	Capacity      *int    `json:"capacity"`
 }
 
 // UpdateTourRequest is the PATCH /tours/:id body (all optional).
 type UpdateTourRequest struct {
-	Title       *string `json:"title"`
-	StartDate   *string `json:"start_date"`
-	EndDate     *string `json:"end_date"`
-	Description *string `json:"description"`
-	Status      *string `json:"status"`
+	Title         *string `json:"title"`
+	StartDate     *string `json:"start_date"`
+	EndDate       *string `json:"end_date"`
+	Description   *string `json:"description"`
+	Status        *string `json:"status"`
+	CatalogTourID *string `json:"catalog_tour_id"`
+	Capacity      *int    `json:"capacity"`
 }
 
 // TourHandler handles tour endpoints.
@@ -40,8 +44,9 @@ func NewTourHandler(tours service.TourService) *TourHandler {
 // List handles GET /tours?status=&q= → { "data": [...] }.
 func (h *TourHandler) List(c *fiber.Ctx) error {
 	filter := repository.TourFilter{
-		Status: c.Query("status"),
-		Query:  c.Query("q"),
+		Status:        c.Query("status"),
+		Query:         c.Query("q"),
+		CatalogTourID: c.Query("catalog"),
 	}
 	tours, err := h.tours.List(filter)
 	if err != nil {
@@ -57,11 +62,13 @@ func (h *TourHandler) Create(c *fiber.Ctx) error {
 		return middleware.JSONError(c, apperror.ValidationError())
 	}
 	in := service.TourInput{
-		Title:       &req.Title,
-		StartDate:   &req.StartDate,
-		EndDate:     &req.EndDate,
-		Description: req.Description,
-		Status:      req.Status,
+		Title:         &req.Title,
+		StartDate:     &req.StartDate,
+		EndDate:       &req.EndDate,
+		Description:   req.Description,
+		Status:        req.Status,
+		CatalogTourID: req.CatalogTourID,
+		Capacity:      req.Capacity,
 	}
 	tour, err := h.tours.Create(in)
 	if err != nil {
@@ -86,11 +93,13 @@ func (h *TourHandler) Update(c *fiber.Ctx) error {
 		return middleware.JSONError(c, apperror.ValidationError())
 	}
 	in := service.TourInput{
-		Title:       req.Title,
-		StartDate:   req.StartDate,
-		EndDate:     req.EndDate,
-		Description: req.Description,
-		Status:      req.Status,
+		Title:         req.Title,
+		StartDate:     req.StartDate,
+		EndDate:       req.EndDate,
+		Description:   req.Description,
+		Status:        req.Status,
+		CatalogTourID: req.CatalogTourID,
+		Capacity:      req.Capacity,
 	}
 	tour, err := h.tours.Update(c.Params("id"), in)
 	if err != nil {

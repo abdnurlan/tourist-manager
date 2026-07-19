@@ -19,7 +19,7 @@ type CreateBookingRequest struct {
 	Email         *string `json:"email"`
 	People        *int    `json:"people"`
 	Date          *string `json:"date"`
-	DepartureID   *string `json:"departure_id"`
+	TourID        *string `json:"tour_id"`
 	Notes         *string `json:"notes"`
 }
 
@@ -53,7 +53,7 @@ func (h *BookingHandler) Create(c *fiber.Ctx) error {
 		Email:         req.Email,
 		People:        req.People,
 		Date:          req.Date,
-		DepartureID:   req.DepartureID,
+		TourID:        req.TourID,
 		Notes:         req.Notes,
 	}
 	booking, err := h.svc.Create(in)

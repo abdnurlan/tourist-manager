@@ -24,7 +24,6 @@ type Handlers struct {
 	CatalogTour *handler.CatalogTourHandler
 	Booking     *handler.BookingHandler
 	Upload      *handler.UploadHandler
-	Departure   *handler.DepartureHandler
 }
 
 // New builds the Fiber app, mounts global middleware, and registers every route
@@ -106,12 +105,6 @@ func New(cfg *config.Config, h Handlers) *fiber.App {
 	api.Get("/catalog-tours/:id", auth, h.CatalogTour.Get)
 	api.Patch("/catalog-tours/:id", auth, h.CatalogTour.Update)
 	api.Delete("/catalog-tours/:id", auth, h.CatalogTour.Delete)
-
-	// Tour departures (admin management of dated departures).
-	api.Get("/catalog-tours/:id/departures", auth, h.Departure.ListByTour)
-	api.Post("/catalog-tours/:id/departures", auth, h.Departure.Create)
-	api.Patch("/departures/:id", auth, h.Departure.Update)
-	api.Delete("/departures/:id", auth, h.Departure.Delete)
 
 	// Image upload (admin) — returns { "url": "/uploads/<name>" }.
 	api.Post("/uploads", auth, h.Upload.UploadImage)
