@@ -20,6 +20,7 @@ import {
 import { useBookings, useUpdateBookingStatus, useDeleteBooking } from "@/lib/hooks/use-bookings";
 import { az } from "@/lib/i18n/az";
 import { cn } from "@/lib/utils/cn";
+import { formatLongDate } from "@/lib/utils/date";
 import type { Booking, BookingStatus } from "@/lib/types";
 
 type StatusFilter = "all" | BookingStatus;
@@ -37,10 +38,8 @@ function chipLabel(s: StatusFilter): string {
   return s === "all" ? az.reservation.all : az.reservation.status[s];
 }
 
-function fmtDate(iso: string): string {
-  const d = new Date(iso);
-  return d.toLocaleDateString("az-AZ", { day: "2-digit", month: "short", year: "numeric" });
-}
+// Bron tarixləri "15 Oktyabr 2026" formatında (lokal-müstəqil, az.calendar-dan).
+const fmtDate = formatLongDate;
 
 export default function ReservationsPage() {
   const [status, setStatus] = useState<StatusFilter>("all");

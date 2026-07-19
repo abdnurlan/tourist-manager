@@ -1,14 +1,28 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
+import { format, parseISO } from "date-fns";
+import { ar, az, enUS, he, ru } from "date-fns/locale";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, ArrowRight, Check, Clock, MapPin, Star, Users, X } from "lucide-react";
 import { BookingDialog, type BookingTour } from "@/components/BookingDialog";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
-import { T, type Departure, type Tour } from "@/lib/tours-data";
+import { T, type Departure, type Lang, type Tour } from "@/lib/tours-data";
 import { fetchCatalogTour } from "@/lib/api/client";
 import { useLanguage } from "@/hooks/use-language";
 import logoImg from "@/assets/logo.png";
+
+const DATE_LOCALES = { az, en: enUS, he, ar, ru };
+
+// Format a departure's date range in the active language, e.g. "15 – 18 okt 2026"
+// (or a single "15 okt 2026" when there's no end date).
+function fmtDepartureRange(d: Departure, lang: Lang): string {
+  const loc = DATE_LOCALES[lang];
+  const start = format(parseISO(d.start_date), "d MMM yyyy", { locale: loc });
+  if (!d.end_date) return start;
+  const end = format(parseISO(d.end_date), "d MMM yyyy", { locale: loc });
+  return `${start} – ${end}`;
+}
 
 export const Route = createFileRoute("/tours/$tourId")({
   loader: async ({ params }): Promise<{ tour: Tour }> => {
@@ -242,8 +256,7 @@ function TourDetail() {
                               <span
                                 className={`h-3.5 w-3.5 rounded-full border ${active ? "border-accent bg-accent" : "border-foreground/40"}`}
                               />
-                              {d.start_date}
-                              {d.end_date ? ` – ${d.end_date}` : ""}
+                              {fmtDepartureRange(d, lang)}
                             </span>
                             <span className="text-foreground/70">
                               {(d.price ?? tour.price)} ₼ · {d.capacity - d.booked} {t.detail.seats}

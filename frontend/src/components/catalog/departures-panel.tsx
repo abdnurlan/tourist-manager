@@ -14,6 +14,7 @@ import {
   useDeleteDeparture,
 } from "@/lib/hooks/use-departures";
 import { az } from "@/lib/i18n/az";
+import { formatLongDate, formatDateRange } from "@/lib/utils/date";
 import type { Departure } from "@/lib/types";
 
 interface DeparturesPanelProps {
@@ -80,8 +81,8 @@ export function DeparturesPanel({ open, onOpenChange, tourId, basePrice }: Depar
                   <span className="flex items-center gap-2">
                     <CalendarDays className="size-4 text-accent" />
                     <span>
-                      {d.start_date}
-                      {d.end_date ? ` – ${d.end_date}` : ""} · {d.price ?? basePrice} ₼ ·{" "}
+                      {d.end_date ? formatDateRange(d.start_date, d.end_date) : formatLongDate(d.start_date)}
+                      {" · "}{d.price ?? basePrice} ₼ ·{" "}
                       {d.booked}/{d.capacity} {t.seats} ·{" "}
                       <span className="text-muted-foreground">{t.status[d.status]}</span>
                     </span>
