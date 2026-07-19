@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   useMutation,
@@ -70,12 +70,18 @@ export default function ToursPage() {
   const [editing, setEditing] = useState<Tour | null>(null);
   const [deleting, setDeleting] = useState<Tour | null>(null);
 
-  // Server-side filter by status only; search is applied client-side for
+  // Optional catalog filter from the URL (?catalog=<id>) — set when navigating
+  // from a catalog card to view that catalog's linked tours (dated departures).
+  const catalog = useSearchParams().get("catalog") ?? undefined;
+
+  // Server-side filter by status (+ catalog); search is applied client-side for
   // instant feedback (no debounce flicker), per CONTRACT q-on-title/description.
-  const filters: ToursQuery = useMemo(
-    () => (status === "all" ? {} : { status }),
-    [status],
-  );
+  const filters: ToursQuery = useMemo(() => {
+    const f: ToursQuery = {};
+    if (status !== "all") f.status = status;
+    if (catalog) f.catalog = catalog;
+    return f;
+  }, [status, catalog]);
   const toursKey = queryKeys.tours(filters);
 
   const { data: tours, isLoading, isError, refetch } = useQuery({
@@ -108,7 +114,14 @@ export default function ToursPage() {
         end_date: body.end_date,
         description: body.description ?? null,
         status: body.status ?? "planned",
+        catalog_tour_id: body.catalog_tour_id ?? null,
+        capacity: body.capacity ?? 12,
         events_count: 0,
+        guests_count: 0,
+        booked_seats: 0,
+        price: 0,
+        catalog_slug: "",
+        catalog_title: "",
         created_at: now,
         updated_at: now,
       };

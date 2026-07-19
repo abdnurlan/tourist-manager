@@ -138,11 +138,7 @@ export default function ReservationsPage() {
                     </div>
                     <div className="flex items-center gap-2">
                       <CalendarDays className="size-4 shrink-0" />
-                      {b.departure_date
-                        ? fmtDate(b.departure_date)
-                        : b.date
-                          ? fmtDate(b.date)
-                          : az.reservation.no_date}
+                      {b.date ? fmtDate(b.date) : az.reservation.no_date}
                     </div>
                     {b.phone && (
                       <a href={`tel:${b.phone}`} className="flex items-center gap-2 hover:text-foreground">

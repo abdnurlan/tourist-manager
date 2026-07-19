@@ -98,6 +98,10 @@ export const az = {
     passport: "Pasport nömrəsi",
     nationality: "Vətəndaşlıq",
     optional: "(istəyə bağlı)",
+    catalog_tour: "Kataloq turu",
+    catalog_none: "Kataloqsuz",
+    inherited_price: "Qiymət (kataloqdan)",
+    capacity: "Yer sayı",
   },
 
   // §9.7 Validation messages
@@ -111,6 +115,7 @@ export const az = {
     invalid_date: "Tarix formatı yanlışdır.",
     invalid_time: "Saat formatı yanlışdır (SS:DD).",
     invalid_price: "Qiymət düzgün rəqəm olmalıdır.",
+    capacity_min: "Yer sayı ən azı 1 olmalıdır.",
     min_chars: "Ən azı {n} simvol olmalıdır.",
     username_required: "İstifadəçi adı tələb olunur.",
     password_required: "Şifrə tələb olunur.",
@@ -534,26 +539,7 @@ export const az = {
     slug_required: "Slug tələb olunur",
     title_required: "Ad tələb olunur",
     price_required: "Qiymət tələb olunur",
-    departures: {
-      manage: "Tarixləri idarə et",
-      title: "Tarixlər",
-      empty: "Hələ tarix yoxdur",
-      add: "Bu tarixi əlavə et",
-      added: "Tarix əlavə olundu",
-      updated: "Tarix yeniləndi",
-      deleted: "Tarix silindi",
-      delete_confirm: "Bu tarixi silmək istədiyinizə əminsiniz?",
-      start_date: "Başlama",
-      end_date: "Bitmə",
-      price_hint: "Boş → baza qiymət",
-      capacity: "Yer sayı",
-      seats: "yer",
-      status: {
-        open: "Açıq",
-        full: "Dolub",
-        closed: "Keçmiş",
-      },
-    },
+    view_tours: "Bu turun tarixləri (Turlar)",
   },
 
   // Reservations submitted from the landing site.
