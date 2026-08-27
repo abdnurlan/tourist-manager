@@ -11,4 +11,54 @@
     <xhtml:link rel="alternate" hreflang="ru" href="https://m4strip.com/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://m4strip.com/" />
   </url>
+  <url>
+    <loc>https://m4strip.com/tours/qobustan-absheron</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="he" href="https://m4strip.com/tours/qobustan-absheron" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://m4strip.com/tours/qobustan-absheron" />
+    <xhtml:link rel="alternate" hreflang="az" href="https://m4strip.com/tours/qobustan-absheron" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://m4strip.com/tours/qobustan-absheron" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://m4strip.com/tours/qobustan-absheron" />
+  </url>
+  <url>
+    <loc>https://m4strip.com/tours/baki-seher</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="he" href="https://m4strip.com/tours/baki-seher" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://m4strip.com/tours/baki-seher" />
+    <xhtml:link rel="alternate" hreflang="az" href="https://m4strip.com/tours/baki-seher" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://m4strip.com/tours/baki-seher" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://m4strip.com/tours/baki-seher" />
+  </url>
+  <url>
+    <loc>https://m4strip.com/tours/quba</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="he" href="https://m4strip.com/tours/quba" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://m4strip.com/tours/quba" />
+    <xhtml:link rel="alternate" hreflang="az" href="https://m4strip.com/tours/quba" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://m4strip.com/tours/quba" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://m4strip.com/tours/quba" />
+  </url>
+  <url>
+    <loc>https://m4strip.com/tours/qebele</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="he" href="https://m4strip.com/tours/qebele" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://m4strip.com/tours/qebele" />
+    <xhtml:link rel="alternate" hreflang="az" href="https://m4strip.com/tours/qebele" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://m4strip.com/tours/qebele" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://m4strip.com/tours/qebele" />
+  </url>
+  <url>
+    <loc>https://m4strip.com/tours/baki-gece</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="he" href="https://m4strip.com/tours/baki-gece" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://m4strip.com/tours/baki-gece" />
+    <xhtml:link rel="alternate" hreflang="az" href="https://m4strip.com/tours/baki-gece" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://m4strip.com/tours/baki-gece" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://m4strip.com/tours/baki-gece" />
+  </url>
 </urlset>

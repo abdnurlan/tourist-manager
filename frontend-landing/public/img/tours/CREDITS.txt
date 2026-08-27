@@ -1,0 +1,37 @@
+M4ST Trip — tur şəkillərinin mənbələri / Photo credits
+==========================================================
+
+Şəkillər Wikimedia Commons-dan götürülüb və 1400px-ə kiçildilib.
+CC BY-SA lisenziyalı şəkillər saytda GÖRÜNƏN atribusiya tələb edir —
+aşağıda müəllif adları verilib. Öz şəkillərinizlə dəyişdirsəniz bu fayl
+da yenilənməlidir.
+
+img/tours/qobustan-absheron.jpg
+  Mənbə   : https://commons.wikimedia.org/wiki/File%3AGobustan_State_Reserve_13.jpg
+  Lisenziya: CC BY-SA 4.0  (https://creativecommons.org/licenses/by-sa/4.0)
+  Müəllif : Sefer azeri
+  Atribusiya lazımdır: BƏLİ
+
+img/tours/baki-seher.jpg
+  Mənbə   : https://commons.wikimedia.org/wiki/File%3AOld_city_baku_azerbaijan7.jpg
+  Lisenziya: Public domain
+  Müəllif : Самый древний
+  Atribusiya lazımdır: xeyr
+
+img/tours/quba.jpg
+  Mənbə   : https://commons.wikimedia.org/wiki/File%3AQ%C4%B1rm%C4%B1z%C4%B1_Q%C9%99s%C9%99b%C9%99_Quba.jpg
+  Lisenziya: CC BY-SA 4.0  (https://creativecommons.org/licenses/by-sa/4.0)
+  Müəllif : Shafa Movsumov
+  Atribusiya lazımdır: BƏLİ
+
+img/tours/qebele.jpg
+  Mənbə   : https://commons.wikimedia.org/wiki/File%3AGabala_State_Nature_Sanctuary_mountains_view.jpg
+  Lisenziya: CC BY-SA 4.0  (https://creativecommons.org/licenses/by-sa/4.0)
+  Müəllif : Havin HP
+  Atribusiya lazımdır: BƏLİ
+
+img/tours/baki-gece.jpg
+  Mənbə   : https://commons.wikimedia.org/wiki/File%3ABAKU_AT_NIGHT_.RED_TOWERS.%D7%91%D7%90%D7%A7%D7%95_%D7%91%D7%9C%D7%99%D7%9C%D7%94_%D7%9E%D7%92%D7%93%D7%9C%D7%99%D7%9D_%D7%91%D7%90%D7%93%D7%95%D7%9D.jpg
+  Lisenziya: CC0  (http://creativecommons.org/publicdomain/zero/1.0/deed.en)
+  Müəllif : Avisadehh
+  Atribusiya lazımdır: xeyr

@@ -1,0 +1,987 @@
+[
+  {
+    "slug": "qobustan-absheron",
+    "category": "history",
+    "price": 120,
+    "rating": 4.9,
+    "duration": 1,
+    "group_size": "2-14",
+    "image_url": "/img/tours/qobustan-absheron.jpg",
+    "published": true,
+    "sort_order": 1,
+    "title": {
+      "az": "Qobustan – Abşeron turu",
+      "he": "סיור גובוסטאן – אבשרון",
+      "en": "Gobustan – Absheron Tour",
+      "ru": "Тур Гобустан – Абшерон"
+    },
+    "region": {
+      "az": "Abşeron",
+      "he": "אבשרון",
+      "en": "Absheron",
+      "ru": "Абшерон"
+    },
+    "overview": {
+      "az": "Qayaüstü rəsmlər, palçıq vulkanları və fasiləsiz yanan alov — bir gündə Abşeronun ən qeyri-adi məkanları: Qobustan qoruğu, Atəşgah məbədi və Yanar Dağ.",
+      "he": "ציורי סלע, הרי געש בוץ ולהבה שאינה כבה — ביום אחד המקומות יוצאי הדופן של אבשרון: שמורת גובוסטאן, מקדש האש אטשגאה וההר הבוער ינר דאג.",
+      "en": "Rock art, mud volcanoes and a flame that never goes out — the most unusual sites of Absheron in a single day: the Gobustan reserve, the Ateshgah fire temple and Yanar Dag.",
+      "ru": "Наскальные рисунки, грязевые вулканы и никогда не гаснущее пламя — самые необычные места Абшерона за один день: заповедник Гобустан, храм огня Атешгях и Янардаг."
+    },
+    "highlights": {
+      "az": [
+        "Qobustan təbiət qoruğu",
+        "Palçıq vulkanları",
+        "Atəşgah məbədi",
+        "Yanar Dağ"
+      ],
+      "he": [
+        "שמורת הטבע גובוסטאן",
+        "הר געש בוץ",
+        "מקדש האש אטשגאה",
+        "ההר הבוער ינר דאג"
+      ],
+      "en": [
+        "Gobustan Nature Reserve",
+        "Mud volcanoes",
+        "Ateshgah Fire Temple",
+        "Yanar Dag — the Burning Mountain"
+      ],
+      "ru": [
+        "Заповедник Гобустан",
+        "Грязевые вулканы",
+        "Храм огня Атешгях",
+        "Янардаг — Горящая гора"
+      ]
+    },
+    "itinerary": {
+      "az": [
+        {
+          "title": "Qobustan təbiət qoruğu",
+          "description": "Min illər öncəyə aid qədim qayaüstü rəsmlər"
+        },
+        {
+          "title": "Palçıq vulkanları",
+          "description": "Unikal və təsirli təbiət hadisəsi"
+        },
+        {
+          "title": "Atəşgah məbədi",
+          "description": "XVII əsrə aid tarixi atəş məbədi"
+        },
+        {
+          "title": "Yanar Dağ",
+          "description": "Fasiləsiz yanan təbii alov"
+        }
+      ],
+      "he": [
+        {
+          "title": "שמורת הטבע גובוסטאן",
+          "description": "ציורי סלע עתיקים בני אלפי שנים"
+        },
+        {
+          "title": "הר געש בוץ",
+          "description": "תופעת טבע ייחודית ומרשימה"
+        },
+        {
+          "title": "מקדש האש אטשגאה",
+          "description": "מקדש אש היסטורי מהמאה ה-17"
+        },
+        {
+          "title": "ההר הבוער ינר דאג",
+          "description": "להבת אש טבעית הבוערת ללא הפסקה"
+        }
+      ],
+      "en": [
+        {
+          "title": "Gobustan Nature Reserve",
+          "description": "Ancient rock carvings thousands of years old"
+        },
+        {
+          "title": "Mud volcanoes",
+          "description": "A unique and striking natural phenomenon"
+        },
+        {
+          "title": "Ateshgah Fire Temple",
+          "description": "A historic 17th-century fire temple"
+        },
+        {
+          "title": "Yanar Dag — the Burning Mountain",
+          "description": "A natural flame that burns without pause"
+        }
+      ],
+      "ru": [
+        {
+          "title": "Заповедник Гобустан",
+          "description": "Древние наскальные рисунки, которым тысячи лет"
+        },
+        {
+          "title": "Грязевые вулканы",
+          "description": "Уникальное и впечатляющее природное явление"
+        },
+        {
+          "title": "Храм огня Атешгях",
+          "description": "Исторический храм огня XVII века"
+        },
+        {
+          "title": "Янардаг — Горящая гора",
+          "description": "Природное пламя, горящее без остановки"
+        }
+      ]
+    },
+    "included": {
+      "az": [
+        "Kondisionerli nəqliyyat",
+        "İvrit dilli bələdçi",
+        "Su",
+        "Bütün marşrut boyu müşayiət"
+      ],
+      "he": [
+        "הסעה ברכב ממוזג",
+        "מדריך דובר עברית",
+        "מים",
+        "ליווי לאורך כל המסלול"
+      ],
+      "en": [
+        "Air-conditioned transport",
+        "Hebrew-speaking guide",
+        "Water",
+        "Escort along the whole route"
+      ],
+      "ru": [
+        "Транспорт с кондиционером",
+        "Гид, говорящий на иврите",
+        "Вода",
+        "Сопровождение на всём маршруте"
+      ]
+    },
+    "excluded": {
+      "az": [
+        "Giriş biletləri",
+        "Nahar və şəxsi xərclər",
+        "Bəxşiş"
+      ],
+      "he": [
+        "כרטיסי כניסה",
+        "ארוחות והוצאות אישיות",
+        "טיפים"
+      ],
+      "en": [
+        "Entrance tickets",
+        "Meals and personal expenses",
+        "Tips"
+      ],
+      "ru": [
+        "Входные билеты",
+        "Питание и личные расходы",
+        "Чаевые"
+      ]
+    }
+  },
+  {
+    "slug": "baki-seher",
+    "category": "history",
+    "price": 90,
+    "rating": 4.8,
+    "duration": 1,
+    "group_size": "2-14",
+    "image_url": "/img/tours/baki-seher.jpg",
+    "published": true,
+    "sort_order": 2,
+    "title": {
+      "az": "Bakı şəhər turu",
+      "he": "סיור בבאקו",
+      "en": "Baku City Tour",
+      "ru": "Обзорный тур по Баку"
+    },
+    "region": {
+      "az": "Bakı",
+      "he": "באקו",
+      "en": "Baku",
+      "ru": "Баку"
+    },
+    "overview": {
+      "az": "Fəxri Xiyabandan Yaşıl Bazara qədər — Bakının tarixi mərkəzi, dünya irsi İçərişəhər, Heydər Əliyev Mərkəzi və dəniz boyunca uzanan Bulvar bir günlük şəhər turunda.",
+      "he": "משדרת הכבוד ועד השוק הירוק — מרכזה ההיסטורי של באקו, העיר העתיקה איצ׳רי שהר שהוכרזה כאתר מורשת עולמית, מרכז היידר אלייב וטיילת הים, בסיור עירוני של יום אחד.",
+      "en": "From the Alley of Honour to the Green Bazaar — Baku's historic core, the UNESCO-listed Old City, the Heydar Aliyev Center and the seaside Boulevard in a one-day city tour.",
+      "ru": "От Аллеи почётного захоронения до Зелёного базара — исторический центр Баку, Ичеришехер из списка всемирного наследия, Центр Гейдара Алиева и Бульвар у моря за один день."
+    },
+    "highlights": {
+      "az": [
+        "Fəxri Xiyaban",
+        "Bakı Bulvarı",
+        "İçərişəhər",
+        "Heydər Əliyev Mərkəzi",
+        "Yaşıl Bazar"
+      ],
+      "he": [
+        "שדרת הכבוד",
+        "טיילת באקו",
+        "העיר העתיקה איצ׳רי שהר",
+        "מרכז היידר אלייב",
+        "השוק הירוק"
+      ],
+      "en": [
+        "Alley of Honour",
+        "Baku Boulevard",
+        "Icherisheher — the Old City",
+        "Heydar Aliyev Center",
+        "Green Bazaar"
+      ],
+      "ru": [
+        "Аллея почётного захоронения",
+        "Бакинский бульвар",
+        "Ичеришехер — Старый город",
+        "Центр Гейдара Алиева",
+        "Зелёный базар"
+      ]
+    },
+    "itinerary": {
+      "az": [
+        {
+          "title": "Fəxri Xiyaban",
+          "description": "Qəhrəmanların xatirəsinə həsr olunmuş məkan"
+        },
+        {
+          "title": "Bakı Bulvarı",
+          "description": "Dəniz boyunca gözəl gəzinti məkanı"
+        },
+        {
+          "title": "İçərişəhər",
+          "description": "Bakının qədim şəhəri, dünya irsi məkanı"
+        },
+        {
+          "title": "Heydər Əliyev Mərkəzi",
+          "description": "Müasir memarlığın şah əsəri"
+        },
+        {
+          "title": "Yaşıl Bazar",
+          "description": "Müxtəlif meyvələr, tərəvəzlər və yerli məhsullar"
+        }
+      ],
+      "he": [
+        {
+          "title": "שדרת הכבוד",
+          "description": "מקום לזכרם של הגיבורים"
+        },
+        {
+          "title": "טיילת באקו",
+          "description": "טיילת הים הקסומה"
+        },
+        {
+          "title": "העיר העתיקה איצ׳רי שהר",
+          "description": "העיר העתיקה של באקו, אתר מורשת עולמית"
+        },
+        {
+          "title": "מרכז היידר אלייב",
+          "description": "יצירת מופת אדריכלית מודרנית"
+        },
+        {
+          "title": "השוק הירוק",
+          "description": "מגוון פירות, ירקות ומוצרים מקומיים"
+        }
+      ],
+      "en": [
+        {
+          "title": "Alley of Honour",
+          "description": "A memorial to the nation's heroes"
+        },
+        {
+          "title": "Baku Boulevard",
+          "description": "A beautiful promenade along the sea"
+        },
+        {
+          "title": "Icherisheher — the Old City",
+          "description": "Baku's ancient walled city, a World Heritage site"
+        },
+        {
+          "title": "Heydar Aliyev Center",
+          "description": "A masterpiece of modern architecture"
+        },
+        {
+          "title": "Green Bazaar",
+          "description": "Fruit, vegetables and local produce"
+        }
+      ],
+      "ru": [
+        {
+          "title": "Аллея почётного захоронения",
+          "description": "Место памяти героев"
+        },
+        {
+          "title": "Бакинский бульвар",
+          "description": "Прекрасная набережная у моря"
+        },
+        {
+          "title": "Ичеришехер — Старый город",
+          "description": "Древний город Баку, объект всемирного наследия"
+        },
+        {
+          "title": "Центр Гейдара Алиева",
+          "description": "Шедевр современной архитектуры"
+        },
+        {
+          "title": "Зелёный базар",
+          "description": "Фрукты, овощи и местные продукты"
+        }
+      ]
+    },
+    "included": {
+      "az": [
+        "Kondisionerli nəqliyyat",
+        "İvrit dilli bələdçi",
+        "Su",
+        "Bütün marşrut boyu müşayiət"
+      ],
+      "he": [
+        "הסעה ברכב ממוזג",
+        "מדריך דובר עברית",
+        "מים",
+        "ליווי לאורך כל המסלול"
+      ],
+      "en": [
+        "Air-conditioned transport",
+        "Hebrew-speaking guide",
+        "Water",
+        "Escort along the whole route"
+      ],
+      "ru": [
+        "Транспорт с кондиционером",
+        "Гид, говорящий на иврите",
+        "Вода",
+        "Сопровождение на всём маршруте"
+      ]
+    },
+    "excluded": {
+      "az": [
+        "Giriş biletləri",
+        "Nahar və şəxsi xərclər",
+        "Bəxşiş"
+      ],
+      "he": [
+        "כרטיסי כניסה",
+        "ארוחות והוצאות אישיות",
+        "טיפים"
+      ],
+      "en": [
+        "Entrance tickets",
+        "Meals and personal expenses",
+        "Tips"
+      ],
+      "ru": [
+        "Входные билеты",
+        "Питание и личные расходы",
+        "Чаевые"
+      ]
+    }
+  },
+  {
+    "slug": "quba",
+    "category": "mountain",
+    "price": 150,
+    "rating": 4.9,
+    "duration": 1,
+    "group_size": "2-14",
+    "image_url": "/img/tours/quba.jpg",
+    "published": true,
+    "sort_order": 3,
+    "title": {
+      "az": "Quba turu",
+      "he": "סיור קובה",
+      "en": "Quba Tour",
+      "ru": "Тур в Губу"
+    },
+    "region": {
+      "az": "Quba",
+      "he": "קובה",
+      "en": "Quba",
+      "ru": "Губа"
+    },
+    "overview": {
+      "az": "Beşbarmaq dağından Qəçrəş meşəsinə — Qafqaz dağlarında unikal yəhudi qəsəbəsi Qırmızı Qəsəbə, Çənlibel gölü, xalça fabriki, yerli çörək dadımı və daha çoxu.",
+      "he": "מהר חמש האצבעות ועד יער גצ׳רש — העיירה האדומה, כפר יהודי ייחודי בהרי הקווקז, אגם צ׳נליבל, מפעל השטיחים, טעימת לחם מקומי ועוד.",
+      "en": "From Besh Barmag mountain to the Qechresh forest — the Red Town, a unique Jewish settlement in the Caucasus mountains, Chanlibel lake, the carpet factory, a local bread tasting and more.",
+      "ru": "От горы Бешбармак до леса Гячреш — Красная Слобода, уникальное еврейское поселение в горах Кавказа, озеро Чанлибель, ковровая фабрика, дегустация местного хлеба и не только."
+    },
+    "highlights": {
+      "az": [
+        "Beşbarmaq dağı",
+        "Çənlibel gölü",
+        "Qırmızı Qəsəbə",
+        "Çörək bişirmə məkanı",
+        "Xalça fabriki",
+        "Qəçrəş meşəsi"
+      ],
+      "he": [
+        "הר חמש האצבעות",
+        "אגם צ׳נליבל",
+        "העיירה האדומה",
+        "מאפייה",
+        "מפעל השטיחים",
+        "יער גצ׳רש"
+      ],
+      "en": [
+        "Besh Barmag Mountain",
+        "Chanlibel Lake",
+        "Qirmizi Qasaba — the Red Town",
+        "Traditional bakery",
+        "Carpet factory",
+        "Qechresh forest"
+      ],
+      "ru": [
+        "Гора Бешбармак",
+        "Озеро Чанлибель",
+        "Красная Слобода",
+        "Традиционная пекарня",
+        "Ковровая фабрика",
+        "Лес Гячреш"
+      ]
+    },
+    "itinerary": {
+      "az": [
+        {
+          "title": "Beşbarmaq dağı",
+          "description": "Möhtəşəm mənzərə və müqəddəs simvol"
+        },
+        {
+          "title": "Çənlibel gölü",
+          "description": "Təbiətin qoynunda gözəl göl"
+        },
+        {
+          "title": "Qırmızı Qəsəbə",
+          "description": "Qafqaz dağlarında unikal yəhudi qəsəbəsi"
+        },
+        {
+          "title": "Çörək bişirmə məkanı",
+          "description": "Yerli və ənənəvi çörəyin dadına baxış"
+        },
+        {
+          "title": "Xalça fabriki",
+          "description": "Xalça sənəti ilə tanışlıq"
+        },
+        {
+          "title": "Qəçrəş meşəsi",
+          "description": "Sıx və sakit meşə"
+        }
+      ],
+      "he": [
+        {
+          "title": "הר חמש האצבעות",
+          "description": "נוף מרהיב וסמל קדוש"
+        },
+        {
+          "title": "אגם צ׳נליבל",
+          "description": "אגם יפהפה בלב הטבע"
+        },
+        {
+          "title": "העיירה האדומה",
+          "description": "כפר יהודי ייחודי בהרי הקווקז"
+        },
+        {
+          "title": "מאפייה",
+          "description": "טעימה מלחם מקומי ומסורתי"
+        },
+        {
+          "title": "מפעל השטיחים",
+          "description": "היכרות עם אומנות השטיחים"
+        },
+        {
+          "title": "יער גצ׳רש",
+          "description": "יער עבות ופסטורלי"
+        }
+      ],
+      "en": [
+        {
+          "title": "Besh Barmag Mountain",
+          "description": "A magnificent view and a sacred landmark"
+        },
+        {
+          "title": "Chanlibel Lake",
+          "description": "A beautiful lake in the heart of nature"
+        },
+        {
+          "title": "Qirmizi Qasaba — the Red Town",
+          "description": "A unique Jewish settlement in the Caucasus mountains"
+        },
+        {
+          "title": "Traditional bakery",
+          "description": "A tasting of local, traditional bread"
+        },
+        {
+          "title": "Carpet factory",
+          "description": "An introduction to the art of carpet weaving"
+        },
+        {
+          "title": "Qechresh forest",
+          "description": "A dense and peaceful forest"
+        }
+      ],
+      "ru": [
+        {
+          "title": "Гора Бешбармак",
+          "description": "Величественный вид и священный символ"
+        },
+        {
+          "title": "Озеро Чанлибель",
+          "description": "Прекрасное озеро в окружении природы"
+        },
+        {
+          "title": "Красная Слобода",
+          "description": "Уникальное еврейское поселение в горах Кавказа"
+        },
+        {
+          "title": "Традиционная пекарня",
+          "description": "Дегустация местного традиционного хлеба"
+        },
+        {
+          "title": "Ковровая фабрика",
+          "description": "Знакомство с искусством ковроткачества"
+        },
+        {
+          "title": "Лес Гячреш",
+          "description": "Густой и тихий лес"
+        }
+      ]
+    },
+    "included": {
+      "az": [
+        "Kondisionerli nəqliyyat",
+        "İvrit dilli bələdçi",
+        "Su",
+        "Bütün marşrut boyu müşayiət"
+      ],
+      "he": [
+        "הסעה ברכב ממוזג",
+        "מדריך דובר עברית",
+        "מים",
+        "ליווי לאורך כל המסלול"
+      ],
+      "en": [
+        "Air-conditioned transport",
+        "Hebrew-speaking guide",
+        "Water",
+        "Escort along the whole route"
+      ],
+      "ru": [
+        "Транспорт с кондиционером",
+        "Гид, говорящий на иврите",
+        "Вода",
+        "Сопровождение на всём маршруте"
+      ]
+    },
+    "excluded": {
+      "az": [
+        "Giriş biletləri",
+        "Nahar və şəxsi xərclər",
+        "Bəxşiş"
+      ],
+      "he": [
+        "כרטיסי כניסה",
+        "ארוחות והוצאות אישיות",
+        "טיפים"
+      ],
+      "en": [
+        "Entrance tickets",
+        "Meals and personal expenses",
+        "Tips"
+      ],
+      "ru": [
+        "Входные билеты",
+        "Питание и личные расходы",
+        "Чаевые"
+      ]
+    }
+  },
+  {
+    "slug": "qebele",
+    "category": "nature",
+    "price": 160,
+    "rating": 4.8,
+    "duration": 1,
+    "group_size": "2-14",
+    "image_url": "/img/tours/qebele.jpg",
+    "published": true,
+    "sort_order": 4,
+    "title": {
+      "az": "Qəbələ turu",
+      "he": "סיור קבאלה",
+      "en": "Gabala Tour",
+      "ru": "Тур в Габалу"
+    },
+    "region": {
+      "az": "Qəbələ – Şamaxı",
+      "he": "גבלה – שמאחי",
+      "en": "Gabala – Shamakhi",
+      "ru": "Габала – Шемаха"
+    },
+    "overview": {
+      "az": "Şamaxının Cümə Məscidindən Qəbələnin dağ zirvələrinə — qədim şərab zavodu, dağlarla əhatə olunmuş göl, Yeddi Gözəl şəlaləsi və kanatla dağ gəzintisi.",
+      "he": "ממסגד ג׳ומה בשמאחי ועד פסגות ההרים של קבאלה — יקב עתיק, אגם מוקף הרים, מפל שבע היפהפיות ונסיעה ברכבל אל ההרים.",
+      "en": "From the Juma Mosque in Shamakhi to the peaks above Gabala — a historic winery, a lake ringed by mountains, the Seven Beauties waterfall and a cable-car ride to the summits.",
+      "ru": "От Джума-мечети в Шемахе до вершин Габалы — старинный винный завод, окружённое горами озеро, водопад «Семь красавиц» и подъём на фуникулёре."
+    },
+    "highlights": {
+      "az": [
+        "Şamaxı Cümə Məscidi",
+        "Meysəri şərab zavodu",
+        "Nəfəs kəsən mənzərəli göl",
+        "Yeddi Gözəl şəlaləsi",
+        "Kanatla gəzinti"
+      ],
+      "he": [
+        "מסגד ג׳ומה בשמאחי",
+        "יקב מייסרי",
+        "אגם עם נוף עוצר נשימה",
+        "מפל שבע היפהפיות",
+        "נסיעה ברכבל"
+      ],
+      "en": [
+        "Juma Mosque, Shamakhi",
+        "Meysari winery",
+        "A lake with a breathtaking view",
+        "Seven Beauties waterfall",
+        "Cable-car ride"
+      ],
+      "ru": [
+        "Джума-мечеть в Шемахе",
+        "Винный завод «Мейсяри»",
+        "Озеро с захватывающим видом",
+        "Водопад «Семь красавиц»",
+        "Поездка на фуникулёре"
+      ]
+    },
+    "itinerary": {
+      "az": [
+        {
+          "title": "Şamaxı Cümə Məscidi",
+          "description": "Qafqazın ən qədim məscidlərindən biri"
+        },
+        {
+          "title": "Meysəri şərab zavodu",
+          "description": "Qədim ənənəyə malik yerli şərab zavodu"
+        },
+        {
+          "title": "Nəfəs kəsən mənzərəli göl",
+          "description": "Dağlarla əhatə olunmuş gözəl göl"
+        },
+        {
+          "title": "Yeddi Gözəl şəlaləsi",
+          "description": "Təbiətin qoynunda möhtəşəm şəlalə"
+        },
+        {
+          "title": "Kanatla gəzinti",
+          "description": "Dağ zirvələrinə kanatla səyahət"
+        }
+      ],
+      "he": [
+        {
+          "title": "מסגד ג׳ומה בשמאחי",
+          "description": "אחד המסגדים העתיקים ביותר בקווקז"
+        },
+        {
+          "title": "יקב מייסרי",
+          "description": "יקב מקומי עם מסורת עתיקה"
+        },
+        {
+          "title": "אגם עם נוף עוצר נשימה",
+          "description": "אגם יפהפה מוקף בהרים"
+        },
+        {
+          "title": "מפל שבע היפהפיות",
+          "description": "מפל מרהיב בלב הטבע"
+        },
+        {
+          "title": "נסיעה ברכבל",
+          "description": "נסיעה ברכבל אל פסגות ההרים"
+        }
+      ],
+      "en": [
+        {
+          "title": "Juma Mosque, Shamakhi",
+          "description": "One of the oldest mosques in the Caucasus"
+        },
+        {
+          "title": "Meysari winery",
+          "description": "A local winery with a long-standing tradition"
+        },
+        {
+          "title": "A lake with a breathtaking view",
+          "description": "A beautiful lake ringed by mountains"
+        },
+        {
+          "title": "Seven Beauties waterfall",
+          "description": "A magnificent waterfall in the heart of nature"
+        },
+        {
+          "title": "Cable-car ride",
+          "description": "A cable-car journey to the mountain peaks"
+        }
+      ],
+      "ru": [
+        {
+          "title": "Джума-мечеть в Шемахе",
+          "description": "Одна из старейших мечетей Кавказа"
+        },
+        {
+          "title": "Винный завод «Мейсяри»",
+          "description": "Местная винодельня со старинной традицией"
+        },
+        {
+          "title": "Озеро с захватывающим видом",
+          "description": "Прекрасное озеро в окружении гор"
+        },
+        {
+          "title": "Водопад «Семь красавиц»",
+          "description": "Величественный водопад среди природы"
+        },
+        {
+          "title": "Поездка на фуникулёре",
+          "description": "Подъём по канатной дороге к вершинам гор"
+        }
+      ]
+    },
+    "included": {
+      "az": [
+        "Kondisionerli nəqliyyat",
+        "İvrit dilli bələdçi",
+        "Su",
+        "Bütün marşrut boyu müşayiət"
+      ],
+      "he": [
+        "הסעה ברכב ממוזג",
+        "מדריך דובר עברית",
+        "מים",
+        "ליווי לאורך כל המסלול"
+      ],
+      "en": [
+        "Air-conditioned transport",
+        "Hebrew-speaking guide",
+        "Water",
+        "Escort along the whole route"
+      ],
+      "ru": [
+        "Транспорт с кондиционером",
+        "Гид, говорящий на иврите",
+        "Вода",
+        "Сопровождение на всём маршруте"
+      ]
+    },
+    "excluded": {
+      "az": [
+        "Giriş biletləri",
+        "Nahar və şəxsi xərclər",
+        "Bəxşiş"
+      ],
+      "he": [
+        "כרטיסי כניסה",
+        "ארוחות והוצאות אישיות",
+        "טיפים"
+      ],
+      "en": [
+        "Entrance tickets",
+        "Meals and personal expenses",
+        "Tips"
+      ],
+      "ru": [
+        "Входные билеты",
+        "Питание и личные расходы",
+        "Чаевые"
+      ]
+    }
+  },
+  {
+    "slug": "baki-gece",
+    "category": "coast",
+    "price": 70,
+    "rating": 4.7,
+    "duration": 1,
+    "group_size": "2-14",
+    "image_url": "/img/tours/baki-gece.jpg",
+    "published": true,
+    "sort_order": 5,
+    "title": {
+      "az": "Bakı gecə turu",
+      "he": "סיור בבאקו בלילה",
+      "en": "Baku by Night",
+      "ru": "Ночной тур по Баку"
+    },
+    "region": {
+      "az": "Bakı",
+      "he": "באקו",
+      "en": "Baku",
+      "ru": "Баку"
+    },
+    "overview": {
+      "az": "Bakını gecə işıqları altında kəşf edin: Dağüstü Parkdan panoramik mənzərə, işıqlı Bulvar boyunca avtomobil gəzintisi, Zəfər Tağı və müasir Ağ Şəhər.",
+      "he": "גלו את באקו באורות הלילה: תצפית פנורמית מפארק ההר, נסיעה לאורך הבולוואר המואר, שער הניצחון והעיר הלבנה המודרנית.",
+      "en": "Discover Baku under the night lights: the panorama from Highland Park, a drive along the illuminated Boulevard, the Victory Arch and the modern White City.",
+      "ru": "Откройте Баку в ночных огнях: панорама с Нагорного парка, поездка по освещённому Бульвару, Триумфальная арка и современный Белый город."
+    },
+    "highlights": {
+      "az": [
+        "Böyük park kompleksi",
+        "Dağüstü Park",
+        "Bulvar boyunca avtomobillə gəzinti",
+        "Zəfər Tağı",
+        "Ağ Şəhər"
+      ],
+      "he": [
+        "קומפלקס פארק גדול",
+        "פארק דגוסטו / פארק ההר",
+        "נסיעה ברכב לאורך הבולוואר",
+        "שער הניצחון",
+        "העיר הלבנה"
+      ],
+      "en": [
+        "Grand park complex",
+        "Highland Park",
+        "A drive along the Boulevard",
+        "Victory Arch",
+        "White City"
+      ],
+      "ru": [
+        "Большой парковый комплекс",
+        "Нагорный парк",
+        "Поездка по Бульвару",
+        "Триумфальная арка",
+        "Белый город"
+      ]
+    },
+    "itinerary": {
+      "az": [
+        {
+          "title": "Böyük park kompleksi",
+          "description": "Şəhərin mərkəzində gözəl park"
+        },
+        {
+          "title": "Dağüstü Park",
+          "description": "Bakıya möhtəşəm panoramik baxış"
+        },
+        {
+          "title": "Bulvar boyunca avtomobillə gəzinti",
+          "description": "İşıqlı bulvar boyunca rahat avtomobil gəzintisi"
+        },
+        {
+          "title": "Zəfər Tağı",
+          "description": "Tarixi qələbənin simvolu"
+        },
+        {
+          "title": "Ağ Şəhər",
+          "description": "Müasir və prestijli ərazi"
+        }
+      ],
+      "he": [
+        {
+          "title": "קומפלקס פארק גדול",
+          "description": "פארק יפהפה בלב העיר"
+        },
+        {
+          "title": "פארק דגוסטו / פארק ההר",
+          "description": "תצפית פנורמית מדהימה על באקו"
+        },
+        {
+          "title": "נסיעה ברכב לאורך הבולוואר",
+          "description": "נסיעה נוחה לאורך הבולוואר המואר"
+        },
+        {
+          "title": "שער הניצחון",
+          "description": "סמל הניצחון ההיסטורי"
+        },
+        {
+          "title": "העיר הלבנה",
+          "description": "אזור מודרני ויוקרתי"
+        }
+      ],
+      "en": [
+        {
+          "title": "Grand park complex",
+          "description": "A beautiful park in the heart of the city"
+        },
+        {
+          "title": "Highland Park",
+          "description": "A stunning panoramic view over Baku"
+        },
+        {
+          "title": "A drive along the Boulevard",
+          "description": "A relaxed drive along the illuminated Boulevard"
+        },
+        {
+          "title": "Victory Arch",
+          "description": "A symbol of the historic victory"
+        },
+        {
+          "title": "White City",
+          "description": "A modern and prestigious district"
+        }
+      ],
+      "ru": [
+        {
+          "title": "Большой парковый комплекс",
+          "description": "Прекрасный парк в центре города"
+        },
+        {
+          "title": "Нагорный парк",
+          "description": "Потрясающая панорама Баку"
+        },
+        {
+          "title": "Поездка по Бульвару",
+          "description": "Спокойная поездка по освещённому Бульвару"
+        },
+        {
+          "title": "Триумфальная арка",
+          "description": "Символ исторической победы"
+        },
+        {
+          "title": "Белый город",
+          "description": "Современный престижный район"
+        }
+      ]
+    },
+    "included": {
+      "az": [
+        "Kondisionerli nəqliyyat",
+        "İvrit dilli bələdçi",
+        "Su",
+        "Bütün marşrut boyu müşayiət"
+      ],
+      "he": [
+        "הסעה ברכב ממוזג",
+        "מדריך דובר עברית",
+        "מים",
+        "ליווי לאורך כל המסלול"
+      ],
+      "en": [
+        "Air-conditioned transport",
+        "Hebrew-speaking guide",
+        "Water",
+        "Escort along the whole route"
+      ],
+      "ru": [
+        "Транспорт с кондиционером",
+        "Гид, говорящий на иврите",
+        "Вода",
+        "Сопровождение на всём маршруте"
+      ]
+    },
+    "excluded": {
+      "az": [
+        "Giriş biletləri",
+        "Nahar və şəxsi xərclər",
+        "Bəxşiş"
+      ],
+      "he": [
+        "כרטיסי כניסה",
+        "ארוחות והוצאות אישיות",
+        "טיפים"
+      ],
+      "en": [
+        "Entrance tickets",
+        "Meals and personal expenses",
+        "Tips"
+      ],
+      "ru": [
+        "Входные билеты",
+        "Питание и личные расходы",
+        "Чаевые"
+      ]
+    }
+  }
+]
