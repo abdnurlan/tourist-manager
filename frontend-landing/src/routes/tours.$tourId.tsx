@@ -11,6 +11,7 @@ import { T, type Lang, type Tour, type TourDate } from "@/lib/tours-data";
 import { fetchCatalogTour } from "@/lib/api/client";
 import { useLanguage } from "@/hooks/use-language";
 import { Logo } from "@/components/Logo";
+import { SEO } from "./__root";
 
 const DATE_LOCALES = { az, en: enUS, he, ar, ru };
 
@@ -43,14 +44,25 @@ export const Route = createFileRoute("/tours/$tourId")({
   },
   head: ({ loaderData }) => {
     const tour = loaderData?.tour;
-    const loc = tour?.i18n.az;
+    // head() runs without the visitor's language cookie, so it must pick one
+    // language up front. Hebrew — the same choice the root route makes for the
+    // Israeli inbound market. (i18n.he always resolves: the API adapter falls
+    // back az -> en -> any when a translation is missing.)
+    const loc = tour?.i18n.he;
+    // Catalog images are site-relative paths (/img/tours/...); social scrapers
+    // need an absolute URL, so resolve them against the canonical origin.
+    const ogImage = tour
+      ? tour.image.startsWith("http")
+        ? tour.image
+        : `${SEO.url}${tour.image}`
+      : SEO.image;
     return {
       meta: [
         { title: loc ? `${loc.title} — M4st Trip` : "Tur — M4st Trip" },
         { name: "description", content: loc?.overview ?? "" },
         { property: "og:title", content: loc?.title ?? "" },
         { property: "og:description", content: loc?.overview ?? "" },
-        ...(tour ? [{ property: "og:image", content: tour.image }] : []),
+        { property: "og:image", content: ogImage },
       ],
     };
   },

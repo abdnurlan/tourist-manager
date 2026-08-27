@@ -83,7 +83,7 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
 }
 
 // Hebrew-first SEO metadata for the inbound market (Israel → Azerbaijan).
-const SEO = {
+export const SEO = {
   url: "https://m4strip.com",
   image: "https://m4strip.com/og-image.jpg",
   title: "M4st Trip — טיולים מאורגנים לאזרבייג'ן | מדריכים דוברי עברית",
