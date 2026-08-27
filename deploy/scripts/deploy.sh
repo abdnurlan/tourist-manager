@@ -21,13 +21,27 @@ fi
 set -a; source .env; set +a
 DOMAIN="${DOMAIN:-tour.m4strip.com}"
 
-echo "### 1/5 Yeni kod build edilir ..."
+echo "### 1/6 Yeni kod build edilir ..."
 $COMPOSE build
 
-echo "### 2/5 Servislər işə salınır (db, backend, frontend, nginx, certbot) ..."
+echo "### 2/6 Servislər işə salınır (db, backend, frontend, nginx, certbot) ..."
 $COMPOSE up -d
 
-echo "### 3/5 DB hazır olana qədər gözlənilir ..."
+echo "### 3/6 nginx konfiqurasiyası yenidən yüklənir ..."
+# nginx.conf və conf.d/ bind-mount-dur: fayl dəyişsə də `up -d` nginx-i yenidən
+# qurmur, yəni yeni konfiqurasiya işə düşmür. Bundan başqa backend/frontend
+# konteynerləri hər deploy-da yeni IP alır, nginx isə upstream host adlarını
+# yalnız konfiqurasiya yüklənərkən çözür — reload olmasa köhnə IP-yə bağlanıb
+# "connection refused" alır. Reload hər iki problemi həll edir.
+if $COMPOSE exec -T nginx nginx -t >/dev/null 2>&1; then
+  $COMPOSE exec -T nginx nginx -s reload
+  echo "    nginx reload edildi."
+else
+  echo "    ! nginx -t uğursuz oldu — reload edilmədi, köhnə konfiqurasiya qalır:" >&2
+  $COMPOSE exec -T nginx nginx -t >&2 || true
+fi
+
+echo "### 4/6 DB hazır olana qədər gözlənilir ..."
 for i in $(seq 1 30); do
   if $COMPOSE exec -T db pg_isready -U "${POSTGRES_USER}" -d "${POSTGRES_DB}" >/dev/null 2>&1; then
     echo "    DB hazırdır."
@@ -36,10 +50,10 @@ for i in $(seq 1 30); do
   sleep 2
 done
 
-echo "### 4/5 Köhnə image-lər təmizlənir ..."
+echo "### 5/6 Köhnə image-lər təmizlənir ..."
 docker image prune -f >/dev/null 2>&1 || true
 
-echo "### 5/5 Sağlamlıq yoxlanışı (/api/health, birbaşa origin) ..."
+echo "### 6/6 Sağlamlıq yoxlanışı (/api/health, birbaşa origin) ..."
 # Cloudflare-dən asılı olmamaq üçün birbaşa origin nginx-ə (localhost) sorğu;
 # -k: origin cert localhost üçün deyil, -H Host: düzgün server blokunu seçir.
 sleep 5
