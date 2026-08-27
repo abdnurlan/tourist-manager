@@ -126,7 +126,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     ],
     links: [
       { rel: "stylesheet", href: appCss },
-      { rel: "canonical", href: SEO.url },
+      // canonical burada YOXDUR: root hansı URL-də olduğunu bilmir. Hər route
+      // öz canonical-ını verir (index, $section, tours.$tourId) — əks halda
+      // root-un dəyəri ilə route-un dəyəri yan-yana düşür və iki ziddiyyətli
+      // canonical tag-ı çıxır, axtarış motoru isə hər ikisini nəzərə almır.
       // Favicons / app icons: the Electric Orange "4" mark on brand Green.
       { rel: "icon", href: "/favicon.ico", sizes: "any" },
       { rel: "icon", type: "image/png", sizes: "192x192", href: "/favicon-192.png" },
