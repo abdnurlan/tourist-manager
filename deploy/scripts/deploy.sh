@@ -27,13 +27,22 @@ $COMPOSE build
 echo "### 2/6 Servislər işə salınır (db, backend, frontend, nginx, certbot) ..."
 $COMPOSE up -d
 
-echo "### 3/6 nginx konfiqurasiyası yenidən yüklənir ..."
-# nginx.conf və conf.d/ bind-mount-dur: fayl dəyişsə də `up -d` nginx-i yenidən
-# qurmur, yəni yeni konfiqurasiya işə düşmür. Bundan başqa backend/frontend
-# konteynerləri hər deploy-da yeni IP alır, nginx isə upstream host adlarını
-# yalnız konfiqurasiya yüklənərkən çözür — reload olmasa köhnə IP-yə bağlanıb
-# "connection refused" alır. Reload hər iki problemi həll edir.
-if $COMPOSE exec -T nginx nginx -t >/dev/null 2>&1; then
+echo "### 3/6 nginx konfiqurasiyası tətbiq edilir ..."
+# nginx.conf TƏK FAYL kimi bind-mount edilib. `git pull` faylı yeni inode ilə
+# əvəz edir, konteyner isə köhnə inode-u tutub saxlayır — yəni fayl dəyişəndə
+# `reload` heç nə etmir, konteyner yenidən qurulmalıdır. (conf.d/ və ssl/
+# qovluq kimi mount olunub, onlar dəyişikliyi normal görür.)
+#
+# Konteyner yenidən qurulmasa da reload lazımdır: hər deploy-da backend və
+# frontend konteynerləri yeni IP alır, nginx isə upstream host adlarını
+# yalnız konfiqurasiya yüklənərkən çözür.
+host_sum=$(sha256sum deploy/nginx/nginx.conf | cut -d' ' -f1)
+cont_sum=$($COMPOSE exec -T nginx sha256sum /etc/nginx/nginx.conf 2>/dev/null | cut -d' ' -f1 || echo "yox")
+
+if [[ "$host_sum" != "$cont_sum" ]]; then
+  echo "    nginx.conf dəyişib — konteyner yenidən qurulur."
+  $COMPOSE up -d --force-recreate nginx
+elif $COMPOSE exec -T nginx nginx -t >/dev/null 2>&1; then
   $COMPOSE exec -T nginx nginx -s reload
   echo "    nginx reload edildi."
 else
