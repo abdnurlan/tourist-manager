@@ -95,7 +95,7 @@ services:
       - backend
     environment:
       # SSR route loaders run inside the container — reach backend by service name.
-      SSR_API_URL: http://backend:8080/api
+      SSR_API_URL: http://turplanlayici_backend:8080/api
       PORT: "3001"
     networks:
       - turnet
