@@ -30,7 +30,10 @@ WORKDIR /app
 ENV NODE_ENV=production
 ENV PORT=3001
 # SSR loaders run inside the container; reach the backend by service name.
-ENV SSR_API_URL=http://backend:8080/api
+# Konteyner adı ilə: turnet şəbəkəsində "backend" compose aliası başqa stack-lə
+# toqquşur (bax deploy/nginx/nginx.conf). compose bu dəyəri üzərinə yazır —
+# bu sətir image-i compose olmadan işlədəndə etibarlı default verir.
+ENV SSR_API_URL=http://turplanlayici_backend:8080/api
 # Nitro node-server output is fully self-contained under .output/.
 COPY --from=builder /app/.output ./.output
 EXPOSE 3001

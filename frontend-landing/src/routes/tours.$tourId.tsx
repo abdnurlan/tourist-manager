@@ -57,6 +57,10 @@ export const Route = createFileRoute("/tours/$tourId")({
         : `${SEO.url}${tour.image}`
       : SEO.image;
     return {
+      // Without this the root route's canonical (the home page) would apply to
+      // every tour page, telling search engines to ignore them — while the
+      // sitemap asks for the opposite.
+      links: tour ? [{ rel: "canonical", href: `${SEO.url}/tours/${tour.id}` }] : [],
       meta: [
         { title: loc ? `${loc.title} — M4st Trip` : "Tur — M4st Trip" },
         { name: "description", content: loc?.overview ?? "" },
