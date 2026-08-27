@@ -46,16 +46,17 @@ function TestimonialsColumn(props: {
               >
                 <blockquote className="m-0 p-0">
                   {item.rating != null && (
-                    <div className="mb-4 flex items-center gap-1 text-accent">
+                    <div className="mb-4 flex items-center gap-1 text-brand-orange" aria-label={`${item.rating}/5`}>
                       {Array.from({ length: 5 }).map((_, s) => (
                         <Star
                           key={s}
-                          className={`h-4 w-4 ${s < (item.rating ?? 0) ? "fill-accent" : "text-foreground/20"}`}
+                          aria-hidden="true"
+                          className={`h-4 w-4 ${s < (item.rating ?? 0) ? "fill-brand-orange" : "text-brand-grey/60"}`}
                         />
                       ))}
                     </div>
                   )}
-                  <p className="m-0 leading-relaxed font-normal text-foreground/80">{item.text}</p>
+                  <p className="m-0 leading-relaxed font-normal text-foreground">{item.text}</p>
                   <footer className="mt-6 flex items-center gap-3 border-t border-border pt-5">
                     <img
                       width={44}
@@ -63,10 +64,10 @@ function TestimonialsColumn(props: {
                       src={item.image}
                       alt={item.name}
                       loading="lazy"
-                      className="h-11 w-11 rounded-full object-cover ring-2 ring-border transition-all duration-300 group-hover:ring-accent/40"
+                      className="h-11 w-11 rounded-full object-cover ring-2 ring-border transition-all duration-300 group-hover:ring-brand-orange/50"
                     />
                     <div className="flex flex-col">
-                      <cite className="font-display text-base font-semibold not-italic leading-5 tracking-tight text-foreground">
+                      <cite className="font-display text-base font-bold not-italic leading-5 text-foreground">
                         {item.name}
                       </cite>
                       <span className="mt-0.5 text-sm leading-5 tracking-tight text-muted-foreground">
@@ -95,7 +96,7 @@ export interface TestimonialsMarqueeProps {
 
 /**
  * Three vertically-scrolling columns of testimonials, masked top & bottom.
- * Fed by the site's own review data; styled with the M4STrip palette.
+ * Fed by the site's own review data; styled with the M4st Trip brand palette.
  */
 export function TestimonialsMarquee({
   eyebrow,
@@ -118,12 +119,12 @@ export function TestimonialsMarquee({
         transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
         className="z-10 mx-auto max-w-7xl px-6"
       >
-        <div className="mx-auto mb-14 flex max-w-2xl flex-col items-start" dir={dir}>
-          <p className="mb-3 text-sm uppercase tracking-widest text-accent">{eyebrow}</p>
-          <h2 id="reviews-heading" className="font-display text-4xl font-medium tracking-tight md:text-5xl">
+        <div className="mb-14 flex max-w-2xl flex-col items-start" dir={dir}>
+          <p className="eyebrow mb-3">{eyebrow}</p>
+          <h2 id="reviews-heading" className="font-display text-4xl font-bold md:text-5xl">
             {title}
           </h2>
-          <p className="mt-4 text-foreground/75">{subtitle}</p>
+          <p className="mt-4 leading-relaxed text-muted-foreground">{subtitle}</p>
         </div>
 
         <div

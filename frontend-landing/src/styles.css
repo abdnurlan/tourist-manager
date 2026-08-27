@@ -31,55 +31,87 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
+
+  /* Brand tokens straight from the M4st Trip brand guide (2026). */
+  --color-brand-orange: var(--brand-orange);
+  --color-brand-green: var(--brand-green);
+  --color-brand-grey: var(--brand-grey);
+  --color-brand-offwhite: var(--brand-offwhite);
+  --color-brand-ink: var(--brand-ink);
+  /* AA-safe orange for small text on light surfaces (#fd5c02 is 2.8:1 there). */
+  --color-accent-ink: var(--accent-ink);
+  /* On-green foreground pair, for the dark brand sections. */
+  --color-on-green: var(--on-green);
+  --color-on-green-muted: var(--on-green-muted);
+
   --font-display: var(--font-display);
   --font-sans: var(--font-sans);
 }
 
 :root {
-  --radius: 1rem;
+  --radius: 0.875rem;
 
-  /* ── "Səyahət Jurnalı" palette — matched to the admin app ──
-     Warm paper base, deep brand navy ink, sun-orange accent
-     (all drawn from the M4STrip logo). */
-  --background: #f6f1e7;          /* warm paper */
-  --foreground: #1c1917;          /* ink */
-  --card: #fffdf8;                /* surface */
-  --card-foreground: #1c1917;
-  --popover: #fffdf8;
-  --popover-foreground: #1c1917;
-  --primary: #01335e;            /* brand navy */
-  --primary-foreground: #f4f8fd;
-  --secondary: #efe6d4;          /* surface-muted */
-  --secondary-foreground: #1c1917;
-  --muted: #efe6d4;
-  --muted-foreground: #6f655a;
-  --accent: #e9790d;             /* sun-orange */
-  --accent-foreground: #fff6ec;
-  --destructive: #b3402f;
-  --destructive-foreground: #fff6ec;
-  --border: #e6dac4;
-  --input: #e6dac4;
-  --ring: #01335e;
+  /* ── Brand guide palette ────────────────────────────────────────────
+     Orange #fd5c02 · Green #17281e · Grey #a7a8ab · Off White #f1f1f1
+     (the wordmark's own dark is "midnight black" #29272a). */
+  --brand-orange: #fd5c02;
+  --brand-green: #17281e;
+  --brand-grey: #a7a8ab;
+  --brand-offwhite: #f1f1f1;
+  --brand-ink: #29272a;
 
-  /* "Heebo" carries the Hebrew glyphs (primary market); Inter covers Latin. */
-  --font-display: "Fraunces", "Heebo", ui-serif, Georgia, serif;
-  --font-sans: "Inter", "Heebo", ui-sans-serif, system-ui, sans-serif;
+  --background: #f1f1f1;          /* Off White */
+  --foreground: #17281e;          /* Green — the brand's ink */
+  --card: #ffffff;
+  --card-foreground: #17281e;
+  --popover: #ffffff;
+  --popover-foreground: #17281e;
+  /* Orange is the brand's action colour; green ink on it clears AA (4.9:1). */
+  --primary: #fd5c02;
+  --primary-foreground: #17281e;
+  --secondary: #e5e7e3;
+  --secondary-foreground: #17281e;
+  --muted: #e5e7e3;
+  --muted-foreground: #5d6b62;    /* 4.9:1 on Off White */
+  --accent: #fd5c02;
+  --accent-foreground: #17281e;
+  --primary-hover: #e35001;   /* darker orange — keeps the green ink at AA on hover */
+  --accent-ink: #b8410a;          /* 4.9:1 on Off White — small orange text */
+  --on-green: #f1f1f1;
+  --on-green-muted: #b9c3bc;      /* 7.3:1 on Green */
+  --destructive: #b3271b;
+  --destructive-foreground: #ffffff;
+  --border: #d7d9d5;
+  --input: #c9ccc6;
+  --ring: #fd5c02;
 
-  /* Glass tokens — warm paper glass (light), for sticky nav & cards */
-  --glass-bg: color-mix(in srgb, #fffdf8 80%, transparent);
-  --glass-bg-strong: color-mix(in srgb, #fffdf8 92%, transparent);
-  --glass-border: #e6dac4;
-  --glass-highlight: linear-gradient(135deg, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0.15) 40%, rgba(255, 255, 255, 0) 100%);
+  /* Poppins is the brand typeface; Heebo carries the Hebrew glyphs
+     (Israel is the primary inbound market) and Poppins has none. */
+  --font-display: "Poppins", "Heebo", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Poppins", "Heebo", ui-sans-serif, system-ui, sans-serif;
+
+  /* Glass tokens — neutral off-white glass for the sticky nav & cards. */
+  --glass-bg: rgba(255, 255, 255, 0.74);
+  --glass-border: rgba(23, 40, 30, 0.1);
+  --glass-highlight: linear-gradient(135deg, rgba(255, 255, 255, 0.65) 0%, rgba(255, 255, 255, 0.16) 40%, rgba(255, 255, 255, 0) 100%);
   --glass-blur: 16px;
-  --glass-shadow: 0 8px 32px rgba(28, 25, 23, 0.1);
+  --glass-shadow: 0 8px 32px rgba(23, 40, 30, 0.1);
 
-  --gradient-warm: linear-gradient(135deg, rgba(1, 51, 94, 0.9), rgba(233, 121, 13, 0.85));
-  --gradient-hero: linear-gradient(180deg, rgba(28, 25, 23, 0.15) 0%, rgba(28, 25, 23, 0.55) 100%);
+  /* Glass over the dark green brand sections. */
+  --glass-dark-bg: rgba(241, 241, 241, 0.08);
+  --glass-dark-border: rgba(241, 241, 241, 0.16);
+
+  --gradient-warm: linear-gradient(135deg, #17281e 0%, #1d3527 48%, rgba(253, 92, 2, 0.92) 100%);
+  --gradient-hero: linear-gradient(180deg, rgba(23, 40, 30, 0.28) 0%, rgba(23, 40, 30, 0.55) 45%, rgba(23, 40, 30, 0.85) 100%);
+  /* Side ramp under the headline column. Two explicit directions rather than a
+     scaleX flip — a transform on the scrim layer does not reliably mirror it. */
+  --gradient-hero-side: linear-gradient(to right, rgba(23, 40, 30, 0.62) 0%, rgba(23, 40, 30, 0.2) 45%, transparent 72%);
+  --gradient-hero-side-rtl: linear-gradient(to left, rgba(23, 40, 30, 0.62) 0%, rgba(23, 40, 30, 0.2) 45%, transparent 72%);
   --gradient-ambient:
-    radial-gradient(60% 50% at 15% 10%, rgba(233, 121, 13, 0.1), transparent 60%),
-    radial-gradient(50% 50% at 85% 20%, rgba(1, 51, 94, 0.1), transparent 60%);
-  --shadow-soft: 0 30px 80px -30px rgba(28, 25, 23, 0.35);
-  --shadow-card: 0 12px 40px -12px rgba(28, 25, 23, 0.2);
+    radial-gradient(60% 50% at 15% 10%, rgba(253, 92, 2, 0.07), transparent 60%),
+    radial-gradient(50% 50% at 85% 20%, rgba(23, 40, 30, 0.07), transparent 60%);
+  --shadow-soft: 0 30px 80px -30px rgba(23, 40, 30, 0.3);
+  --shadow-card: 0 12px 40px -12px rgba(23, 40, 30, 0.16);
 }
 
 @layer base {
@@ -91,36 +123,42 @@
     background-color: var(--color-background);
     color: var(--color-foreground);
     font-family: var(--font-sans);
-    font-feature-settings: "ss01", "cv11";
   }
 
   body {
     background-image: var(--gradient-ambient);
-    background-attachment: fixed;
+    background-repeat: no-repeat;
     background-size: cover;
-    min-height: 100vh;
+    min-height: 100dvh;
   }
 
+  /* Poppins Bold for headings, per the brand guide's typography page. */
   h1, h2, h3, h4, h5 {
     font-family: var(--font-display);
-    letter-spacing: -0.02em;
+    font-weight: 700;
+    letter-spacing: -0.015em;
+  }
+
+  /* Prices, seat counts and stats must not jitter as digits change. */
+  .tabular-nums, [class*="tabular-nums"] {
+    font-variant-numeric: tabular-nums;
   }
 }
 
 @layer components {
   .glass {
     background: var(--glass-bg);
-    backdrop-filter: blur(var(--glass-blur)) saturate(160%);
-    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(160%);
+    backdrop-filter: blur(var(--glass-blur)) saturate(140%);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(140%);
     border: 1px solid var(--glass-border);
     box-shadow: var(--glass-shadow);
   }
-  .glass-strong {
-    background: var(--glass-bg-strong);
-    backdrop-filter: blur(28px) saturate(180%);
-    -webkit-backdrop-filter: blur(28px) saturate(180%);
-    border: 1px solid var(--glass-border);
-    box-shadow: var(--glass-shadow);
+  /* Glass for use on the dark green brand sections. */
+  .glass-on-green {
+    background: var(--glass-dark-bg);
+    backdrop-filter: blur(var(--glass-blur)) saturate(140%);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(140%);
+    border: 1px solid var(--glass-dark-border);
   }
   .glass-sheen {
     position: relative;
@@ -134,7 +172,53 @@
     background: var(--glass-highlight);
     pointer-events: none;
     mix-blend-mode: overlay;
-    opacity: 0.7;
+    opacity: 0.6;
+  }
+
+  /* Hero scrim: vertical ramp plus a side ramp behind the headline column. */
+  .hero-scrim {
+    background: var(--gradient-hero);
+  }
+  .hero-scrim-side {
+    background: var(--gradient-hero-side);
+  }
+  [dir="rtl"] .hero-scrim-side {
+    background: var(--gradient-hero-side-rtl);
+  }
+
+  /* Buttons keep their designed height on mouse, but never drop below the
+     44px platform minimum on a touch device. Pointer type, not viewport width,
+     is what decides this — a 1024px iPad is still a finger. */
+  @media (pointer: coarse) {
+    .touch-target {
+      min-height: 2.75rem;
+    }
+    .touch-target-square {
+      min-height: 2.75rem;
+      min-width: 2.75rem;
+    }
+  }
+
+
+  /* The brand's dark canvas (footer, CTA band) — Green with Off White ink. */
+  .surface-green {
+    background-color: var(--brand-green);
+    color: var(--on-green);
+  }
+
+  /* Brand eyebrow: uppercase label in the AA-safe orange. */
+  .eyebrow {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 0.8125rem;
+    line-height: 1.4;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent-ink);
+  }
+  .surface-green .eyebrow,
+  .eyebrow-on-dark {
+    color: var(--brand-orange);
   }
 }
 
@@ -189,30 +273,44 @@
   }
 
   /* ---- Sheen sweep across glass on hover ---- */
+  /* One-shot sheen. It used to `transition: left` both ways, so leaving the card
+     swept the highlight back across it and parked it at the top-left — the skew
+     pushes the strip's top edge ~0.32×height to the right, which dragged it back
+     into the clipped box. Now it is an animation that only plays on hover-in and
+     leaves nothing behind, driven by transform rather than `left`. */
   .sheen-sweep { position: relative; overflow: hidden; }
   .sheen-sweep::after {
     content: "";
     position: absolute;
     top: 0;
-    left: -75%;
-    width: 50%;
+    left: 0;
+    width: 55%;
     height: 100%;
     background: linear-gradient(
       100deg,
       transparent 0%,
-      oklch(1 0 0 / 0.22) 50%,
+      rgba(255, 255, 255, 0.22) 50%,
       transparent 100%
     );
-    transform: skewX(-18deg);
-    transition: left 0.7s ease;
+    transform: translateX(-200%) skewX(-18deg);
+    opacity: 0;
     pointer-events: none;
     z-index: 2;
   }
-  .sheen-sweep:hover::after { left: 130%; }
+  @keyframes sheen-sweep {
+    from { transform: translateX(-200%) skewX(-18deg); opacity: 1; }
+    to { transform: translateX(320%) skewX(-18deg); opacity: 1; }
+  }
+  /* hover:hover only — on touch, :hover sticks after a tap. */
+  @media (hover: hover) {
+    .sheen-sweep:hover::after {
+      animation: sheen-sweep 0.75s ease-out;
+    }
+  }
 
   /* ---- Nav scrolled state ---- */
   .nav-scrolled {
-    box-shadow: 0 12px 40px -12px oklch(0 0 0 / 0.55);
+    box-shadow: 0 14px 40px -14px rgba(23, 40, 30, 0.35);
   }
 
   /* ---- Mobile menu slide ---- */
@@ -235,5 +333,36 @@
   .reveal-stagger > * {
     opacity: 1 !important;
     transform: none !important;
+  }
+}
+
+/* Short landscape viewports (phone rotated, ~390px tall): a 640px hero would push
+   its own call to action off screen, so the hero sizes to content and the type
+   steps down. Deliberately unlayered — it has to beat the height/spacing
+   utilities in Tailwind's `utilities` layer. */
+@media (max-height: 620px) and (orientation: landscape) {
+  .hero-shell {
+    height: auto;
+    min-height: 0;
+  }
+  .hero-body {
+    padding-top: 6.5rem;
+    /* Clears the stats card's -mt-16 overlap so it never covers the search bar. */
+    padding-bottom: 5.5rem;
+  }
+  .hero-shell h1 {
+    font-size: clamp(1.75rem, 4.4vw, 2.75rem);
+  }
+  .hero-lede {
+    margin-top: 0.75rem;
+    font-size: 1rem;
+  }
+  .hero-search {
+    margin-top: 1.25rem;
+    flex-direction: row;
+    align-items: center;
+  }
+  .hero-badge {
+    margin-bottom: 0.75rem;
   }
 }

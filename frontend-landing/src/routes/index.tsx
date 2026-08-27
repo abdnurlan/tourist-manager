@@ -5,9 +5,12 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { MapPin, Clock, Users, Star, ArrowRight, Mountain, Compass, Search, Phone, Instagram, Menu, X } from "lucide-react";
+import { MapPin, Clock, Users, Star, ArrowRight, Mountain, Compass, PlaneTakeoff, Search, Phone, Instagram, Menu, X } from "lucide-react";
 import { BookingDialog, type BookingTour } from "@/components/BookingDialog";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { Logo } from "@/components/Logo";
+import { CountUp } from "@/components/CountUp";
+import { SplitText } from "@/components/SplitText";
 import { Reveal } from "@/components/Reveal";
 import { TestimonialsMarquee } from "@/components/ui/testimonials-marquee";
 import { T, CAT_KEYS, REVIEWS, type CategoryKey, type Tour } from "@/lib/tours-data";
@@ -17,7 +20,6 @@ import { useLanguage } from "@/hooks/use-language";
 
 import heroImg from "@/assets/hero-mountains.jpg";
 import heroVideo from "@/assets/hero.mp4";
-import logoImg from "@/assets/logo.png";
 
 const CURRENT_YEAR = 2026;
 
@@ -59,38 +61,59 @@ function Index() {
     });
   }, [tours, category, query, lang]);
 
+  const navItems = [
+    { href: "#tours", label: t.nav.tours },
+    { href: "#reviews", label: t.reviews.eyebrow },
+    { href: "#how", label: t.nav.how },
+    { href: "#contact", label: t.nav.contact },
+  ];
+
   return (
-    <div dir={dir} lang={lang} className="min-h-screen text-foreground">
+    <div dir={dir} lang={lang} className="min-h-dvh text-foreground">
+      {/* Keyboard users can jump past the fixed nav. */}
+      <a
+        href="#tours"
+        className="sr-only focus:not-sr-only focus:fixed focus:start-4 focus:top-4 focus:z-50 focus:rounded-full focus:bg-brand-green focus:px-5 focus:py-3 focus:text-sm focus:font-semibold focus:text-on-green"
+      >
+        {t.nav.tours}
+      </a>
+
       {/* NAV */}
       <header
-        className={`fixed left-1/2 z-40 w-[calc(100%-2rem)] -translate-x-1/2 transition-[top,max-width] duration-[400ms] ease-[cubic-bezier(.25,.46,.45,.94)] ${
-          scrolled ? "top-3 max-w-[860px]" : "top-4 max-w-6xl"
+        className={`fixed left-1/2 z-40 w-[calc(100%-1.5rem)] -translate-x-1/2 transition-[top,max-width] duration-[400ms] ease-[cubic-bezier(.25,.46,.45,.94)] sm:w-[calc(100%-2rem)] ${
+          scrolled ? "top-3 max-w-[900px]" : "top-4 max-w-6xl"
         }`}
       >
         <div
-          className={`glass glass-sheen flex items-center justify-between gap-4 rounded-full transition-[padding,box-shadow] duration-[400ms] ease-[cubic-bezier(.25,.46,.45,.94)] ${
-            scrolled ? "nav-scrolled px-4 py-2" : "px-5 py-3"
+          className={`glass glass-sheen flex items-center justify-between gap-2 rounded-full transition-[padding,box-shadow] duration-[400ms] ease-[cubic-bezier(.25,.46,.45,.94)] sm:gap-4 ${
+            scrolled ? "nav-scrolled px-3 py-3 sm:px-4" : "px-3 py-3 sm:px-5"
           }`}
         >
-          <Link to="/" className="group flex items-center gap-2 text-foreground">
-            <img src={logoImg} alt={t.brand} width={36} height={36} className="h-9 w-9 shrink-0 object-contain transition-transform duration-300 group-hover:-translate-y-0.5" />
-            <span className="font-display text-lg font-medium tracking-tight">{t.brand}</span>
+          {/* The wordmark carries the name — no duplicate text label beside it. */}
+          <Link
+            to="/"
+            className="group relative shrink-0 rounded-md before:absolute before:inset-x-0 before:-inset-y-2.5 before:content-[''] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+            aria-label={t.brand}
+          >
+            <Logo
+              height={29}
+              alt={t.brand}
+              className="transition-transform duration-300 group-hover:-translate-y-0.5"
+            />
           </Link>
           <nav
-            className={`hidden items-center text-sm text-foreground/80 transition-[gap] duration-[400ms] ease-[cubic-bezier(.25,.46,.45,.94)] lg:flex ${
+            aria-label={t.nav.tours}
+            className={`hidden items-center font-display text-sm font-medium text-foreground/80 transition-[gap] duration-[400ms] ease-[cubic-bezier(.25,.46,.45,.94)] lg:flex ${
               scrolled ? "gap-4" : "gap-7"
             }`}
           >
-            {[
-              { href: "#tours", label: t.nav.tours },
-              { href: "#reviews", label: t.reviews.eyebrow },
-              { href: "#how", label: t.nav.how },
-              { href: "#contact", label: t.nav.contact },
-            ].map((item) => (
+            {navItems.map((item) => (
               <a
                 key={item.href}
                 href={item.href}
-                className="relative transition-colors duration-300 hover:text-foreground after:absolute after:-bottom-1.5 after:left-0 after:h-px after:w-0 after:bg-accent after:transition-all after:duration-300 hover:after:w-full"
+                // `before:` widens the tap area to 44px on touch (iPad shows this
+                // nav) without changing the pill's height; `after:` is the underline.
+                className="relative rounded-sm transition-colors duration-300 before:absolute before:inset-x-0 before:-inset-y-3 before:content-[''] hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-4 after:absolute after:-bottom-1.5 after:left-0 after:h-0.5 after:w-0 after:bg-brand-orange after:transition-all after:duration-300 hover:after:w-full"
               >
                 {item.label}
               </a>
@@ -98,43 +121,49 @@ function Index() {
           </nav>
           <div className="flex items-center gap-2">
             <LanguageSwitcher lang={lang} onChange={setLang} dir={dir} />
-            <Button size="sm" className="hidden rounded-full transition-transform duration-300 hover:scale-[1.03] active:scale-95 sm:inline-flex">{t.nav.book}</Button>
+            <Button
+              size="sm"
+              className="hidden h-10 transition-transform duration-300 hover:scale-[1.03] active:scale-95 sm:inline-flex"
+              onClick={() => document.getElementById("tours")?.scrollIntoView({ behavior: "smooth" })}
+            >
+              {t.nav.book}
+            </Button>
             <button
               onClick={() => setMenuOpen((v) => !v)}
-              className="glass flex h-9 w-9 cursor-pointer items-center justify-center rounded-full text-foreground transition active:scale-95 lg:hidden"
+              className="glass touch-target-square flex h-10 w-10 cursor-pointer items-center justify-center rounded-full text-foreground transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring active:scale-95 lg:hidden"
               aria-label={menuOpen ? "Close menu" : "Open menu"}
               aria-expanded={menuOpen}
             >
-              {menuOpen ? <X className="h-4.5 w-4.5" /> : <Menu className="h-4.5 w-4.5" />}
+              {menuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </button>
           </div>
         </div>
 
         {/* MOBILE MENU */}
         {menuOpen && (
-          <div className="animate-menu-in glass glass-sheen mt-2 flex flex-col gap-1 rounded-3xl p-3 lg:hidden">
-            {[
-              { href: "#tours", label: t.nav.tours },
-              { href: "#reviews", label: t.reviews.eyebrow },
-              { href: "#how", label: t.nav.how },
-              { href: "#contact", label: t.nav.contact },
-            ].map((item) => (
+          <nav
+            aria-label={t.nav.tours}
+            className="animate-menu-in glass glass-sheen mt-2 flex flex-col gap-1 rounded-3xl p-3 lg:hidden"
+          >
+            {navItems.map((item) => (
               <a
                 key={item.href}
                 href={item.href}
                 onClick={() => setMenuOpen(false)}
-                className="rounded-2xl px-4 py-3 text-sm text-foreground/85 transition-colors hover:bg-white/10 hover:text-foreground"
+                className="rounded-2xl px-4 py-3 font-display text-sm font-medium text-foreground/85 transition-colors hover:bg-secondary hover:text-foreground"
               >
                 {item.label}
               </a>
             ))}
-            <Button className="mt-1 rounded-2xl" onClick={() => setMenuOpen(false)}>{t.nav.book}</Button>
-          </div>
+            <Button className="mt-1" onClick={() => setMenuOpen(false)}>{t.nav.book}</Button>
+          </nav>
         )}
       </header>
 
       {/* HERO */}
-      <section className="relative h-[92vh] min-h-[640px] w-full overflow-hidden">
+      {/* Taller floor on small phones: the content is bottom-aligned, and at
+          640px the badge slid under the fixed nav on a 568px-tall screen. */}
+      <section className="hero-shell relative h-[92svh] min-h-[700px] w-full overflow-hidden sm:min-h-[640px]">
         <img src={heroImg} alt="" width={1920} height={1080} className="absolute inset-0 h-full w-full scale-105 object-cover" />
         <video
           autoPlay
@@ -148,124 +177,147 @@ function Index() {
         >
           <source src={heroVideo} type="video/mp4" />
         </video>
-        <div className="absolute inset-0" style={{ background: "var(--gradient-hero)" }} />
-        <div className="animate-float pointer-events-none absolute -left-20 top-1/3 h-72 w-72 rounded-full bg-accent/30 blur-3xl" />
-        <div className="animate-float-alt pointer-events-none absolute right-0 top-20 h-80 w-80 rounded-full bg-primary/30 blur-3xl" />
+        {/* Brand Green scrim — keeps the white type above 4.5:1 over any frame. */}
+        <div aria-hidden="true" className="hero-scrim absolute inset-0" />
+        <div aria-hidden="true" className="hero-scrim-side absolute inset-0" />
+        <div aria-hidden="true" className="animate-float pointer-events-none absolute -left-20 top-1/3 h-72 w-72 rounded-full bg-brand-orange/25 blur-3xl" />
+        <div aria-hidden="true" className="animate-float-alt pointer-events-none absolute right-0 top-20 h-80 w-80 rounded-full bg-brand-green/40 blur-3xl" />
 
-        <div className="relative z-10 mx-auto flex h-full max-w-7xl flex-col justify-end px-6 pb-20 md:pb-28">
-          <Badge className="animate-fade-up mb-6 w-fit rounded-full border-white/25 bg-white/15 px-4 py-1.5 text-white backdrop-blur-md" style={{ animationDelay: "0.1s" }}>{t.hero.badge}</Badge>
-          <h1 className="animate-fade-up max-w-4xl font-display text-5xl font-medium leading-[1.05] text-white md:text-7xl lg:text-8xl" style={{ animationDelay: "0.2s" }}>
-            {t.hero.title1} <em className="italic text-accent">{t.hero.title2}</em>
-          </h1>
-          <p className="animate-fade-up mt-6 max-w-xl text-lg text-white/90 md:text-xl" style={{ animationDelay: "0.35s" }}>{t.hero.subtitle}</p>
+        <div className="hero-body relative z-10 mx-auto flex h-full max-w-7xl flex-col justify-end px-6 pb-20 md:pb-28">
+          <Badge className="hero-badge animate-fade-up mb-6 w-fit border-transparent bg-brand-orange text-[13px] text-primary-foreground" style={{ animationDelay: "0.1s" }}>{t.hero.badge}</Badge>
+          <SplitText
+            as="h1"
+            key={lang}
+            dir={dir}
+            delay={0.2}
+            segments={[{ text: t.hero.title1 }, { text: t.hero.title2, className: "text-brand-orange" }]}
+            className="max-w-4xl font-display text-5xl font-bold leading-[1.05] text-white md:text-7xl lg:text-8xl"
+          />
+          <p className="hero-lede animate-fade-up mt-6 max-w-xl text-lg leading-relaxed text-white/90 md:text-xl" style={{ animationDelay: "0.35s" }}>{t.hero.subtitle}</p>
 
-          <div className="animate-fade-up mt-10 flex w-full max-w-2xl flex-col gap-3 rounded-2xl border border-white/20 bg-white/15 p-3 backdrop-blur-md md:flex-row md:items-center" style={{ animationDelay: "0.5s" }}>
+          <div className="hero-search animate-fade-up mt-10 flex w-full max-w-2xl flex-col gap-3 rounded-2xl border border-white/25 bg-brand-green/45 p-3 backdrop-blur-md md:flex-row md:items-center" style={{ animationDelay: "0.5s" }}>
             <div className="flex flex-1 items-center gap-2 px-3">
-              <Search className="h-5 w-5 text-white/80" />
+              <Search aria-hidden="true" className="h-5 w-5 shrink-0 text-white/90" />
               <Input
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder={t.hero.searchPh}
-                className="border-0 bg-transparent text-white shadow-none placeholder:text-white/70 focus-visible:ring-0"
+                aria-label={t.hero.searchPh}
+                className="h-11 border-0 bg-transparent text-base text-white shadow-none placeholder:text-white/80 focus-visible:ring-0"
               />
             </div>
-            <Button size="lg" className="cursor-pointer rounded-xl transition-transform duration-300 hover:scale-[1.02] active:scale-95" onClick={() => document.getElementById("tours")?.scrollIntoView({ behavior: "smooth" })}>
-              {t.hero.cta} <ArrowRight className={`h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5 ${dir === "rtl" ? "mr-1 rotate-180" : "ml-1"}`} />
+            <Button size="lg" className="group transition-transform duration-300 hover:scale-[1.02] active:scale-95" onClick={() => document.getElementById("tours")?.scrollIntoView({ behavior: "smooth" })}>
+              {t.hero.cta} <ArrowRight aria-hidden="true" className={`h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5 ${dir === "rtl" ? "rotate-180" : ""}`} />
             </Button>
           </div>
         </div>
       </section>
 
       {/* STATS */}
-      <section className="mx-auto -mt-16 max-w-7xl px-6">
-        <div className="relative z-10 grid grid-cols-2 gap-8 rounded-3xl border border-border bg-card px-8 py-10 shadow-(--shadow-soft) md:grid-cols-4">
-          {t.stats.map((s) => (
-            <div key={s.v}>
-              <div className="font-display text-4xl font-medium text-accent md:text-5xl">{s.k}</div>
-              <div className="mt-1 text-sm text-muted-foreground">{s.v}</div>
+      <section className="mx-auto -mt-16 max-w-7xl px-6" aria-label={t.hero.badge}>
+        <Reveal stagger className="relative z-10 grid grid-cols-2 gap-8 rounded-3xl border border-border bg-card px-8 py-10 shadow-(--shadow-soft) md:grid-cols-4">
+          {t.stats.map((s, i) => (
+            <div key={s.v} style={{ "--i": i } as CSSProperties}>
+              <CountUp
+                value={s.k}
+                delay={i * 0.08}
+                className="block font-display text-4xl font-bold tabular-nums text-brand-orange md:text-5xl"
+              />
+              <div className="mt-1.5 text-sm font-medium text-muted-foreground">{s.v}</div>
             </div>
           ))}
-        </div>
+        </Reveal>
       </section>
 
       {/* TOURS */}
       <section id="tours" className="mx-auto max-w-7xl px-6 py-24">
-        <Reveal className="flex flex-col items-start justify-between gap-6 md:flex-row md:items-end">
+        <Reveal>
           <div className="max-w-2xl">
-            <p className="mb-3 text-sm uppercase tracking-widest text-accent">{t.tours.eyebrow}</p>
-            <h2 className="font-display text-4xl font-medium md:text-5xl">{t.tours.title}</h2>
-            <p className="mt-4 text-foreground/75">{t.tours.subtitle}</p>
+            <p className="eyebrow mb-3">{t.tours.eyebrow}</p>
+            <h2 className="font-display text-4xl font-bold md:text-5xl">{t.tours.title}</h2>
+            <p className="mt-4 leading-relaxed text-muted-foreground">{t.tours.subtitle}</p>
           </div>
-          <div className="glass flex flex-wrap gap-1 rounded-full p-1">
-            {CAT_KEYS.map((c) => (
-              <button
-                key={c}
-                onClick={() => setCategory(c)}
-                className={`cursor-pointer rounded-full px-4 py-2 text-sm transition-all duration-300 ${
-                  category === c ? "bg-primary text-primary-foreground shadow" : "text-foreground/80 hover:text-foreground hover:bg-white/5"
-                }`}
-              >
-                {t.cats[c]}
-              </button>
-            ))}
+          {/* Own row: the category count grows, so it scrolls rather than wraps. */}
+          <div
+            className="-mx-6 mt-8 overflow-x-auto px-6 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+            role="tablist"
+            aria-label={t.tours.title}
+          >
+            <div className="glass inline-flex gap-1 rounded-full p-1">
+              {CAT_KEYS.map((c) => (
+                <button
+                  key={c}
+                  role="tab"
+                  aria-selected={category === c}
+                  onClick={() => setCategory(c)}
+                  className={`min-h-11 shrink-0 cursor-pointer rounded-full px-4 font-display text-sm font-semibold transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
+                    category === c
+                      ? "bg-primary text-primary-foreground shadow-sm"
+                      : "text-foreground/75 hover:bg-secondary hover:text-foreground"
+                  }`}
+                >
+                  {t.cats[c]}
+                </button>
+              ))}
+            </div>
           </div>
         </Reveal>
 
         <div key={category + query} className="reveal-stagger is-revealed mt-12 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
           {isLoading &&
             Array.from({ length: 6 }).map((_, i) => (
-              <div key={i} className="glass overflow-hidden rounded-3xl">
-                <div className="aspect-[4/5] animate-pulse bg-foreground/5" />
+              <div key={i} className="overflow-hidden rounded-3xl border border-border bg-card">
+                <div className="aspect-[4/5] animate-pulse bg-secondary" />
                 <div className="space-y-3 p-6">
-                  <div className="h-4 w-1/3 animate-pulse rounded bg-foreground/10" />
-                  <div className="h-6 w-2/3 animate-pulse rounded bg-foreground/10" />
-                  <div className="h-4 w-full animate-pulse rounded bg-foreground/5" />
+                  <div className="h-4 w-1/3 animate-pulse rounded bg-secondary" />
+                  <div className="h-6 w-2/3 animate-pulse rounded bg-secondary" />
+                  <div className="h-4 w-full animate-pulse rounded bg-secondary" />
                 </div>
               </div>
             ))}
           {filtered.map((tour, idx) => {
             const loc = tour.i18n[lang];
             return (
-              <article key={tour.id} style={{ "--i": idx % 6 } as CSSProperties} className="glass glass-sheen sheen-sweep group overflow-hidden rounded-3xl ring-1 ring-transparent transition-[box-shadow,--tw-ring-color] duration-300 hover:shadow-[var(--shadow-soft)] hover:ring-accent/30">
-                <Link to="/tours/$tourId" params={{ tourId: tour.id }} className="block">
+              <article key={tour.id} style={{ "--i": idx % 6 } as CSSProperties} className="sheen-sweep group overflow-hidden rounded-3xl border border-border bg-card shadow-(--shadow-card) transition-[box-shadow,border-color,transform] duration-300 hover:-translate-y-1 hover:border-brand-orange/40 hover:shadow-(--shadow-soft)">
+                <Link to="/tours/$tourId" params={{ tourId: tour.id }} className="block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset">
                   <div className="relative aspect-[4/5] overflow-hidden">
                     <img src={tour.image} alt={loc.title} loading="lazy" width={1024} height={1280} className="h-full w-full object-cover transition duration-700 group-hover:scale-105" />
-                    <Badge className={`glass absolute top-4 rounded-full text-white ${dir === "rtl" ? "right-4" : "left-4"}`}>
+                    <Badge variant="green" className={`absolute top-4 ${dir === "rtl" ? "right-4" : "left-4"}`}>
                       {t.cats[tour.category]}
                     </Badge>
-                    <div className={`glass absolute top-4 flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-medium text-foreground ${dir === "rtl" ? "left-4" : "right-4"}`}>
-                      <Star className="h-3.5 w-3.5 fill-accent text-accent" /> {tour.rating}
+                    <div className={`absolute top-4 flex items-center gap-1 rounded-full bg-white/95 px-2.5 py-1 font-display text-xs font-semibold tabular-nums text-foreground shadow-sm ${dir === "rtl" ? "left-4" : "right-4"}`}>
+                      <Star aria-hidden="true" className="h-3.5 w-3.5 fill-brand-orange text-brand-orange" /> {tour.rating}
                     </div>
                   </div>
                 </Link>
                 <div className="p-6">
-                  <Link to="/tours/$tourId" params={{ tourId: tour.id }} className="block">
-                    <div className="flex items-center gap-1.5 text-xs text-foreground/70">
-                      <MapPin className="h-3.5 w-3.5" /> {loc.region}
+                  <Link to="/tours/$tourId" params={{ tourId: tour.id }} className="block rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+                    <div className="flex items-center gap-1.5 text-[13px] font-medium text-muted-foreground">
+                      <MapPin aria-hidden="true" className="h-3.5 w-3.5" /> {loc.region}
                     </div>
-                    <h3 className="mt-2 font-display text-2xl font-semibold leading-tight tracking-tight transition-colors duration-200 group-hover:text-accent">{loc.title}</h3>
+                    <h3 className="mt-2 font-display text-2xl font-bold leading-tight break-words transition-colors duration-200 group-hover:text-accent-ink">{loc.title}</h3>
                   </Link>
-                  <ul className="mt-4 space-y-2 text-sm text-foreground/70">
+                  <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
                     {loc.highlights.slice(0, 3).map((h) => (
                       <li key={h} className="flex items-start gap-2.5">
-                        <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-accent/70" /> {h}
+                        <span aria-hidden="true" className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-brand-orange" /> {h}
                       </li>
                     ))}
                   </ul>
-                  <div className="mt-5 flex items-center gap-4 text-xs font-medium text-foreground/60">
-                    <span className="flex items-center gap-1.5"><Clock className="h-3.5 w-3.5" /> {tour.duration} {t.tours.days}</span>
-                    <span className="flex items-center gap-1.5"><Users className="h-3.5 w-3.5" /> {tour.groupSize} {t.tours.people}</span>
+                  <div className="mt-5 flex items-center gap-4 text-xs font-medium text-muted-foreground">
+                    <span className="flex items-center gap-1.5"><Clock aria-hidden="true" className="h-3.5 w-3.5" /> {tour.duration} {t.tours.days}</span>
+                    <span className="flex items-center gap-1.5"><Users aria-hidden="true" className="h-3.5 w-3.5" /> {tour.groupSize} {t.tours.people}</span>
                   </div>
-                  <div className="mt-6 flex items-end justify-between border-t border-foreground/10 pt-5">
+                  <div className="mt-6 flex flex-wrap items-end justify-between gap-4 border-t border-border pt-5">
                     <div>
-                      <div className="text-xs font-medium uppercase tracking-wide text-foreground/50">{t.tours.perPerson}</div>
-                      <div className="mt-0.5 font-display text-3xl font-semibold tabular-nums text-accent">{tour.price} ₼</div>
+                      <div className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">{t.tours.perPerson}</div>
+                      <div className="mt-0.5 font-display text-3xl font-bold tabular-nums text-brand-orange">{tour.price} ₼</div>
                     </div>
                     <div className="flex gap-2">
-                      <Button asChild size="sm" variant="secondary" className="cursor-pointer rounded-full transition-transform duration-300 hover:scale-[1.03] active:scale-95">
+                      <Button asChild size="sm" variant="outline" className="transition-transform duration-300 hover:scale-[1.03] active:scale-95">
                         <Link to="/tours/$tourId" params={{ tourId: tour.id }}>{t.tours.details}</Link>
                       </Button>
-                      <Button size="sm" className="cursor-pointer rounded-full transition-transform duration-300 hover:scale-[1.03] active:scale-95" onClick={() => setBookingTour({ id: tour.id, title: loc.title, region: loc.region, duration: `${tour.duration} ${t.tours.days}`, price: tour.price, image: tour.image })}>
+                      <Button size="sm" className="transition-transform duration-300 hover:scale-[1.03] active:scale-95" onClick={() => setBookingTour({ id: tour.id, title: loc.title, region: loc.region, duration: `${tour.duration} ${t.tours.days}`, price: tour.price, image: tour.image })}>
                         {t.tours.book}
                       </Button>
                     </div>
@@ -275,7 +327,7 @@ function Index() {
             );
           })}
           {!isLoading && filtered.length === 0 && (
-            <div className="glass col-span-full rounded-3xl py-20 text-center text-foreground/70">{t.tours.empty}</div>
+            <div className="col-span-full rounded-3xl border border-dashed border-border bg-card py-20 text-center text-muted-foreground">{t.tours.empty}</div>
           )}
         </div>
       </section>
@@ -301,24 +353,30 @@ function Index() {
         })}
       />
 
-      {/* HOW IT WORKS */}
-
-      <section id="how">
-        <div className="mx-auto max-w-7xl px-6 py-24">
+      {/* HOW IT WORKS — the brand's dark Green band. */}
+      <section id="how" className="surface-green relative overflow-hidden">
+        <div aria-hidden="true" className="animate-float pointer-events-none absolute -left-24 top-0 h-80 w-80 rounded-full bg-brand-orange/20 blur-3xl" />
+        <div className="relative mx-auto max-w-7xl px-6 py-24">
           <Reveal>
-            <p className="mb-3 text-sm uppercase tracking-widest text-accent">{t.how.eyebrow}</p>
-            <h2 className="max-w-2xl font-display text-4xl font-medium md:text-5xl">{t.how.title}</h2>
+            <p className="eyebrow mb-3">{t.how.eyebrow}</p>
+            <h2 className="max-w-2xl font-display text-4xl font-bold text-on-green md:text-5xl">{t.how.title}</h2>
           </Reveal>
 
-          <Reveal stagger className="mt-14 grid gap-6 md:grid-cols-3">
+          <Reveal stagger className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {t.how.steps.map((s, i) => {
-              const Icon = [Compass, Users, Mountain][i];
+              // "Set off" reads as departure; Mountain rendered as a thin, low-mass
+              // triangle next to the circular Compass and Users glyphs.
+              const Icon = [Compass, Users, PlaneTakeoff][i];
               return (
-                <div key={s.t} style={{ "--i": i } as CSSProperties} className="glass glass-sheen group relative rounded-3xl p-8 ring-1 ring-transparent transition-[box-shadow,--tw-ring-color] duration-300 hover:shadow-[var(--shadow-soft)] hover:ring-accent/25">
-                  <div className={`absolute -top-2 font-display text-7xl text-accent/40 transition-colors duration-300 group-hover:text-accent/60 ${dir === "rtl" ? "left-6" : "right-6"}`}>0{i + 1}</div>
-                  <Icon className="h-8 w-8 text-accent transition-transform duration-300 group-hover:scale-110" strokeWidth={1.5} />
-                  <h3 className="mt-5 font-display text-2xl font-medium">{s.t}</h3>
-                  <p className="mt-3 text-foreground/75">{s.d}</p>
+                <div key={s.t} style={{ "--i": i } as CSSProperties} className="glass-on-green group relative overflow-hidden rounded-3xl p-6 transition-[background-color,border-color,transform] duration-300 last:sm:col-span-2 hover:-translate-y-1 hover:border-brand-orange/50 sm:p-8 lg:last:col-span-1">
+                  {/* One row: icon at the start, step number at the end —
+                      justify-between mirrors itself in RTL, no dir branch needed. */}
+                  <div className="flex items-center justify-between gap-4">
+                    <Icon aria-hidden="true" className="h-9 w-9 shrink-0 text-brand-orange transition-transform duration-300 group-hover:scale-110" strokeWidth={1.75} />
+                    <span aria-hidden="true" className="font-display text-6xl font-bold leading-none tabular-nums text-brand-orange/35 transition-colors duration-300 group-hover:text-brand-orange/60">0{i + 1}</span>
+                  </div>
+                  <h3 className="mt-6 font-display text-2xl font-bold text-on-green">{s.t}</h3>
+                  <p className="mt-3 leading-relaxed text-on-green-muted">{s.d}</p>
                 </div>
               );
             })}
@@ -326,14 +384,13 @@ function Index() {
         </div>
       </section>
 
-      {/* CTA */}
-      <section id="contact" className="mx-auto max-w-7xl px-6 py-24">
-        <Reveal className="glass-strong glass-sheen relative overflow-hidden rounded-3xl p-12 md:p-16">
-          <div className="pointer-events-none absolute inset-0" style={{ background: "var(--gradient-warm)", opacity: 0.5 }} />
-          <div className="animate-float pointer-events-none absolute -right-20 -top-20 h-80 w-80 rounded-full bg-accent/40 blur-3xl" />
-          <div className="relative z-10 max-w-2xl">
-            <h2 className="font-display text-4xl font-semibold tracking-tight text-foreground md:text-5xl">{t.cta.title}</h2>
-            <p className="mt-4 max-w-xl text-lg leading-relaxed text-foreground/80">{t.cta.subtitle}</p>
+      {/* CTA — Electric Orange band, Green ink (brand guide's signature pairing). */}
+      <section id="contact" className="relative overflow-hidden bg-brand-orange">
+        <Mountain aria-hidden="true" className="absolute -bottom-16 -right-16 h-96 w-96 text-brand-green/15" strokeWidth={1} />
+        <Reveal className="relative mx-auto max-w-7xl px-6 py-24 md:py-28">
+          <div className="max-w-2xl">
+            <h2 className="font-display text-4xl font-bold text-brand-green md:text-5xl">{t.cta.title}</h2>
+            <p className="mt-4 max-w-xl text-lg font-medium leading-relaxed text-brand-green/85">{t.cta.subtitle}</p>
             <form
               className="mt-8 flex flex-col gap-3 sm:flex-row"
               onSubmit={(e) => {
@@ -343,42 +400,41 @@ function Index() {
                 e.currentTarget.reset();
               }}
             >
+              <label htmlFor="cta-contact" className="sr-only">{t.cta.ph}</label>
               <Input
+                id="cta-contact"
                 name="contact"
-                type="text"
+                type="email"
                 inputMode="email"
                 autoComplete="email"
                 required
                 placeholder={t.cta.ph}
-                aria-label={t.cta.ph}
-                className="h-12 flex-1 rounded-xl border border-foreground/15 bg-background/70 text-foreground shadow-sm backdrop-blur placeholder:text-foreground/50 focus-visible:border-accent focus-visible:ring-2 focus-visible:ring-accent/40"
+                className="h-12 min-h-12 w-full rounded-xl border-transparent bg-white text-base text-foreground shadow-sm placeholder:text-muted-foreground focus-visible:border-brand-green focus-visible:ring-2 focus-visible:ring-brand-green/50 sm:flex-1"
               />
               <Button
                 type="submit"
+                variant="green"
                 size="lg"
-                className="group h-12 shrink-0 cursor-pointer rounded-xl px-7 font-semibold shadow-md transition-[transform,box-shadow] duration-200 hover:shadow-lg active:scale-[0.98]"
+                className="group h-12 shrink-0 rounded-xl px-7 shadow-md transition-[transform,box-shadow] duration-200 hover:shadow-lg active:scale-[0.98]"
               >
                 {t.cta.btn}
-                <ArrowRight className={`h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5 ${dir === "rtl" ? "mr-1.5 rotate-180" : "ml-1.5"}`} />
+                <ArrowRight aria-hidden="true" className={`h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5 ${dir === "rtl" ? "rotate-180" : ""}`} />
               </Button>
             </form>
-            <div className="mt-8 flex flex-wrap gap-6 text-sm text-foreground/85">
-              <a href="tel:+994519600212" className="flex items-center gap-2 transition-colors hover:text-foreground"><Phone className="h-4 w-4" /><span dir="ltr">051 960 02 12</span></a>
-              <a href="https://www.instagram.com/m4strip/" target="_blank" rel="noreferrer" aria-label="M4STrip Instagram" className="flex items-center gap-2 transition-colors hover:text-foreground"><Instagram className="h-4 w-4" /><span dir="ltr">@m4strip</span></a>
+            <div className="mt-8 flex flex-wrap gap-2 font-display text-sm font-semibold text-brand-green">
+              <a href="tel:+994519600212" className="inline-flex min-h-11 items-center gap-2 rounded-full bg-brand-green/10 px-4 transition-colors hover:bg-brand-green/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-green"><Phone aria-hidden="true" className="h-4 w-4 shrink-0" /><span dir="ltr">+994 51 960 02 12</span></a>
+              <a href="mailto:info@m4strip.com" className="inline-flex min-h-11 items-center gap-2 rounded-full bg-brand-green/10 px-4 transition-colors hover:bg-brand-green/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-green"><span dir="ltr">info@m4strip.com</span></a>
+              <a href="https://www.instagram.com/m4strip/" target="_blank" rel="noreferrer" aria-label="M4st Trip Instagram" className="inline-flex min-h-11 items-center gap-2 rounded-full bg-brand-green/10 px-4 transition-colors hover:bg-brand-green/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-green"><Instagram aria-hidden="true" className="h-4 w-4 shrink-0" /><span dir="ltr">@m4strip</span></a>
             </div>
           </div>
-          <Mountain className="absolute -right-10 -bottom-10 h-72 w-72 text-foreground/10" strokeWidth={1} />
         </Reveal>
       </section>
 
       {/* FOOTER */}
-      <footer className="border-t border-foreground/10">
-        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-3 px-6 py-10 text-sm text-foreground/70 md:flex-row">
-          <div className="flex items-center gap-2">
-            <img src={logoImg} alt={t.brand} width={24} height={24} className="h-6 w-6 object-contain" />
-            <span className="font-display text-base text-foreground">{t.brand}</span>
-          </div>
-          <div className="flex flex-col items-center gap-1 text-center md:flex-row md:gap-4">
+      <footer className="surface-green">
+        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-6 px-6 py-12 text-sm text-on-green-muted md:flex-row">
+          <Logo variant="light" height={44} alt={t.brand} />
+          <div className="flex flex-col items-center gap-1 text-center md:flex-row md:gap-5">
             <p>© {CURRENT_YEAR} {t.brand}. {t.footer}</p>
             <p>
               {(() => {
@@ -390,7 +446,7 @@ function Index() {
                       href="https://codalov.co"
                       target="_blank"
                       rel="noreferrer"
-                      className="font-medium text-accent underline-offset-4 transition-colors hover:text-foreground hover:underline"
+                      className="font-semibold text-brand-orange underline-offset-4 transition-colors hover:text-on-green hover:underline"
                     >
                       Codalov
                     </a>

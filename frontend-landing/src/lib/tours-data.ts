@@ -59,7 +59,7 @@ export type Tour = {
 export const T = {
   az: {
     locale: "az-AZ", dir: "ltr" as const,
-    brand: "M4STrip",
+    brand: "m4st trip",
     nav: { tours: "Turlar", how: "Necə işləyir", contact: "Əlaqə", book: "Rezervasiya" },
     hero: { badge: "Azərbaycanı kəşf et", title1: "Doğma torpağın", title2: "möcüzələri", subtitle: "Xınalığın dağlarından Lənkəranın çay bağlarınadək — sənin marşrutun, sənin tempinlə.", searchPh: "Bölgə və ya tur axtar...", cta: "Turları gör" },
     stats: [{ k: "40+", v: "Daxili marşrut" }, { k: "12", v: "Bölgə" }, { k: "8K+", v: "Məmnun turist" }, { k: "4.9", v: "Orta reytinq" }],
@@ -74,7 +74,7 @@ export const T = {
   },
   en: {
     locale: "en-US", dir: "ltr" as const,
-    brand: "M4STrip",
+    brand: "m4st trip",
     nav: { tours: "Tours", how: "How it works", contact: "Contact", book: "Book now" },
     hero: { badge: "Guided tours to Azerbaijan", title1: "Azerbaijan", title2: "awaits you", subtitle: "Organized tours to Azerbaijan — from the peaks of Khinalug to vibrant Baku. Expert local guides, small groups, tailor-made itineraries.", searchPh: "Search a region or tour...", cta: "Browse tours" },
     stats: [{ k: "40+", v: "Organized routes" }, { k: "12", v: "Regions" }, { k: "8K+", v: "Happy travelers" }, { k: "4.9", v: "Average rating" }],
@@ -89,7 +89,7 @@ export const T = {
   },
   he: {
     locale: "he-IL", dir: "rtl" as const,
-    brand: "M4STrip",
+    brand: "m4st trip",
     nav: { tours: "טיולים", how: "איך זה עובד", contact: "צור קשר", book: "להזמין" },
     hero: { badge: "מדריכים דוברי עברית", title1: "אזרבייג'ן", title2: "מחכה לכם", subtitle: "טיולים מאורגנים לאזרבייג'ן — מפסגות חינלוק ועד באקו התוססת. מדריכים דוברי עברית, קבוצות קטנות ומסלול בהתאמה אישית.", searchPh: "חיפוש אזור או טיול...", cta: "לכל הטיולים" },
     stats: [{ k: "40+", v: "מסלולים מאורגנים" }, { k: "12", v: "אזורים" }, { k: "8K+", v: "מטיילים ישראלים" }, { k: "4.9", v: "דירוג ממוצע" }],
@@ -104,7 +104,7 @@ export const T = {
   },
   ar: {
     locale: "ar", dir: "rtl" as const,
-    brand: "M4STrip",
+    brand: "m4st trip",
     nav: { tours: "الجولات", how: "كيف نعمل", contact: "تواصل معنا", book: "احجز الآن" },
     hero: { badge: "اكتشف أذربيجان", title1: "عجائب", title2: "الوطن", subtitle: "من قمم خيناليق إلى بساتين الشاي في لنكران — مسارك، على إيقاعك.", searchPh: "ابحث عن منطقة أو جولة...", cta: "تصفّح الجولات" },
     stats: [{ k: "40+", v: "مسارات محلية" }, { k: "12", v: "منطقة" }, { k: "8K+", v: "مسافر سعيد" }, { k: "4.9", v: "متوسط التقييم" }],
@@ -119,7 +119,7 @@ export const T = {
   },
   ru: {
     locale: "ru-RU", dir: "ltr" as const,
-    brand: "M4STrip",
+    brand: "m4st trip",
     nav: { tours: "Туры", how: "Как это работает", contact: "Контакты", book: "Забронировать" },
     hero: { badge: "Организованные туры в Азербайджан", title1: "Азербайджан", title2: "ждёт вас", subtitle: "Организованные туры в Азербайджан — от вершин Хыналыга до яркого Баку. Опытные гиды, малые группы, индивидуальные маршруты.", searchPh: "Поиск региона или тура...", cta: "Смотреть туры" },
     stats: [{ k: "40+", v: "Маршрутов по стране" }, { k: "12", v: "Регионов" }, { k: "8K+", v: "Довольных туристов" }, { k: "4.9", v: "Средний рейтинг" }],
