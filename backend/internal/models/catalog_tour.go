@@ -28,7 +28,10 @@ type CatalogTour struct {
 	Duration  int     `json:"duration"    gorm:"type:int;not null;default:1"` // days
 	GroupSize string  `json:"group_size"  gorm:"type:text;not null;default:''"`
 	ImageURL  string  `json:"image_url"   gorm:"type:text;not null;default:''"`
-	Published bool    `json:"published"   gorm:"type:boolean;not null;default:true"`
+	// No `default:true` here on purpose: GORM treats a tag default as "omit the
+	// Go zero value from the INSERT", which silently published every tour
+	// created as a draft. The service supplies the default instead.
+	Published bool `json:"published"   gorm:"type:boolean;not null"`
 
 	// Pricing drives every quote. Price above stays as the derived "starting
 	// from" figure so older clients keep working.
