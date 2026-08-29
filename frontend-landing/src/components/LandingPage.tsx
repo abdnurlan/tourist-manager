@@ -374,7 +374,10 @@ export function LandingPage({ section }: { section?: SectionId }) {
           )}
         </div>
 
-        {!isLoading && filtered.length > HOME_TOUR_COUNT && (
+        {/* Always offered, even when the preview already shows everything: the
+            catalogue page is where party size, guide language and price filters
+            live, so it is worth reaching regardless of how many tours exist. */}
+        {!isLoading && filtered.length > 0 && (
           <div className="mt-12 flex justify-center">
             <Button asChild size="lg" variant="outline" className="group transition-transform duration-300 hover:scale-[1.02] active:scale-95">
               <Link to="/tours">
