@@ -1,6 +1,10 @@
 package models
 
-import "time"
+import (
+	"time"
+
+	"tourist-manager/backend/internal/pricing"
+)
 
 // LangMap holds a translatable string keyed by language code (az, en, ru, ar, he).
 type LangMap map[string]string
@@ -25,7 +29,11 @@ type CatalogTour struct {
 	GroupSize string  `json:"group_size"  gorm:"type:text;not null;default:''"`
 	ImageURL  string  `json:"image_url"   gorm:"type:text;not null;default:''"`
 	Published bool    `json:"published"   gorm:"type:boolean;not null;default:true"`
-	SortOrder int     `json:"sort_order"  gorm:"type:int;not null;default:0"`
+
+	// Pricing drives every quote. Price above stays as the derived "starting
+	// from" figure so older clients keep working.
+	Pricing   *pricing.Pricing `json:"pricing" gorm:"serializer:json;type:jsonb"`
+	SortOrder int              `json:"sort_order"  gorm:"type:int;not null;default:0"`
 
 	// Multilingual content — persisted as jsonb via GORM's json serializer.
 	Title      LangMap              `json:"title"      gorm:"serializer:json;type:jsonb;not null;default:'{}'"`

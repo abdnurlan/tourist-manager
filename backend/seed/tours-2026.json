@@ -1,0 +1,1237 @@
+[
+  {
+    "slug": "quba-qusar",
+    "category": "mountain",
+    "duration": 1,
+    "rating": 4.9,
+    "group_size": "1-15",
+    "sort_order": 1,
+    "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1600",
+    "pricing": {
+      "model": "group_tiers",
+      "currency": "USD",
+      "tiers": [
+        {
+          "min": 1,
+          "max": 3,
+          "basis": "group",
+          "rates": {
+            "he": 200,
+            "std": 150
+          }
+        },
+        {
+          "min": 4,
+          "max": 4,
+          "basis": "group",
+          "rates": {
+            "he": 240,
+            "std": 190
+          }
+        },
+        {
+          "min": 5,
+          "max": 7,
+          "basis": "group",
+          "rates": {
+            "he": 300,
+            "std": 230
+          }
+        },
+        {
+          "min": 8,
+          "max": 10,
+          "basis": "per_person",
+          "rates": {
+            "he": 55,
+            "std": 40
+          }
+        },
+        {
+          "min": 11,
+          "max": null,
+          "basis": "per_person",
+          "rates": {
+            "he": 50,
+            "std": 35
+          }
+        }
+      ]
+    },
+    "title": {
+      "az": "Quba – Qusar turu",
+      "he": "טיול לקובה וקוסאר",
+      "en": "Guba & Gusar Day Tour",
+      "ru": "Тур в Губу и Гусар",
+      "ar": "جولة قوبا وقوصار"
+    },
+    "region": {
+      "az": "Quba",
+      "he": "קובה",
+      "en": "Guba",
+      "ru": "Губа",
+      "ar": "قوبا"
+    },
+    "overview": {
+      "az": "Şimalın dağ ətəkləri: Qırmızı Qəsəbə, Afurca şəlaləsi və Şahdağ ətrafındakı meşə yolları. Alma bağları arasından keçən bir günlük marşrut.",
+      "he": "מרגלות ההרים בצפון: קרסנאיה סלובודה, מפל אפורג'ה ודרכי היער סביב שאהדאג. מסלול של יום שלם בין מטעי התפוחים.",
+      "en": "The northern foothills: Krasnaya Sloboda, the Afurja waterfall and the forest roads around Shahdag — a full day through apple country.",
+      "ru": "Северные предгорья: Красная Слобода, водопад Афурджа и лесные дороги вокруг Шахдага. Целый день среди яблоневых садов.",
+      "ar": "سفوح الشمال: كراسنايا سلوبودا وشلال أفورجا وطرق الغابات حول شاهداغ — يوم كامل بين بساتين التفاح."
+    },
+    "highlights": {
+      "az": [
+        "Qırmızı Qəsəbə",
+        "Afurca şəlaləsi",
+        "Şahdağ panoramı",
+        "Alma bağları"
+      ],
+      "he": [
+        "קרסנאיה סלובודה",
+        "מפל אפורג'ה",
+        "תצפית שאהדאג",
+        "מטעי תפוחים"
+      ],
+      "en": [
+        "Krasnaya Sloboda",
+        "Afurja waterfall",
+        "Shahdag panorama",
+        "Apple orchards"
+      ],
+      "ru": [
+        "Красная Слобода",
+        "Водопад Афурджа",
+        "Панорама Шахдага",
+        "Яблоневые сады"
+      ],
+      "ar": [
+        "كراسنايا سلوبودا",
+        "شلال أفورجا",
+        "بانوراما شاهداغ",
+        "بساتين التفاح"
+      ]
+    },
+    "included": {
+      "az": [
+        "Nəqliyyat və yanacaq",
+        "Peşəkar bələdçi",
+        "Su"
+      ],
+      "he": [
+        "הסעות ודלק",
+        "מדריך מקצועי",
+        "מים"
+      ],
+      "en": [
+        "Transport and fuel",
+        "Professional guide",
+        "Water"
+      ],
+      "ru": [
+        "Транспорт и топливо",
+        "Профессиональный гид",
+        "Вода"
+      ],
+      "ar": [
+        "النقل والوقود",
+        "مرشد محترف",
+        "مياه"
+      ]
+    },
+    "excluded": {
+      "az": [
+        "Nahar",
+        "Şəxsi xərclər",
+        "Giriş biletləri"
+      ],
+      "he": [
+        "ארוחת צהריים",
+        "הוצאות אישיות",
+        "כרטיסי כניסה"
+      ],
+      "en": [
+        "Lunch",
+        "Personal expenses",
+        "Entrance tickets"
+      ],
+      "ru": [
+        "Обед",
+        "Личные расходы",
+        "Входные билеты"
+      ],
+      "ar": [
+        "الغداء",
+        "المصاريف الشخصية",
+        "تذاكر الدخول"
+      ]
+    }
+  },
+  {
+    "slug": "qebele",
+    "category": "nature",
+    "duration": 1,
+    "rating": 4.8,
+    "group_size": "1-15",
+    "sort_order": 2,
+    "image_url": "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=1600",
+    "pricing": {
+      "model": "group_tiers",
+      "currency": "USD",
+      "tiers": [
+        {
+          "min": 1,
+          "max": 3,
+          "basis": "group",
+          "rates": {
+            "he": 220,
+            "std": 170
+          }
+        },
+        {
+          "min": 4,
+          "max": 4,
+          "basis": "group",
+          "rates": {
+            "he": 260,
+            "std": 210
+          }
+        },
+        {
+          "min": 5,
+          "max": 7,
+          "basis": "group",
+          "rates": {
+            "he": 320,
+            "std": 250
+          }
+        },
+        {
+          "min": 8,
+          "max": 10,
+          "basis": "per_person",
+          "rates": {
+            "he": 60,
+            "std": 45
+          }
+        },
+        {
+          "min": 11,
+          "max": null,
+          "basis": "per_person",
+          "rates": {
+            "he": 55,
+            "std": 40
+          }
+        }
+      ]
+    },
+    "title": {
+      "az": "Qəbələ turu",
+      "he": "טיול לגבאלה",
+      "en": "Gabala Day Tour",
+      "ru": "Тур в Габалу",
+      "ar": "جولة قبالة"
+    },
+    "region": {
+      "az": "Qəbələ",
+      "he": "גבאלה",
+      "en": "Gabala",
+      "ru": "Габала",
+      "ar": "قبالة"
+    },
+    "overview": {
+      "az": "Yeddi Gözəl şəlaləsi, Nohur gölü və Tufandağ kanat yolu. Qafqaz meşələrinin içindən keçən sərin bir gün.",
+      "he": "מפל שבע היפהפיות, אגם נוהור ורכבל טופנדאג. יום מרענן בלב יערות הקווקז.",
+      "en": "The Seven Beauties waterfall, Lake Nohur and the Tufandag cable car — a cool day inside the Caucasus forest.",
+      "ru": "Водопад Семь красавиц, озеро Нохур и канатная дорога Туфандаг. Прохладный день в кавказском лесу.",
+      "ar": "شلال الجميلات السبع وبحيرة نوهور وتلفريك توفانداغ — يوم منعش في قلب غابات القوقاز."
+    },
+    "highlights": {
+      "az": [
+        "Yeddi Gözəl şəlaləsi",
+        "Nohur gölü",
+        "Tufandağ kanat yolu",
+        "Nohurqışlaq kəndi"
+      ],
+      "he": [
+        "מפל שבע היפהפיות",
+        "אגם נוהור",
+        "רכבל טופנדאג",
+        "הכפר נוהורקישלאק"
+      ],
+      "en": [
+        "Seven Beauties waterfall",
+        "Lake Nohur",
+        "Tufandag cable car",
+        "Nohurgishlag village"
+      ],
+      "ru": [
+        "Водопад Семь красавиц",
+        "Озеро Нохур",
+        "Канатная дорога Туфандаг",
+        "Село Нохургышлаг"
+      ],
+      "ar": [
+        "شلال الجميلات السبع",
+        "بحيرة نوهور",
+        "تلفريك توفانداغ",
+        "قرية نوهورقشلاق"
+      ]
+    },
+    "included": {
+      "az": [
+        "Nəqliyyat və yanacaq",
+        "Peşəkar bələdçi",
+        "Su"
+      ],
+      "he": [
+        "הסעות ודלק",
+        "מדריך מקצועי",
+        "מים"
+      ],
+      "en": [
+        "Transport and fuel",
+        "Professional guide",
+        "Water"
+      ],
+      "ru": [
+        "Транспорт и топливо",
+        "Профессиональный гид",
+        "Вода"
+      ],
+      "ar": [
+        "النقل والوقود",
+        "مرشد محترف",
+        "مياه"
+      ]
+    },
+    "excluded": {
+      "az": [
+        "Nahar",
+        "Kanat yolu bileti",
+        "Şəxsi xərclər"
+      ],
+      "he": [
+        "ארוחת צהריים",
+        "כרטיס לרכבל",
+        "הוצאות אישיות"
+      ],
+      "en": [
+        "Lunch",
+        "Cable car ticket",
+        "Personal expenses"
+      ],
+      "ru": [
+        "Обед",
+        "Билет на канатную дорогу",
+        "Личные расходы"
+      ],
+      "ar": [
+        "الغداء",
+        "تذكرة التلفريك",
+        "المصاريف الشخصية"
+      ]
+    }
+  },
+  {
+    "slug": "city-center-baku",
+    "category": "city",
+    "duration": 1,
+    "rating": 4.8,
+    "group_size": "1-15",
+    "sort_order": 3,
+    "image_url": "https://images.unsplash.com/photo-1596386461350-326ccb383e9f?w=1600",
+    "pricing": {
+      "model": "group_tiers",
+      "currency": "USD",
+      "tiers": [
+        {
+          "min": 1,
+          "max": 3,
+          "basis": "group",
+          "rates": {
+            "he": 160,
+            "std": 110
+          }
+        },
+        {
+          "min": 4,
+          "max": 4,
+          "basis": "group",
+          "rates": {
+            "he": 180,
+            "std": 130
+          }
+        },
+        {
+          "min": 5,
+          "max": 7,
+          "basis": "group",
+          "rates": {
+            "he": 220,
+            "std": 170
+          }
+        },
+        {
+          "min": 8,
+          "max": 10,
+          "basis": "per_person",
+          "rates": {
+            "he": 35,
+            "std": 25
+          }
+        },
+        {
+          "min": 11,
+          "max": null,
+          "basis": "per_person",
+          "rates": {
+            "he": 35,
+            "std": 25
+          }
+        }
+      ]
+    },
+    "title": {
+      "az": "Bakı şəhər mərkəzi turu",
+      "he": "סיור במרכז באקו",
+      "en": "Baku City Centre Tour",
+      "ru": "Тур по центру Баку",
+      "ar": "جولة وسط مدينة باكو"
+    },
+    "region": {
+      "az": "Bakı",
+      "he": "באקו",
+      "en": "Baku",
+      "ru": "Баку",
+      "ar": "باكو"
+    },
+    "overview": {
+      "az": "İçərişəhər, Qız Qalası, Şirvanşahlar sarayı, Alov Qülləri və Dəniz Bulvarı. Şəhərin bütün əsas nöqtələri bir gündə.",
+      "he": "העיר העתיקה, מגדל הבתולה, ארמון השירוואנשאהים, מגדלי הלהבה וטיילת הים. כל נקודות המפתח של העיר ביום אחד.",
+      "en": "The Old City, Maiden Tower, Palace of the Shirvanshahs, the Flame Towers and the seaside boulevard — every landmark in one day.",
+      "ru": "Ичеришехер, Девичья башня, дворец Ширваншахов, Пламенные башни и Приморский бульвар. Все главные точки города за один день.",
+      "ar": "المدينة القديمة وبرج العذراء وقصر الشيروانشاهيين وأبراج اللهب والكورنيش — كل المعالم في يوم واحد."
+    },
+    "highlights": {
+      "az": [
+        "İçərişəhər (UNESCO)",
+        "Qız Qalası",
+        "Şirvanşahlar sarayı",
+        "Alov Qülləri",
+        "Dəniz Bulvarı"
+      ],
+      "he": [
+        "העיר העתיקה (אונסק\"ו)",
+        "מגדל הבתולה",
+        "ארמון השירוואנשאהים",
+        "מגדלי הלהבה",
+        "טיילת הים"
+      ],
+      "en": [
+        "Old City (UNESCO)",
+        "Maiden Tower",
+        "Palace of the Shirvanshahs",
+        "Flame Towers",
+        "Seaside boulevard"
+      ],
+      "ru": [
+        "Ичеришехер (ЮНЕСКО)",
+        "Девичья башня",
+        "Дворец Ширваншахов",
+        "Пламенные башни",
+        "Приморский бульвар"
+      ],
+      "ar": [
+        "المدينة القديمة (اليونسكو)",
+        "برج العذراء",
+        "قصر الشيروانشاهيين",
+        "أبراج اللهب",
+        "الكورنيش"
+      ]
+    },
+    "included": {
+      "az": [
+        "Nəqliyyat",
+        "Peşəkar bələdçi",
+        "Su"
+      ],
+      "he": [
+        "הסעות",
+        "מדריך מקצועי",
+        "מים"
+      ],
+      "en": [
+        "Transport",
+        "Professional guide",
+        "Water"
+      ],
+      "ru": [
+        "Транспорт",
+        "Профессиональный гид",
+        "Вода"
+      ],
+      "ar": [
+        "النقل",
+        "مرشد محترف",
+        "مياه"
+      ]
+    },
+    "excluded": {
+      "az": [
+        "Nahar",
+        "Muzey biletləri",
+        "Şəxsi xərclər"
+      ],
+      "he": [
+        "ארוחת צהריים",
+        "כרטיסי מוזיאון",
+        "הוצאות אישיות"
+      ],
+      "en": [
+        "Lunch",
+        "Museum tickets",
+        "Personal expenses"
+      ],
+      "ru": [
+        "Обед",
+        "Билеты в музеи",
+        "Личные расходы"
+      ],
+      "ar": [
+        "الغداء",
+        "تذاكر المتاحف",
+        "المصاريف الشخصية"
+      ]
+    }
+  },
+  {
+    "slug": "qobustan-absheron",
+    "category": "history",
+    "duration": 1,
+    "rating": 4.8,
+    "group_size": "1-15",
+    "sort_order": 4,
+    "image_url": "https://images.unsplash.com/photo-1523906834658-6e24ef2386f9?w=1600",
+    "pricing": {
+      "model": "group_tiers",
+      "currency": "USD",
+      "tiers": [
+        {
+          "min": 1,
+          "max": 3,
+          "basis": "group",
+          "rates": {
+            "he": 180,
+            "std": 130
+          }
+        },
+        {
+          "min": 4,
+          "max": 4,
+          "basis": "group",
+          "rates": {
+            "he": 220,
+            "std": 170
+          }
+        },
+        {
+          "min": 5,
+          "max": 7,
+          "basis": "group",
+          "rates": {
+            "he": 280,
+            "std": 230
+          }
+        },
+        {
+          "min": 8,
+          "max": 10,
+          "basis": "per_person",
+          "rates": {
+            "he": 45,
+            "std": 35
+          }
+        },
+        {
+          "min": 11,
+          "max": null,
+          "basis": "per_person",
+          "rates": {
+            "he": 40,
+            "std": 30
+          }
+        }
+      ]
+    },
+    "title": {
+      "az": "Qobustan – Abşeron turu",
+      "he": "טיול לגובוסטן ואבשרון",
+      "en": "Gobustan & Absheron Tour",
+      "ru": "Тур в Гобустан и на Абшерон",
+      "ar": "جولة قوبوستان وأبشرون"
+    },
+    "region": {
+      "az": "Qobustan",
+      "he": "גובוסטן",
+      "en": "Gobustan",
+      "ru": "Гобустан",
+      "ar": "قوبوستان"
+    },
+    "overview": {
+      "az": "UNESCO qaya rəsmləri, palçıq vulkanları, Atəşgah məbədi və Yanardağ. Azərbaycanın ən qədim və ən qeyri-adi mənzərələri.",
+      "he": "ציורי הסלע של אונסק\"ו, הרי הגעש הבוציים, מקדש אתשגאה והר האש יאנארדאג. הנופים העתיקים והמוזרים ביותר של אזרבייג'ן.",
+      "en": "UNESCO rock carvings, mud volcanoes, the Ateshgah fire temple and burning Yanardag — Azerbaijan at its oldest and strangest.",
+      "ru": "Наскальные рисунки ЮНЕСКО, грязевые вулканы, храм огня Атешгях и горящая Янардаг. Самое древнее и необычное в Азербайджане.",
+      "ar": "نقوش صخرية مدرجة في اليونسكو وبراكين طينية ومعبد النار أتشغاه وجبل يانارداغ المشتعل — أقدم وأغرب ما في أذربيجان."
+    },
+    "highlights": {
+      "az": [
+        "Qobustan qaya rəsmləri",
+        "Palçıq vulkanları",
+        "Atəşgah məbədi",
+        "Yanardağ"
+      ],
+      "he": [
+        "ציורי הסלע בגובוסטן",
+        "הרי געש בוציים",
+        "מקדש אתשגאה",
+        "יאנארדאג"
+      ],
+      "en": [
+        "Gobustan petroglyphs",
+        "Mud volcanoes",
+        "Ateshgah fire temple",
+        "Yanardag"
+      ],
+      "ru": [
+        "Петроглифы Гобустана",
+        "Грязевые вулканы",
+        "Храм огня Атешгях",
+        "Янардаг"
+      ],
+      "ar": [
+        "نقوش قوبوستان",
+        "البراكين الطينية",
+        "معبد أتشغاه",
+        "يانارداغ"
+      ]
+    },
+    "included": {
+      "az": [
+        "Nəqliyyat və yanacaq",
+        "Peşəkar bələdçi",
+        "Su"
+      ],
+      "he": [
+        "הסעות ודלק",
+        "מדריך מקצועי",
+        "מים"
+      ],
+      "en": [
+        "Transport and fuel",
+        "Professional guide",
+        "Water"
+      ],
+      "ru": [
+        "Транспорт и топливо",
+        "Профессиональный гид",
+        "Вода"
+      ],
+      "ar": [
+        "النقل والوقود",
+        "مرشد محترف",
+        "مياه"
+      ]
+    },
+    "excluded": {
+      "az": [
+        "Nahar",
+        "Muzey biletləri",
+        "Palçıq vulkanlarına off-road transfer"
+      ],
+      "he": [
+        "ארוחת צהריים",
+        "כרטיסי מוזיאון",
+        "הסעת שטח להרי הגעש הבוציים"
+      ],
+      "en": [
+        "Lunch",
+        "Museum tickets",
+        "Off-road transfer to the mud volcanoes"
+      ],
+      "ru": [
+        "Обед",
+        "Билеты в музеи",
+        "Внедорожный трансфер к грязевым вулканам"
+      ],
+      "ar": [
+        "الغداء",
+        "تذاكر المتاحف",
+        "نقل الطرق الوعرة إلى البراكين الطينية"
+      ]
+    }
+  },
+  {
+    "slug": "geceki-baki",
+    "category": "city",
+    "duration": 1,
+    "rating": 4.7,
+    "group_size": "1-15",
+    "sort_order": 5,
+    "image_url": "https://images.unsplash.com/photo-1533105079780-92b9be482077?w=1600",
+    "pricing": {
+      "model": "group_tiers",
+      "currency": "USD",
+      "tiers": [
+        {
+          "min": 1,
+          "max": 3,
+          "basis": "group",
+          "rates": {
+            "he": 120,
+            "std": 90
+          }
+        },
+        {
+          "min": 4,
+          "max": 4,
+          "basis": "group",
+          "rates": {
+            "he": 140,
+            "std": 90
+          }
+        },
+        {
+          "min": 5,
+          "max": 7,
+          "basis": "group",
+          "rates": {
+            "he": 180,
+            "std": 130
+          }
+        },
+        {
+          "min": 8,
+          "max": 10,
+          "basis": "per_person",
+          "rates": {
+            "he": 25,
+            "std": 20
+          }
+        },
+        {
+          "min": 11,
+          "max": null,
+          "basis": "per_person",
+          "rates": {
+            "he": 25,
+            "std": 20
+          }
+        }
+      ]
+    },
+    "title": {
+      "az": "Gecə Bakı turu",
+      "he": "סיור לילה בבאקו",
+      "en": "Baku by Night",
+      "ru": "Ночной Баку",
+      "ar": "باكو ليلاً"
+    },
+    "region": {
+      "az": "Bakı",
+      "he": "באקו",
+      "en": "Baku",
+      "ru": "Баку",
+      "ar": "باكو"
+    },
+    "overview": {
+      "az": "Alov Qüllələrinin işıq şousu, Şəhidlər Xiyabanından şəhər panoramı və işıqlandırılmış Dəniz Bulvarı. Axşam saatlarında qısa, rahat marşrut.",
+      "he": "מופע האורות של מגדלי הלהבה, תצפית הפנורמה משדרות השהידים והטיילת המוארת. מסלול ערב קצר ונינוח.",
+      "en": "The Flame Towers light show, the city panorama from Martyrs' Lane and the illuminated boulevard — a short, easy evening route.",
+      "ru": "Световое шоу Пламенных башен, панорама города с Аллеи шехидов и подсвеченный бульвар. Короткий вечерний маршрут.",
+      "ar": "عرض أضواء أبراج اللهب وبانوراما المدينة من جادة الشهداء والكورنيش المضاء — مسار مسائي قصير ومريح."
+    },
+    "highlights": {
+      "az": [
+        "Alov Qüllələrinin işıq şousu",
+        "Şəhidlər Xiyabanı panoramı",
+        "İşıqlandırılmış Dəniz Bulvarı",
+        "Fəvvarələr meydanı"
+      ],
+      "he": [
+        "מופע האורות של מגדלי הלהבה",
+        "תצפית שדרות השהידים",
+        "הטיילת המוארת",
+        "כיכר המזרקות"
+      ],
+      "en": [
+        "Flame Towers light show",
+        "Martyrs' Lane panorama",
+        "Illuminated boulevard",
+        "Fountains Square"
+      ],
+      "ru": [
+        "Световое шоу Пламенных башен",
+        "Панорама с Аллеи шехидов",
+        "Подсвеченный бульвар",
+        "Площадь фонтанов"
+      ],
+      "ar": [
+        "عرض أضواء أبراج اللهب",
+        "بانوراما جادة الشهداء",
+        "الكورنيش المضاء",
+        "ساحة النوافير"
+      ]
+    },
+    "included": {
+      "az": [
+        "Nəqliyyat",
+        "Peşəkar bələdçi",
+        "Su"
+      ],
+      "he": [
+        "הסעות",
+        "מדריך מקצועי",
+        "מים"
+      ],
+      "en": [
+        "Transport",
+        "Professional guide",
+        "Water"
+      ],
+      "ru": [
+        "Транспорт",
+        "Профессиональный гид",
+        "Вода"
+      ],
+      "ar": [
+        "النقل",
+        "مرشد محترف",
+        "مياه"
+      ]
+    },
+    "excluded": {
+      "az": [
+        "Şam yeməyi",
+        "Şəxsi xərclər"
+      ],
+      "he": [
+        "ארוחת ערב",
+        "הוצאות אישיות"
+      ],
+      "en": [
+        "Dinner",
+        "Personal expenses"
+      ],
+      "ru": [
+        "Ужин",
+        "Личные расходы"
+      ],
+      "ar": [
+        "العشاء",
+        "المصاريف الشخصية"
+      ]
+    }
+  },
+  {
+    "slug": "food-masterclass",
+    "category": "food",
+    "duration": 1,
+    "rating": 4.9,
+    "group_size": "1-20",
+    "sort_order": 6,
+    "image_url": "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=1600",
+    "pricing": {
+      "model": "flat_per_person",
+      "currency": "USD",
+      "tiers": [
+        {
+          "min": 1,
+          "max": null,
+          "basis": "per_person",
+          "rates": {
+            "he": 60,
+            "std": 50
+          }
+        }
+      ]
+    },
+    "title": {
+      "az": "Milli mətbəx ustad dərsi",
+      "he": "סדנת בישול אזרית",
+      "en": "Azerbaijani Food Masterclass",
+      "ru": "Мастер-класс азербайджанской кухни",
+      "ar": "ورشة الطبخ الأذربيجاني"
+    },
+    "region": {
+      "az": "Bakı",
+      "he": "באקו",
+      "en": "Baku",
+      "ru": "Баку",
+      "ar": "باكو"
+    },
+    "overview": {
+      "az": "Plov, dolma və qutabı yerli aşpazla birlikdə hazırlayın, sonra hamısını süfrədə dadın. Qiymət nəfərbaşıdır, qrup ölçüsündən asılı deyil.",
+      "he": "מכינים פלוב, דולמה וקוטאב יחד עם שף מקומי, ואז טועמים הכול סביב השולחן. המחיר לאדם ואינו תלוי בגודל הקבוצה.",
+      "en": "Cook plov, dolma and qutab alongside a local chef, then sit down and eat all of it. Priced per person, whatever the group size.",
+      "ru": "Готовим плов, долму и кутабы вместе с местным шеф-поваром, затем всё это пробуем за столом. Цена за человека, независимо от размера группы.",
+      "ar": "حضّر البلوف والدولمة والقوتاب مع طاهٍ محلي ثم تذوّقها جميعًا حول المائدة. السعر للشخص بغض النظر عن حجم المجموعة."
+    },
+    "highlights": {
+      "az": [
+        "Yerli aşpazla birgə bişirmə",
+        "Plov, dolma, qutab",
+        "Bazar gəzintisi",
+        "Süfrə dadımı"
+      ],
+      "he": [
+        "בישול עם שף מקומי",
+        "פלוב, דולמה, קוטאב",
+        "סיור בשוק",
+        "טעימות סביב השולחן"
+      ],
+      "en": [
+        "Cooking with a local chef",
+        "Plov, dolma, qutab",
+        "Market walk",
+        "Tasting at the table"
+      ],
+      "ru": [
+        "Готовка с местным шефом",
+        "Плов, долма, кутабы",
+        "Прогулка по рынку",
+        "Дегустация за столом"
+      ],
+      "ar": [
+        "الطبخ مع طاهٍ محلي",
+        "بلوف، دولمة، قوتاب",
+        "جولة في السوق",
+        "تذوق حول المائدة"
+      ]
+    },
+    "included": {
+      "az": [
+        "Bütün ərzaq",
+        "Aşpaz və bələdçi",
+        "Hazırladığınız yeməklərin dadımı",
+        "Çay"
+      ],
+      "he": [
+        "כל המצרכים",
+        "שף ומדריך",
+        "טעימת המנות שהכנתם",
+        "תה"
+      ],
+      "en": [
+        "All ingredients",
+        "Chef and guide",
+        "Tasting of what you cooked",
+        "Tea"
+      ],
+      "ru": [
+        "Все продукты",
+        "Шеф-повар и гид",
+        "Дегустация приготовленного",
+        "Чай"
+      ],
+      "ar": [
+        "جميع المكونات",
+        "الطاهي والمرشد",
+        "تذوق ما طبختَه",
+        "الشاي"
+      ]
+    },
+    "excluded": {
+      "az": [
+        "Otelə transfer",
+        "Alkoqollu içkilər"
+      ],
+      "he": [
+        "הסעה מהמלון",
+        "משקאות אלכוהוליים"
+      ],
+      "en": [
+        "Hotel transfer",
+        "Alcoholic drinks"
+      ],
+      "ru": [
+        "Трансфер из отеля",
+        "Алкогольные напитки"
+      ],
+      "ar": [
+        "النقل من الفندق",
+        "المشروبات الكحولية"
+      ]
+    }
+  },
+  {
+    "slug": "cip-qobustan",
+    "category": "offroad",
+    "duration": 1,
+    "rating": 4.8,
+    "group_size": "1-4",
+    "sort_order": 7,
+    "image_url": "https://images.unsplash.com/photo-1533105079780-92b9be482077?w=1600",
+    "pricing": {
+      "model": "per_vehicle",
+      "currency": "USD",
+      "vehicle_capacity": 4,
+      "tiers": [
+        {
+          "min": 1,
+          "max": null,
+          "basis": "vehicle",
+          "rates": {
+            "std": 160
+          }
+        }
+      ],
+      "discounts": [
+        {
+          "when_pax_in_vehicle": 2,
+          "amount": 20
+        }
+      ]
+    },
+    "title": {
+      "az": "Cip turu — Qobustan",
+      "he": "טיול ג'יפים — גובוסטן",
+      "en": "Jeep Tour — Gobustan",
+      "ru": "Джип-тур — Гобустан",
+      "ar": "جولة جيب — قوبوستان"
+    },
+    "region": {
+      "az": "Qobustan",
+      "he": "גובוסטן",
+      "en": "Gobustan",
+      "ru": "Гобустан",
+      "ar": "قوبوستان"
+    },
+    "overview": {
+      "az": "Palçıq vulkanlarına yalnız 4x4 ilə çatmaq olar. Qiymət cip başınadır — bir cipdə 4 nəfərə qədər.",
+      "he": "אל הרי הגעש הבוציים מגיעים רק ברכב 4x4. המחיר לג'יפ — עד 4 נוסעים בג'יפ.",
+      "en": "The mud volcanoes are reachable only by 4x4. Priced per jeep — up to 4 riders per vehicle.",
+      "ru": "К грязевым вулканам можно добраться только на 4x4. Цена за джип — до 4 человек в машине.",
+      "ar": "لا يمكن الوصول إلى البراكين الطينية إلا بمركبة دفع رباعي. السعر لكل جيب — حتى 4 ركاب."
+    },
+    "highlights": {
+      "az": [
+        "Palçıq vulkanları",
+        "Off-road marşrut",
+        "Qaya rəsmləri sahəsi",
+        "Fotostop"
+      ],
+      "he": [
+        "הרי געש בוציים",
+        "מסלול שטח",
+        "אתר ציורי הסלע",
+        "עצירת צילום"
+      ],
+      "en": [
+        "Mud volcanoes",
+        "Off-road route",
+        "Petroglyph site",
+        "Photo stop"
+      ],
+      "ru": [
+        "Грязевые вулканы",
+        "Внедорожный маршрут",
+        "Зона петроглифов",
+        "Фотостоп"
+      ],
+      "ar": [
+        "البراكين الطينية",
+        "مسار وعر",
+        "موقع النقوش",
+        "توقف للتصوير"
+      ]
+    },
+    "included": {
+      "az": [
+        "4x4 cip və sürücü",
+        "Yanacaq",
+        "Su"
+      ],
+      "he": [
+        "ג'יפ 4x4 ונהג",
+        "דלק",
+        "מים"
+      ],
+      "en": [
+        "4x4 jeep and driver",
+        "Fuel",
+        "Water"
+      ],
+      "ru": [
+        "Джип 4x4 и водитель",
+        "Топливо",
+        "Вода"
+      ],
+      "ar": [
+        "جيب رباعي الدفع وسائق",
+        "الوقود",
+        "مياه"
+      ]
+    },
+    "excluded": {
+      "az": [
+        "Bələdçi",
+        "Giriş biletləri",
+        "Nahar"
+      ],
+      "he": [
+        "מדריך",
+        "כרטיסי כניסה",
+        "ארוחת צהריים"
+      ],
+      "en": [
+        "Guide",
+        "Entrance tickets",
+        "Lunch"
+      ],
+      "ru": [
+        "Гид",
+        "Входные билеты",
+        "Обед"
+      ],
+      "ar": [
+        "المرشد",
+        "تذاكر الدخول",
+        "الغداء"
+      ]
+    }
+  },
+  {
+    "slug": "cip-simal-marsrutu",
+    "category": "offroad",
+    "duration": 1,
+    "rating": 4.9,
+    "group_size": "1-4",
+    "sort_order": 8,
+    "image_url": "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=1600",
+    "pricing": {
+      "model": "per_vehicle",
+      "currency": "USD",
+      "vehicle_capacity": 4,
+      "tiers": [
+        {
+          "min": 1,
+          "max": null,
+          "basis": "vehicle",
+          "rates": {
+            "std": 260
+          }
+        }
+      ],
+      "discounts": [
+        {
+          "when_pax_in_vehicle": 2,
+          "amount": 20
+        }
+      ]
+    },
+    "title": {
+      "az": "Cip turu — Masazır, Candy Cane, Beşbarmaq",
+      "he": "טיול ג'יפים — מסזיר, הרי הסוכריות ובשבארמאק",
+      "en": "Jeep Tour — Masazir, Candy Cane & Beshbarmag",
+      "ru": "Джип-тур — Масазыр, Леденцовые горы и Бешбармаг",
+      "ar": "جولة جيب — مسازير وجبال قصب الحلوى وبشبارماق"
+    },
+    "region": {
+      "az": "Abşeron – Xızı – Siyəzən",
+      "he": "אבשרון – חיזי – סייאזן",
+      "en": "Absheron – Khizi – Siyazan",
+      "ru": "Абшерон – Хызы – Сиязань",
+      "ar": "أبشرون – خيزي – سيازان"
+    },
+    "overview": {
+      "az": "Bakıdan şimala bir günlük 4x4 marşrutu: çəhrayı duz gölü, Xızının qırmızı-ağ zolaqlı təpələri və Xəzər üzərində ucalan Beşbarmaq qayası. Qiymət cip başınadır — bir cipdə 4 nəfərə qədər.",
+      "he": "מסלול 4x4 של יום שלם צפונה מבאקו: אגם המלח הוורוד, הגבעות המפוספסות של חיזי וסלע בשבארמאק המתנשא מעל הכספי. המחיר לג'יפ — עד 4 נוסעים.",
+      "en": "A full-day 4x4 route north of Baku: the pink salt lake, the red-and-white striped hills of Khizi and the Beshbarmag rock above the Caspian. Priced per jeep — up to 4 riders.",
+      "ru": "Однодневный маршрут 4x4 к северу от Баку: розовое солёное озеро, красно-белые полосатые холмы Хызы и скала Бешбармаг над Каспием. Цена за джип — до 4 человек.",
+      "ar": "مسار دفع رباعي ليوم كامل شمال باكو: بحيرة الملح الوردية وتلال خيزي المخططة وصخرة بشبارماق فوق بحر قزوين. السعر لكل جيب — حتى 4 ركاب."
+    },
+    "highlights": {
+      "az": [
+        "Masazır çəhrayı duz gölü",
+        "Candy Cane zolaqlı təpələri",
+        "Beşbarmaq qayası və ziyarətgah",
+        "Xəzər panoramı"
+      ],
+      "he": [
+        "אגם המלח הוורוד מסזיר",
+        "הגבעות המפוספסות של הרי הסוכריות",
+        "סלע בשבארמאק והמקום הקדוש",
+        "פנורמת הכספי"
+      ],
+      "en": [
+        "Masazir pink salt lake",
+        "Candy Cane striped hills",
+        "Beshbarmag rock and shrine",
+        "Caspian panorama"
+      ],
+      "ru": [
+        "Розовое озеро Масазыр",
+        "Полосатые холмы Леденцовых гор",
+        "Скала Бешбармаг и святилище",
+        "Панорама Каспия"
+      ],
+      "ar": [
+        "بحيرة مسازير الوردية",
+        "تلال قصب الحلوى المخططة",
+        "صخرة بشبارماق والمزار",
+        "بانوراما بحر قزوين"
+      ]
+    },
+    "included": {
+      "az": [
+        "4x4 cip və sürücü",
+        "Yanacaq",
+        "Su"
+      ],
+      "he": [
+        "ג'יפ 4x4 ונהג",
+        "דלק",
+        "מים"
+      ],
+      "en": [
+        "4x4 jeep and driver",
+        "Fuel",
+        "Water"
+      ],
+      "ru": [
+        "Джип 4x4 и водитель",
+        "Топливо",
+        "Вода"
+      ],
+      "ar": [
+        "جيب رباعي الدفع وسائق",
+        "الوقود",
+        "مياه"
+      ]
+    },
+    "excluded": {
+      "az": [
+        "Bələdçi",
+        "Nahar"
+      ],
+      "he": [
+        "מדריך",
+        "ארוחת צהריים"
+      ],
+      "en": [
+        "Guide",
+        "Lunch"
+      ],
+      "ru": [
+        "Гид",
+        "Обед"
+      ],
+      "ar": [
+        "المرشد",
+        "الغداء"
+      ]
+    }
+  }
+]

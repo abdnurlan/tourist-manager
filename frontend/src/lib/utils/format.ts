@@ -4,16 +4,19 @@
 
 import { az } from "@/lib/i18n/az";
 
-/** Format a price + currency, e.g. "40 ₼", "120 $". Returns "" when no price. */
+/** System-wide default currency (CONTRACT: USD). */
+export const DEFAULT_CURRENCY = "USD";
+
 const CURRENCY_SYMBOL: Record<string, string> = {
-  AZN: "₼",
   USD: "$",
+  AZN: "₼",
   EUR: "€",
   GBP: "£",
   TRY: "₺",
   RUB: "₽",
 };
 
+/** Format a price + currency, e.g. "120 $", "40 ₼". Falls back to USD. Returns "" when no price. */
 export function formatPrice(
   price: number | null | undefined,
   currency: string | null | undefined,
@@ -22,9 +25,9 @@ export function formatPrice(
   const formatted = new Intl.NumberFormat("az-AZ", {
     maximumFractionDigits: 2,
   }).format(price);
-  if (!currency) return formatted;
-  const sym = CURRENCY_SYMBOL[currency];
-  return sym ? `${formatted} ${sym}` : `${formatted} ${currency}`;
+  const cur = currency || DEFAULT_CURRENCY;
+  const sym = CURRENCY_SYMBOL[cur];
+  return sym ? `${formatted} ${sym}` : `${formatted} ${cur}`;
 }
 
 /** Time-of-day aware Azerbaijani greeting. */

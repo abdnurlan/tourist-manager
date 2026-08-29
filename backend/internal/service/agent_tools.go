@@ -53,7 +53,7 @@ func agentTools() []ai.ToolDef {
 				"participants":{"type":"string","description":"iştirakçılar / insanlar"},
 				"phone":{"type":"string"},
 				"price":{"type":"number"},
-				"currency":{"type":"string","enum":["AZN","USD","EUR","GBP","TRY","RUB"]},
+				"currency":{"type":"string","enum":["USD","AZN","EUR","GBP","TRY","RUB"],"description":"Defolt: USD"},
 				"payment_status":{"type":"string","enum":["unpaid","partial","paid"]},
 				"status":{"type":"string","enum":["planned","done","cancelled"]},
 				"notes":{"type":"string"}
@@ -72,7 +72,7 @@ func agentTools() []ai.ToolDef {
 				"participants":{"type":"string"},
 				"phone":{"type":"string"},
 				"price":{"type":"number"},
-				"currency":{"type":"string","enum":["AZN","USD","EUR","GBP","TRY","RUB"]},
+				"currency":{"type":"string","enum":["USD","AZN","EUR","GBP","TRY","RUB"],"description":"Defolt: USD"},
 				"payment_status":{"type":"string","enum":["unpaid","partial","paid"]},
 				"status":{"type":"string","enum":["planned","done","cancelled"]},
 				"notes":{"type":"string"}

@@ -17,9 +17,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { az } from "@/lib/i18n/az";
-import type { CatalogCategory, CatalogTour, CatalogTourPayload } from "@/lib/types";
+import type { CatalogCategory, CatalogTour, CatalogTourPayload, Pricing } from "@/lib/types";
+import { PricingEditor, defaultPricing } from "./pricing-editor";
+import { fromPrice } from "@/lib/utils/pricing";
 
-const CATEGORIES: CatalogCategory[] = ["mountain", "history", "nature", "wellness", "coast", "offroad"];
+const CATEGORIES: CatalogCategory[] = ["city", "mountain", "history", "nature", "offroad", "food", "wellness", "coast"];
 // Extra languages beyond AZ, editable in a collapsible section.
 const EXTRA_LANGS: Array<{ code: string; label: string }> = [
   { code: "en", label: "EN" },
@@ -39,7 +41,7 @@ interface CatalogTourFormProps {
 interface FormState {
   slug: string;
   category: CatalogCategory;
-  price: string;
+  pricing: Pricing;
   rating: string;
   duration: string;
   group_size: string;
@@ -53,8 +55,8 @@ interface FormState {
 function emptyState(): FormState {
   return {
     slug: "",
-    category: "mountain",
-    price: "",
+    category: "city",
+    pricing: defaultPricing("group_tiers"),
     rating: "5",
     duration: "1",
     group_size: "",
@@ -70,7 +72,7 @@ function fromTour(t: CatalogTour): FormState {
   return {
     slug: t.slug,
     category: t.category,
-    price: String(t.price),
+    pricing: t.pricing ?? defaultPricing("group_tiers"),
     rating: String(t.rating),
     duration: String(t.duration),
     group_size: t.group_size,
@@ -93,6 +95,7 @@ const GField = ({ label, error, children }: { label: string; error?: string; chi
 export function CatalogTourForm({ open, onOpenChange, tour, onSubmit, submitting }: CatalogTourFormProps) {
   const [s, setS] = useState<FormState>(emptyState());
   const [showLangs, setShowLangs] = useState(false);
+  const [previewPax, setPreviewPax] = useState(2);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [uploading, setUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -133,7 +136,9 @@ export function CatalogTourForm({ open, onOpenChange, tour, onSubmit, submitting
     const next: Record<string, string> = {};
     if (!s.slug.trim()) next.slug = az.catalog.slug_required;
     if (!s.title.az?.trim()) next.title = az.catalog.title_required;
-    if (!s.price.trim() || Number.isNaN(Number(s.price))) next.price = az.catalog.price_required;
+    if (s.pricing.model !== "on_request" && (s.pricing.tiers ?? []).length === 0) {
+      next.pricing = az.catalog.pricing.required;
+    }
     setErrors(next);
     if (Object.keys(next).length > 0) return;
 
@@ -144,7 +149,10 @@ export function CatalogTourForm({ open, onOpenChange, tour, onSubmit, submitting
     onSubmit({
       slug: s.slug.trim(),
       category: s.category,
-      price: Number(s.price),
+      pricing: s.pricing,
+      // Derived here too so the list shows the right "from" immediately; the
+      // backend recomputes it from the same matrix on save.
+      price: fromPrice(s.pricing) ?? 0,
       rating: Number(s.rating) || 5,
       duration: Number(s.duration) || 1,
       group_size: s.group_size.trim(),
@@ -197,10 +205,16 @@ export function CatalogTourForm({ open, onOpenChange, tour, onSubmit, submitting
           </GField>
         </div>
 
-        <div className="grid grid-cols-3 gap-3">
-          <GField label={az.catalog.fields.price} error={errors.price}>
-            <Input inputMode="numeric" value={s.price} onChange={(e) => setS({ ...s, price: e.target.value })} placeholder="220" />
-          </GField>
+        <GField label={az.catalog.pricing.title} error={errors.pricing}>
+          <PricingEditor
+            value={s.pricing}
+            onChange={(pricing) => setS({ ...s, pricing })}
+            previewPax={previewPax}
+            onPreviewPaxChange={setPreviewPax}
+          />
+        </GField>
+
+        <div className="grid grid-cols-2 gap-3">
           <GField label={az.catalog.fields.duration}>
             <Input inputMode="numeric" value={s.duration} onChange={(e) => setS({ ...s, duration: e.target.value })} placeholder="2" />
           </GField>

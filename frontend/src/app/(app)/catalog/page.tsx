@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { fromPrice } from "@/lib/utils/pricing";
 import Link from "next/link";
 import { Compass, Plus, Star, Clock, Users, Pencil, Trash2, EyeOff, CalendarDays } from "lucide-react";
 
@@ -152,8 +153,16 @@ export default function CatalogPage() {
 
                     <div className="mt-auto flex items-end justify-between border-t border-border pt-4">
                       <div>
-                        <p className="text-xs text-muted-foreground">{az.catalog.perPerson}</p>
-                        <p className="font-display text-xl font-semibold text-accent">{t.price} ₼</p>
+                        {/* The price depends on party size, so the card shows
+                            the cheapest entry point rather than one figure. */}
+                        <p className="text-xs text-muted-foreground">
+                          {az.catalog.pricing[t.pricing?.model === "on_request" ? "on_request_short" : "from_label"]}
+                        </p>
+                        <p className="font-display text-xl font-semibold text-accent">
+                          {t.pricing?.model === "on_request"
+                            ? "—"
+                            : `${fromPrice(t.pricing) ?? t.price} $${az.catalog.pricing.from}`}
+                        </p>
                       </div>
                       <div className="flex gap-1">
                         <Button

@@ -9,6 +9,32 @@ import (
 	"tourist-manager/backend/pkg/apperror"
 )
 
+// DefaultCurrency is the system-wide default currency: prices without an
+// explicit currency are stored and shown as USD.
+const DefaultCurrency = "USD"
+
+// normalizeCurrency returns the given currency, falling back to DefaultCurrency
+// when a price exists but no currency was supplied.
+func normalizeCurrency(cur *string) *string {
+	if cur != nil && strings.TrimSpace(*cur) != "" {
+		return cur
+	}
+	d := DefaultCurrency
+	return &d
+}
+
+// currencyForPrice keeps currency nil when there is no price, otherwise it
+// defaults to DefaultCurrency.
+func currencyForPrice(price *float64, cur *string) *string {
+	if price == nil {
+		if cur != nil && strings.TrimSpace(*cur) != "" {
+			return cur
+		}
+		return nil
+	}
+	return normalizeCurrency(cur)
+}
+
 // EventInput carries create/update fields for an event (nil = unchanged on update).
 type EventInput struct {
 	Title         *string
@@ -134,7 +160,7 @@ func (s *eventService) Create(tourID string, in EventInput) (*models.Event, erro
 		Participants:  in.Participants,
 		Phone:         in.Phone,
 		Price:         in.Price,
-		Currency:      in.Currency,
+		Currency:      currencyForPrice(in.Price, in.Currency),
 		PaymentStatus: in.PaymentStatus,
 		ReminderTime:  in.ReminderTime,
 		Attachment:    in.Attachment,
@@ -217,7 +243,12 @@ func (s *eventService) Update(id string, in EventInput) (*models.Event, error) {
 		}
 	}
 	if in.Currency != nil {
-		event.Currency = in.Currency
+		event.Currency = normalizeCurrency(in.Currency)
+	}
+	// A price without any currency falls back to the system default (USD).
+	if event.Price != nil && (event.Currency == nil || strings.TrimSpace(*event.Currency) == "") {
+		d := DefaultCurrency
+		event.Currency = &d
 	}
 	if in.PaymentStatus != nil {
 		ps := strings.TrimSpace(*in.PaymentStatus)

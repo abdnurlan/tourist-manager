@@ -21,6 +21,7 @@ type CreateBookingRequest struct {
 	Date          *string `json:"date"`
 	TourID        *string `json:"tour_id"`
 	Notes         *string `json:"notes"`
+	GuideLang     *string `json:"guide_lang"`
 }
 
 // UpdateBookingStatusRequest is the admin PATCH /bookings/:id body.
@@ -55,6 +56,7 @@ func (h *BookingHandler) Create(c *fiber.Ctx) error {
 		Date:          req.Date,
 		TourID:        req.TourID,
 		Notes:         req.Notes,
+		GuideLang:     req.GuideLang,
 	}
 	booking, err := h.svc.Create(in)
 	if err != nil {

@@ -329,7 +329,7 @@ Indexes: `idx_tours_status(status)`, `idx_tours_start_date(start_date)`.
 | participants | text | YES | NULL | free text / names (OPTIONAL) |
 | phone | text | YES | NULL | |
 | price | numeric(12,2) | YES | NULL | |
-| currency | varchar(8) | YES | NULL | e.g. `AZN`, `USD`, `EUR` |
+| currency | varchar(8) | YES | NULL | default `USD`; also `AZN`, `EUR`, `GBP`, `TRY`, `RUB` |
 | payment_status | payment_status | YES | NULL | |
 | reminder_time | timestamptz | YES | NULL | |
 | attachment | text | YES | NULL | quick url/text field (mirrors attachments) |
@@ -550,7 +550,7 @@ Event object (matches §4.4 columns, snake_case):
   "participants": null,
   "phone": "+994501234567",
   "price": 40.00,
-  "currency": "AZN",
+  "currency": "USD",
   "payment_status": "unpaid",
   "reminder_time": "2026-06-18T07:00:00Z",
   "attachment": null,
@@ -570,7 +570,7 @@ Request (only `title`, `type`, `date` required; everything else optional/nullabl
 ```json
 { "title": "Hava limanı transferi", "type": "transfer", "date": "2026-06-18",
   "time": "09:00", "location": "Hava Limanı", "participants": null, "phone": "+994...",
-  "price": 40, "currency": "AZN", "payment_status": "unpaid",
+  "price": 40, "currency": "USD", "payment_status": "unpaid",
   "reminder_time": "2026-06-18T07:00:00Z", "attachment": null, "notes": null,
   "status": "planned" }
 ```

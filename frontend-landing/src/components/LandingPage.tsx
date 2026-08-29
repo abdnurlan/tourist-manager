@@ -25,7 +25,11 @@ const CURRENT_YEAR = 2026;
 
 // The landing page is one document; these are its blocks. Each also has a real
 // URL (/tours, /reviews, …) so links are shareable — no "#" fragments.
-export const SECTIONS = ["tours", "reviews", "how", "contact"] as const;
+/** How many tours the home page previews before sending visitors to /tours. */
+const HOME_TOUR_COUNT = 6;
+
+// "tours" is no longer a scroll anchor route: /tours is a real catalogue page.
+export const SECTIONS = ["reviews", "how", "contact"] as const;
 export type SectionId = (typeof SECTIONS)[number];
 
 export function isSectionId(v: string): v is SectionId {
@@ -79,10 +83,12 @@ export function LandingPage({ section }: { section?: SectionId }) {
     });
   }, [tours, category, query, lang]);
 
+  // Home shows a preview only; /tours carries the full catalogue with filters.
+  const preview = useMemo(() => filtered.slice(0, HOME_TOUR_COUNT), [filtered]);
+
   // One typed route ("/$section") backs all four; the param is the block id, so
   // these render as /tours, /reviews, /how and /contact.
   const navItems = [
-    { section: "tours", label: t.nav.tours },
     { section: "reviews", label: t.reviews.eyebrow },
     { section: "how", label: t.nav.how },
     { section: "contact", label: t.nav.contact },
@@ -127,6 +133,13 @@ export function LandingPage({ section }: { section?: SectionId }) {
               scrolled ? "gap-4" : "gap-7"
             }`}
           >
+            <Link
+              to="/tours"
+              className="relative rounded-sm transition-colors duration-300 before:absolute before:inset-x-0 before:-inset-y-3 before:content-[''] hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-4 after:absolute after:-bottom-1.5 after:left-0 after:h-0.5 after:w-0 after:bg-brand-orange after:transition-all after:duration-300 hover:after:w-full"
+              activeProps={{ className: "text-foreground after:w-full" }}
+            >
+              {t.nav.tours}
+            </Link>
             {navItems.map((item) => (
               <Link
                 key={item.section}
@@ -167,6 +180,14 @@ export function LandingPage({ section }: { section?: SectionId }) {
             aria-label={t.nav.tours}
             className="animate-menu-in glass glass-sheen mt-2 flex flex-col gap-1 rounded-3xl p-3 lg:hidden"
           >
+            <Link
+              to="/tours"
+              onClick={() => setMenuOpen(false)}
+              className="rounded-2xl px-4 py-3 font-display text-sm font-medium text-foreground/85 transition-colors hover:bg-secondary hover:text-foreground"
+              activeProps={{ className: "bg-secondary text-foreground" }}
+            >
+              {t.nav.tours}
+            </Link>
             {navItems.map((item) => (
               <Link
                 key={item.section}
@@ -299,7 +320,7 @@ export function LandingPage({ section }: { section?: SectionId }) {
                 </div>
               </div>
             ))}
-          {filtered.map((tour, idx) => {
+          {preview.map((tour, idx) => {
             const loc = tour.i18n[lang];
             return (
               <article key={tour.id} style={{ "--i": idx % 6 } as CSSProperties} className="sheen-sweep group overflow-hidden rounded-3xl border border-border bg-card shadow-(--shadow-card) transition-[box-shadow,border-color,transform] duration-300 hover:-translate-y-1 hover:border-brand-orange/40 hover:shadow-(--shadow-soft)">
@@ -332,16 +353,14 @@ export function LandingPage({ section }: { section?: SectionId }) {
                     <span className="flex items-center gap-1.5"><Clock aria-hidden="true" className="h-3.5 w-3.5" /> {tour.duration} {t.tours.days}</span>
                     <span className="flex items-center gap-1.5"><Users aria-hidden="true" className="h-3.5 w-3.5" /> {tour.groupSize} {t.tours.people}</span>
                   </div>
-                  <div className="mt-6 flex flex-wrap items-end justify-between gap-4 border-t border-border pt-5">
-                    <div>
-                      <div className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">{t.tours.perPerson}</div>
-                      <div className="mt-0.5 font-display text-3xl font-bold tabular-nums text-brand-orange">{tour.price} ₼</div>
-                    </div>
+                  {/* No price here by design: the price depends on party size,
+                      so the card sends the visitor to the calculator instead. */}
+                  <div className="mt-6 flex flex-wrap items-center justify-end gap-4 border-t border-border pt-5">
                     <div className="flex gap-2">
                       <Button asChild size="sm" variant="outline" className="transition-transform duration-300 hover:scale-[1.03] active:scale-95">
                         <Link to="/tours/$tourId" params={{ tourId: tour.id }}>{t.tours.details}</Link>
                       </Button>
-                      <Button size="sm" className="transition-transform duration-300 hover:scale-[1.03] active:scale-95" onClick={() => setBookingTour({ id: tour.id, title: loc.title, region: loc.region, duration: `${tour.duration} ${t.tours.days}`, price: tour.price, image: tour.image })}>
+                      <Button size="sm" className="transition-transform duration-300 hover:scale-[1.03] active:scale-95" onClick={() => setBookingTour({ id: tour.id, title: loc.title, region: loc.region, duration: `${tour.duration} ${t.tours.days}`, price: tour.price, pricing: tour.pricing, image: tour.image })}>
                         {t.tours.book}
                       </Button>
                     </div>
@@ -354,6 +373,17 @@ export function LandingPage({ section }: { section?: SectionId }) {
             <div className="col-span-full rounded-3xl border border-dashed border-border bg-card py-20 text-center text-muted-foreground">{t.tours.empty}</div>
           )}
         </div>
+
+        {!isLoading && filtered.length > HOME_TOUR_COUNT && (
+          <div className="mt-12 flex justify-center">
+            <Button asChild size="lg" variant="outline" className="group transition-transform duration-300 hover:scale-[1.02] active:scale-95">
+              <Link to="/tours">
+                {t.catalog.viewAll}
+                <ArrowRight aria-hidden="true" className={`h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5 ${dir === "rtl" ? "rotate-180" : ""}`} />
+              </Link>
+            </Button>
+          </div>
+        )}
       </section>
 
       {/* REVIEWS */}

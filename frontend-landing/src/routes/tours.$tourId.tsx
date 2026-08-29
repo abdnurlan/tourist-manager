@@ -10,6 +10,9 @@ import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { T, type Lang, type Tour, type TourDate } from "@/lib/tours-data";
 import { fetchCatalogTour } from "@/lib/api/client";
 import { useLanguage } from "@/hooks/use-language";
+import { useGuideLang } from "@/hooks/use-guide-lang";
+import { GuideLangSelect } from "@/components/GuideLangSelect";
+import { PaxStepper, PriceBox, PriceTiers } from "@/components/PriceCalculator";
 import { Logo } from "@/components/Logo";
 import { SEO } from "./__root";
 
@@ -102,6 +105,11 @@ function TourDetail() {
   const [selected, setSelected] = useState<TourDate | null>(
     bookableDates.length > 0 ? bookableDates[0] : null,
   );
+  // Party size drives the price: two travellers on a small-group tour pay a
+  // group total, not twice a per-person rate.
+  const [pax, setPax] = useState(2);
+  // Which guide is booked — deliberately separate from the UI language.
+  const [guide, setGuide] = useGuideLang();
 
   const t = T[lang];
   const dir = t.dir;
@@ -115,16 +123,18 @@ function TourDetail() {
   }, []);
 
   const openBooking = () => {
-    if (!selected) return;
     setBooking({
       id: tour.id,
       title: loc.title,
       region: loc.region,
       duration: `${tour.duration} ${t.tours.days}`,
-      price: selected.price ?? tour.price,
+      price: selected?.price ?? tour.price,
+      pricing: tour.pricing,
       image: tour.image,
-      tourId: selected.id,
-      departureDate: selected.startDate,
+      // Only a dated departure locks the tour and the travel date; day tours
+      // are booked as an open request for the date the traveller picks.
+      tourId: selected?.id,
+      departureDate: selected?.startDate,
     });
   };
 
@@ -307,9 +317,20 @@ function TourDetail() {
           {/* Sticky booking card */}
           <aside className="order-first lg:order-none lg:col-span-1">
             <div className="sticky top-28 rounded-3xl border border-border bg-card p-8 shadow-(--shadow-soft)">
-              <div className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">{t.tours.perPerson}</div>
-              <div className="mt-1 font-display text-5xl font-bold tabular-nums text-brand-orange">
-                {(selected?.price ?? tour.price)} ₼
+              <div className="font-display text-lg font-bold">{t.pricing.title}</div>
+              <div className="mt-4">
+                <PaxStepper
+                  pax={pax}
+                  onChange={setPax}
+                  label={t.pricing.paxLabel}
+                  personLabel={t.pricing.person}
+                />
+              </div>
+              <div className="mt-5 border-t border-border pt-5">
+                <GuideLangSelect value={guide} onChange={setGuide} lang={lang} />
+              </div>
+              <div className="mt-5 border-t border-border pt-5">
+                <PriceBox pricing={tour.pricing} pax={pax} guide={guide} t={t} />
               </div>
 
               <div className="mt-6 space-y-3 border-t border-border pt-6 text-sm text-muted-foreground">
@@ -324,6 +345,14 @@ function TourDetail() {
                 <div className="flex items-center justify-between">
                   <span className="flex items-center gap-2"><Star aria-hidden="true" className="h-4 w-4" /> {t.detail.rating}</span>
                   <span>{tour.rating} / 5</span>
+                </div>
+              </div>
+
+              {/* Every bracket, so the traveller can see where the next step is */}
+              <div className="mt-6 border-t border-border pt-6">
+                <div className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">{t.pricing.table}</div>
+                <div className="mt-3">
+                  <PriceTiers pricing={tour.pricing} guide={guide} t={t} />
                 </div>
               </div>
 
@@ -356,7 +385,7 @@ function TourDetail() {
                               {fmtDateRange(d, lang)}
                             </span>
                             <span className="tabular-nums text-muted-foreground">
-                              {d.price} ₼ · {remaining} {t.detail.seats}
+                              {d.price} $ · {remaining} {t.detail.seats}
                             </span>
                           </button>
                         </li>
@@ -368,8 +397,7 @@ function TourDetail() {
 
               <Button
                 size="lg"
-                disabled={!selected}
-                className="group mt-6 w-full transition-transform duration-300 hover:scale-[1.02] active:scale-95 disabled:cursor-not-allowed disabled:opacity-50"
+                className="group mt-6 w-full transition-transform duration-300 hover:scale-[1.02] active:scale-95"
                 onClick={openBooking}
               >
                 {t.detail.bookNow}{" "}
@@ -380,7 +408,7 @@ function TourDetail() {
         </div>
       </section>
 
-      <BookingDialog tour={booking} open={!!booking} lang={lang} onOpenChange={(o) => !o && setBooking(null)} />
+      <BookingDialog tour={booking} initialPeople={pax} open={!!booking} lang={lang} onOpenChange={(o) => !o && setBooking(null)} />
     </div>
   );
 }

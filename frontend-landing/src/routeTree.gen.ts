@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SectionRouteImport } from './routes/$section'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ToursIndexRouteImport } from './routes/tours.index'
 import { Route as ToursTourIdRouteImport } from './routes/tours.$tourId'
 
 const SectionRoute = SectionRouteImport.update({
@@ -23,6 +24,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ToursIndexRoute = ToursIndexRouteImport.update({
+  id: '/tours/',
+  path: '/tours/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ToursTourIdRoute = ToursTourIdRouteImport.update({
   id: '/tours/$tourId',
   path: '/tours/$tourId',
@@ -33,30 +39,34 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/$section': typeof SectionRoute
   '/tours/$tourId': typeof ToursTourIdRoute
+  '/tours/': typeof ToursIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/$section': typeof SectionRoute
   '/tours/$tourId': typeof ToursTourIdRoute
+  '/tours': typeof ToursIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/$section': typeof SectionRoute
   '/tours/$tourId': typeof ToursTourIdRoute
+  '/tours/': typeof ToursIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/$section' | '/tours/$tourId'
+  fullPaths: '/' | '/$section' | '/tours/$tourId' | '/tours/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/$section' | '/tours/$tourId'
-  id: '__root__' | '/' | '/$section' | '/tours/$tourId'
+  to: '/' | '/$section' | '/tours/$tourId' | '/tours'
+  id: '__root__' | '/' | '/$section' | '/tours/$tourId' | '/tours/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   SectionRoute: typeof SectionRoute
   ToursTourIdRoute: typeof ToursTourIdRoute
+  ToursIndexRoute: typeof ToursIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -75,6 +85,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/tours/': {
+      id: '/tours/'
+      path: '/tours'
+      fullPath: '/tours/'
+      preLoaderRoute: typeof ToursIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/tours/$tourId': {
       id: '/tours/$tourId'
       path: '/tours/$tourId'
@@ -89,6 +106,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   SectionRoute: SectionRoute,
   ToursTourIdRoute: ToursTourIdRoute,
+  ToursIndexRoute: ToursIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

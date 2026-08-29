@@ -33,7 +33,7 @@ func (s *service) DetectIntent(ctx context.Context, text string) (string, error)
 		return IntentCreateTour, nil
 	case strings.Contains(t, "proqram"):
 		return IntentShowTourProgram, nil
-	case strings.Contains(t, "qiymət") || strings.Contains(t, "manat") || strings.Contains(t, "azn"):
+	case strings.Contains(t, "qiymət") || strings.Contains(t, "dollar") || strings.Contains(t, "usd") || strings.Contains(t, "manat") || strings.Contains(t, "azn"):
 		return IntentSetEventPrice, nil
 	case strings.Contains(t, "harda") || strings.Contains(t, "harada") || strings.Contains(t, "tap"):
 		return IntentFindEvent, nil

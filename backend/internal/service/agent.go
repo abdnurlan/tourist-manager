@@ -19,9 +19,9 @@ import (
 // events, asking for confirmation before any mutation. Used by both the web /ai
 // chat and the Telegram bot so behaviour is identical on every surface.
 type AIAgent struct {
-	ai     ai.AIService
-	tours  TourService
-	events EventService
+	ai        ai.AIService
+	tours     TourService
+	events    EventService
 	tourRepo  repository.TourRepository
 	eventRepo repository.EventRepository
 	tg        repository.TelegramRepository
@@ -503,7 +503,7 @@ func eventSummary(p eventArgs) string {
 	if p.Price != nil {
 		cur := p.Currency
 		if cur == "" {
-			cur = "AZN"
+			cur = "USD"
 		}
 		fmt.Fprintf(&sb, "\n• 💰 %g %s", *p.Price, cur)
 	}
@@ -533,7 +533,7 @@ func eventChanges(p eventArgs) string {
 	if p.Price != nil {
 		cur := p.Currency
 		if cur == "" {
-			cur = "AZN"
+			cur = "USD"
 		}
 		parts = append(parts, fmt.Sprintf("qiymət → %g %s", *p.Price, cur))
 	}

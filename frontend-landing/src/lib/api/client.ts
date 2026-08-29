@@ -1,4 +1,5 @@
 import type { CategoryKey, Lang, Tour, TourDate, TourDay, TourLocale } from "@/lib/tours-data";
+import type { Pricing } from "@/lib/pricing";
 
 // Public API base for the M4STrip backend.
 //   • Browser (client): VITE_API_URL — a host-reachable origin (localhost:8080).
@@ -31,6 +32,7 @@ interface ApiCatalogTour {
   itinerary: Record<string, { title: string; description: string }[]>;
   included: Record<string, string[]>;
   excluded: Record<string, string[]>;
+  pricing?: Pricing | null;
 }
 
 // Backend internal Tour linked to a catalog tour (a bookable dated departure).
@@ -102,6 +104,7 @@ function adapt(api: ApiCatalogTour): Tour {
     duration: api.duration,
     groupSize: api.group_size,
     price: api.price,
+    pricing: api.pricing ?? null,
     rating: api.rating,
     image: api.image_url,
     i18n,
@@ -136,6 +139,7 @@ export interface CreateBookingBody {
   phone?: string | null;
   email?: string | null;
   people?: number;
+  guide_lang?: string | null;
   date?: string | null;
   tour_id?: string | null;
   notes?: string | null;

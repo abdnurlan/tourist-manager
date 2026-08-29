@@ -13,12 +13,18 @@ type Booking struct {
 	Phone         *string `json:"phone"           gorm:"type:text"`
 	Email         *string `json:"email"           gorm:"type:text"`
 	People        int     `json:"people"          gorm:"type:int;not null;default:1"`
-	Date          *string `json:"date"            gorm:"type:date"` // YYYY-MM-DD, optional
+	Date          *string `json:"date"            gorm:"type:date"`       // YYYY-MM-DD, optional
 	TourID        *string `json:"tour_id"         gorm:"type:uuid;index"` // nullable: linked internal tour (departure)
 	Notes         *string `json:"notes"           gorm:"type:text"`
-	Status        string  `json:"status"          gorm:"type:booking_status;not null;default:'new'"`
-	CreatedAt     time.Time `json:"created_at"    gorm:"autoCreateTime"`
-	UpdatedAt     time.Time `json:"updated_at"    gorm:"autoUpdateTime"`
+
+	// Money is frozen at booking time: the catalog price sheet may change, the
+	// agreed total may not. GuideLang records which rate column was applied.
+	QuotedTotal *float64  `json:"quoted_total" gorm:"type:numeric(12,2)"`
+	Currency    *string   `json:"currency"     gorm:"type:varchar(8)"`
+	GuideLang   *string   `json:"guide_lang"   gorm:"type:varchar(8)"`
+	Status      string    `json:"status"          gorm:"type:booking_status;not null;default:'new'"`
+	CreatedAt   time.Time `json:"created_at"    gorm:"autoCreateTime"`
+	UpdatedAt   time.Time `json:"updated_at"    gorm:"autoUpdateTime"`
 }
 
 func (Booking) TableName() string { return "bookings" }

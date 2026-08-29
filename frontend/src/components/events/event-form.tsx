@@ -24,6 +24,7 @@ import { eventMeta } from "@/lib/event-meta";
 import { az } from "@/lib/i18n/az";
 import { cn } from "@/lib/utils/cn";
 import { useTourGuests } from "@/lib/hooks/use-guests";
+import { getDefaultCurrency } from "@/components/settings/currency-card";
 import { TYPE_FIELDS } from "./type-fields-config";
 import type {
   Event,
@@ -57,7 +58,7 @@ function parseDetails(d: Event["details"] | undefined): Record<string, string> {
 const EVENT_TYPES: EventType[] = ["transfer", "hotel", "restaurant", "other"];
 const EVENT_STATUSES: EventStatus[] = ["planned", "done", "cancelled"];
 const PAYMENT_STATUSES: PaymentStatus[] = ["unpaid", "partial", "paid"];
-const CURRENCIES = ["AZN", "USD", "EUR", "GBP", "TRY", "RUB"];
+const CURRENCIES = ["USD", "AZN", "EUR", "GBP", "TRY", "RUB"];
 
 const TIME_RE = /^([01]\d|2[0-3]):[0-5]\d$/;
 
@@ -186,7 +187,7 @@ export function EventForm({
       participants: event?.participants ?? "",
       phone: event?.phone ?? "",
       price: event?.price != null ? String(event.price) : "",
-      currency: event?.currency ?? "AZN",
+      currency: event?.currency ?? getDefaultCurrency(),
       payment_status: event?.payment_status ?? "",
       status: event?.status ?? "planned",
       reminder_offset: rfcToOffset(

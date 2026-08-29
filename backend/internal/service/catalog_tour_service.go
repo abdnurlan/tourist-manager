@@ -1,7 +1,10 @@
 package service
 
 import (
+	"errors"
+
 	"tourist-manager/backend/internal/models"
+	"tourist-manager/backend/internal/pricing"
 	"tourist-manager/backend/internal/repository"
 	"tourist-manager/backend/pkg/apperror"
 )
@@ -24,6 +27,7 @@ type CatalogTourInput struct {
 	Itinerary  map[string][]models.DayPlan
 	Included   map[string][]string
 	Excluded   map[string][]string
+	Pricing    *pricing.Pricing
 }
 
 // CatalogTourService implements catalog-tour business logic.
@@ -82,8 +86,16 @@ func (s *catalogTourService) Create(in CatalogTourInput) (*models.CatalogTour, e
 	} else if !validCatalogCategories[category] {
 		fields = append(fields, apperror.FieldError{Field: "category", Message: "Kateqoriya yanlışdır"})
 	}
-	if in.Price == nil || *in.Price < 0 {
+	if in.Price != nil && *in.Price < 0 {
 		fields = append(fields, apperror.FieldError{Field: "price", Message: "Qiymət düzgün deyil"})
+	}
+	if in.Pricing == nil && in.Price == nil {
+		fields = append(fields, apperror.FieldError{Field: "pricing", Message: "Qiymət cədvəli tələb olunur"})
+	}
+	if in.Pricing != nil {
+		if err := validatePricing(in.Pricing); err != nil {
+			fields = append(fields, apperror.FieldError{Field: "pricing", Message: err.Error()})
+		}
 	}
 	if len(in.Title) == 0 || trimSpace(in.Title["az"]) == "" {
 		fields = append(fields, apperror.FieldError{Field: "title", Message: "Ad tələb olunur"})
@@ -101,7 +113,8 @@ func (s *catalogTourService) Create(in CatalogTourInput) (*models.CatalogTour, e
 	t := &models.CatalogTour{
 		Slug:       slug,
 		Category:   category,
-		Price:      *in.Price,
+		Pricing:    in.Pricing,
+		Price:      derivedFromPrice(in.Pricing, in.Price),
 		Rating:     valOrDefault(in.Rating, 5),
 		Duration:   valOrDefaultInt(in.Duration, 1),
 		GroupSize:  trimPtr(in.GroupSize),
@@ -147,11 +160,21 @@ func (s *catalogTourService) Update(id string, in CatalogTourInput) (*models.Cat
 		}
 		t.Category = category
 	}
+	if in.Pricing != nil {
+		if err := validatePricing(in.Pricing); err != nil {
+			return nil, validationError([]apperror.FieldError{{Field: "pricing", Message: err.Error()}})
+		}
+		t.Pricing = in.Pricing
+	}
 	if in.Price != nil {
 		if *in.Price < 0 {
 			return nil, validationError([]apperror.FieldError{{Field: "price", Message: "Qiymət düzgün deyil"}})
 		}
 		t.Price = *in.Price
+	}
+	// Keep the derived "from" figure in step with the matrix.
+	if in.Pricing != nil && in.Price == nil {
+		t.Price = derivedFromPrice(t.Pricing, nil)
 	}
 	if in.Rating != nil {
 		t.Rating = *in.Rating
@@ -208,3 +231,49 @@ func (s *catalogTourService) Delete(id string) error {
 	}
 	return nil
 }
+
+// derivedFromPrice keeps CatalogTour.Price meaningful as the cheapest total a
+// party can pay. An explicit price wins; otherwise it comes from the matrix.
+func derivedFromPrice(p *pricing.Pricing, explicit *int) int {
+	if explicit != nil {
+		return *explicit
+	}
+	return pricing.FromPrice(p)
+}
+
+// validatePricing rejects a matrix that cannot produce a quote.
+func validatePricing(p *pricing.Pricing) error {
+	switch p.Model {
+	case pricing.ModelOnRequest:
+		return nil
+	case pricing.ModelGroupTiers, pricing.ModelFlatPerPerson, pricing.ModelPerVehicle:
+	default:
+		return errPricingModel
+	}
+	if p.Model == pricing.ModelPerVehicle && p.VehicleCapacity < 1 {
+		return errVehicleCapacity
+	}
+	if len(p.Tiers) == 0 {
+		return errPricingTiers
+	}
+	for _, t := range p.Tiers {
+		if t.Min < 1 || (t.Max != nil && *t.Max < t.Min) {
+			return errPricingTiers
+		}
+		if len(t.Rates) == 0 {
+			return errPricingTiers
+		}
+	}
+	// A quote must exist for a single traveller, otherwise the landing page
+	// cannot render anything at all.
+	if _, err := pricing.Calculate(p, 1, pricing.RateStandard); err != nil {
+		return err
+	}
+	return nil
+}
+
+var (
+	errPricingModel    = errors.New("qiymət modeli yanlışdır")
+	errPricingTiers    = errors.New("qiymət pillələri yanlışdır")
+	errVehicleCapacity = errors.New("nəqliyyat tutumu yanlışdır")
+)

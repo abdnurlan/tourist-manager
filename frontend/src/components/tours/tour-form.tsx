@@ -283,7 +283,7 @@ export function TourForm({
             />
             {selectedCatalog && (
               <p className="text-xs text-muted-foreground">
-                {az.field.inherited_price}: <span className="font-medium text-accent">{selectedCatalog.price} ₼</span>
+                {az.field.inherited_price}: <span className="font-medium text-accent">{selectedCatalog.price} $</span>
               </p>
             )}
           </div>

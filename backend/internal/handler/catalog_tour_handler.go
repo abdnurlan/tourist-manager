@@ -1,10 +1,13 @@
 package handler
 
 import (
+	"strconv"
+
 	"github.com/gofiber/fiber/v2"
 
 	"tourist-manager/backend/internal/middleware"
 	"tourist-manager/backend/internal/models"
+	"tourist-manager/backend/internal/pricing"
 	"tourist-manager/backend/internal/repository"
 	"tourist-manager/backend/internal/service"
 	"tourist-manager/backend/pkg/apperror"
@@ -13,22 +16,23 @@ import (
 // CatalogTourRequest is the create/update body. Pointers on scalars let PATCH
 // leave fields unchanged; maps are replaced wholesale when present.
 type CatalogTourRequest struct {
-	Slug       *string                       `json:"slug"`
-	Category   *string                       `json:"category"`
-	Price      *int                          `json:"price"`
-	Rating     *float64                      `json:"rating"`
-	Duration   *int                          `json:"duration"`
-	GroupSize  *string                       `json:"group_size"`
-	ImageURL   *string                       `json:"image_url"`
-	Published  *bool                         `json:"published"`
-	SortOrder  *int                          `json:"sort_order"`
-	Title      map[string]string             `json:"title"`
-	Region     map[string]string             `json:"region"`
-	Overview   map[string]string             `json:"overview"`
-	Highlights map[string][]string           `json:"highlights"`
-	Itinerary  map[string][]models.DayPlan   `json:"itinerary"`
-	Included   map[string][]string           `json:"included"`
-	Excluded   map[string][]string           `json:"excluded"`
+	Slug       *string                     `json:"slug"`
+	Category   *string                     `json:"category"`
+	Price      *int                        `json:"price"`
+	Rating     *float64                    `json:"rating"`
+	Duration   *int                        `json:"duration"`
+	GroupSize  *string                     `json:"group_size"`
+	ImageURL   *string                     `json:"image_url"`
+	Published  *bool                       `json:"published"`
+	SortOrder  *int                        `json:"sort_order"`
+	Title      map[string]string           `json:"title"`
+	Region     map[string]string           `json:"region"`
+	Overview   map[string]string           `json:"overview"`
+	Highlights map[string][]string         `json:"highlights"`
+	Itinerary  map[string][]models.DayPlan `json:"itinerary"`
+	Included   map[string][]string         `json:"included"`
+	Excluded   map[string][]string         `json:"excluded"`
+	Pricing    *pricing.Pricing            `json:"pricing"`
 }
 
 func (r CatalogTourRequest) toInput() service.CatalogTourInput {
@@ -39,6 +43,7 @@ func (r CatalogTourRequest) toInput() service.CatalogTourInput {
 		Title: r.Title, Region: r.Region, Overview: r.Overview,
 		Highlights: r.Highlights, Itinerary: r.Itinerary,
 		Included: r.Included, Excluded: r.Excluded,
+		Pricing: r.Pricing,
 	}
 }
 
@@ -134,4 +139,28 @@ func (h *CatalogTourHandler) Delete(c *fiber.Ctx) error {
 		return err
 	}
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{"success": true})
+}
+
+// Quote handles GET /public/catalog-tours/:slug/quote?pax=N&guide_lang=he.
+// The landing site mirrors this calculation for instant feedback; this endpoint
+// is the authority it can fall back to and that the booking flow is checked
+// against.
+func (h *CatalogTourHandler) Quote(c *fiber.Ctx) error {
+	tour, err := h.svc.GetBySlug(c.Params("slug"))
+	if err != nil {
+		return err
+	}
+	pax, convErr := strconv.Atoi(c.Query("pax", "1"))
+	if convErr != nil || pax < 1 {
+		return middleware.JSONError(c, apperror.ValidationError().WithFields([]apperror.FieldError{
+			{Field: "pax", Message: "Nəfər sayı düzgün deyil"},
+		}))
+	}
+	q, err := pricing.Calculate(tour.Pricing, pax, c.Query("guide_lang"))
+	if err != nil {
+		return middleware.JSONError(c, apperror.ValidationError().WithFields([]apperror.FieldError{
+			{Field: "pricing", Message: err.Error()},
+		}))
+	}
+	return c.JSON(q)
 }

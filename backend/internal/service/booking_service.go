@@ -4,6 +4,7 @@ import (
 	"strconv"
 
 	"tourist-manager/backend/internal/models"
+	"tourist-manager/backend/internal/pricing"
 	"tourist-manager/backend/internal/repository"
 	"tourist-manager/backend/pkg/apperror"
 )
@@ -25,6 +26,7 @@ type BookingInput struct {
 	Date          *string
 	TourID        *string // linked internal tour (bookable departure)
 	Notes         *string
+	GuideLang     *string // which rate column the traveller booked ("he" | other)
 }
 
 // BookingService implements booking business logic.
@@ -155,6 +157,20 @@ func (s *bookingService) Create(in BookingInput) (*models.Booking, error) {
 		booking.TourSlug = cleanPtr(in.TourSlug)
 	default:
 		booking.TourTitle = "Fərdi sorğu"
+	}
+
+	// Freeze the money. The total is recomputed here from the catalog matrix —
+	// never taken from the client — so a tampered or stale browser price cannot
+	// be stored. A tour without a matrix simply records no total.
+	guideLang := pricing.RateKey(trimPtr(in.GuideLang))
+	booking.GuideLang = &guideLang
+	if resolved != nil && resolved.Pricing != nil {
+		if q, err := pricing.Calculate(resolved.Pricing, people, guideLang); err == nil && !q.OnRequest {
+			total := float64(q.Total)
+			booking.QuotedTotal = &total
+			cur := q.Currency
+			booking.Currency = &cur
+		}
 	}
 
 	if err := s.bookings.Create(booking); err != nil {

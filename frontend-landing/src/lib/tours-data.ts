@@ -1,5 +1,7 @@
+import type { Pricing } from "@/lib/pricing";
+
 export type Lang = "az" | "en" | "he" | "ar" | "ru";
-export type CategoryKey = "mountain" | "history" | "nature" | "wellness" | "coast" | "offroad";
+export type CategoryKey = "mountain" | "history" | "nature" | "wellness" | "coast" | "offroad" | "city" | "food";
 
 export type DayPlan = { title: string; description: string };
 export type TourLocale = {
@@ -44,6 +46,8 @@ export type TourDate = {
 
 export type Tour = {
   id: string;
+  /** Full price matrix — the source of every quote (see lib/pricing.ts). */
+  pricing?: Pricing | null;
   category: CategoryKey;
   duration: number;
   groupSize: string;
@@ -64,12 +68,14 @@ export const T = {
     hero: { badge: "Azərbaycanı kəşf et", title1: "Doğma torpağın", title2: "möcüzələri", subtitle: "Xınalığın dağlarından Lənkəranın çay bağlarınadək — sənin marşrutun, sənin tempinlə.", searchPh: "Bölgə və ya tur axtar...", cta: "Turları gör" },
     stats: [{ k: "40+", v: "Daxili marşrut" }, { k: "12", v: "Bölgə" }, { k: "8K+", v: "Məmnun turist" }, { k: "4.9", v: "Orta reytinq" }],
     tours: { eyebrow: "Turlar", title: "Marşrutunu seç", subtitle: "Hər mövsüm üçün hazırlanmış turlar — yerli bələdçilər, kiçik qruplar, sənin tempin.", perPerson: "Bir nəfər üçün", book: "Rezerv et", details: "Detallı bax", empty: "Bu axtarışa uyğun tur tapılmadı.", days: "gün", people: "nəfər" },
-    cats: { all: "Hamısı", mountain: "Dağ", history: "Tarix", nature: "Təbiət", wellness: "Müalicə", coast: "Sahil", offroad: "Offroad" },
+    cats: { all: "Hamısı", mountain: "Dağ", history: "Tarix", nature: "Təbiət", wellness: "Müalicə", coast: "Sahil", offroad: "Offroad", city: "Şəhər", food: "Mətbəx" },
     how: { eyebrow: "Necə işləyir", title: "Üç sadə addımda səyahətə hazır", steps: [{ t: "Marşrutu seç", d: "Kataloqdan ilgi sahənə uyğun turu seç və ya bizdən fərdi marşrut istə." }, { t: "Qrupu təsdiqlə", d: "Tarixi, qrup ölçüsünü və əlavə xidmətləri rahatlıqla seç." }, { t: "Yola çıx", d: "Yerli bələdçi sizi qarşılayır — qalanı kəşf etmək sizə qalır." }] },
     cta: { title: "Fərdi marşrut hazırlayaq", subtitle: "Tarixi, büdcəni və maraqlarını bildir — 24 saat ərzində sənə uyğun tur təklifi göndərək.", ph: "Email və ya WhatsApp", btn: "Təklif al", sent: "Sorğunuz göndərildi ✓" },
     footer: "Bütün hüquqlar qorunur.", madeBy: "Bu sayt {c} tərəfindən hazırlanmışdır",
     detail: { back: "Geri", overview: "Tura ümumi baxış", itinerary: "Marşrut", included: "Qiymətə daxildir", excluded: "Qiymətə daxil deyil", bookNow: "İndi rezerv et", duration: "Müddət", group: "Qrup", rating: "Reytinq", price: "Qiymət", notFound: "Tur tapılmadı", dates: "Mövcud tarixlər", noDates: "Hazırda açıq tarix yoxdur", seats: "yer", schedule: "Gün-gün proqram", restDay: "Sərbəst gün", activeDays: "aktiv gün", restDays: "sərbəst gün" },
     reviews: { eyebrow: "Rəylər", title: "Müştəri rəyləri", subtitle: "Bizimlə səyahət edən qonaqlarımızın təəssüratları.", tourLabel: "Tur" },
+    pricing: { title: "Qiyməti hesabla", paxLabel: "Neçə nəfər?", total: "Ümumi məbləğ", perPerson: "nəfərbaşı", groupTotal: "Qrup üçün ümumi məbləğ", perPersonBasis: "Nəfərbaşı hesablanır", perVehicle: "Cip başına", vehicles: "cip", vehicleNote: "Bir cipdə 4 nəfərədək", onRequest: "Qiymət sorğu ilə", contactUs: "Bizimlə əlaqə saxlayın", table: "Bütün qiymət pillələri", tableGroup: "qrup", tablePerPerson: "nəf/baş", upTo: "-ə qədər", andUp: "və yuxarı", person: "nəfər", floorNote: "Minimum qrup məbləği tətbiq olundu.", guideNote: "Qiymət bələdçinin danışdığı dilə görə dəyişir.", guideHe: "İvrit dilli bələdçi", guideStd: "İngilis / Rus dilli bələdçi", guideLabel: "Bələdçi dili", guideHint: "Bu seçim qiymətə təsir edir və saytın dilindən asılı deyil." },
+    catalog: { title: "Bütün turlar", subtitle: "Nəfər sayını və bələdçi dilini seç — qiymətlər dərhal yenilənir.", viewAll: "Hamısına bax", filters: "Filtrlər", priceRange: "Qiymət aralığı", min: "Ən az", max: "Ən çox", reset: "Sıfırla", results: "tur tapıldı", none: "Bu filtrlərə uyğun tur yoxdur.", backHome: "Ana səhifə", sortLabel: "Sıralama", sortDefault: "Tövsiyə olunan", sortPriceAsc: "Ucuzdan bahaya", sortPriceDesc: "Bahadan ucuza" },
 
   },
   en: {
@@ -79,12 +85,14 @@ export const T = {
     hero: { badge: "Guided tours to Azerbaijan", title1: "Azerbaijan", title2: "awaits you", subtitle: "Organized tours to Azerbaijan — from the peaks of Khinalug to vibrant Baku. Expert local guides, small groups, tailor-made itineraries.", searchPh: "Search a region or tour...", cta: "Browse tours" },
     stats: [{ k: "40+", v: "Organized routes" }, { k: "12", v: "Regions" }, { k: "8K+", v: "Happy travelers" }, { k: "4.9", v: "Average rating" }],
     tours: { eyebrow: "Tours", title: "Pick your route", subtitle: "Organized tours for every season — expert guides, small groups, your pace.", perPerson: "Per person", book: "Book", details: "View details", empty: "No tours match your search.", days: "days", people: "people" },
-    cats: { all: "All", mountain: "Mountain", history: "History", nature: "Nature", wellness: "Wellness", coast: "Coast", offroad: "Offroad" },
+    cats: { all: "All", mountain: "Mountain", history: "History", nature: "Nature", wellness: "Wellness", coast: "Coast", offroad: "Offroad", city: "City", food: "Food" },
     how: { eyebrow: "How it works", title: "Ready to travel in three simple steps", steps: [{ t: "Pick a route", d: "Choose a tour from the catalog or request a custom itinerary." }, { t: "Confirm the group", d: "Set the date, group size and add-ons with ease." }, { t: "Set off", d: "Your local guide meets you — the rest is for you to discover." }] },
     cta: { title: "Let's build a custom itinerary", subtitle: "Tell us the date, budget and interests — we'll send a tailored offer within 24 hours.", ph: "Email or WhatsApp", btn: "Get offer", sent: "Request sent ✓" },
     footer: "All rights reserved.", madeBy: "This site was built by {c}",
     detail: { back: "Back", overview: "Overview", itinerary: "Itinerary", included: "What's included", excluded: "Not included", bookNow: "Book now", duration: "Duration", group: "Group", rating: "Rating", price: "Price", notFound: "Tour not found", dates: "Available dates", noDates: "No open dates right now", seats: "seats", schedule: "Day-by-day program", restDay: "Free day", activeDays: "active days", restDays: "free days" },
     reviews: { eyebrow: "Reviews", title: "What our travelers say", subtitle: "Impressions from guests who traveled with us.", tourLabel: "Tour" },
+    pricing: { title: "Calculate your price", paxLabel: "How many people?", total: "Total", perPerson: "per person", groupTotal: "Total for the group", perPersonBasis: "Charged per person", perVehicle: "Per jeep", vehicles: "jeeps", vehicleNote: "Up to 4 riders per jeep", onRequest: "Price on request", contactUs: "Get in touch", table: "All price brackets", tableGroup: "group", tablePerPerson: "per person", upTo: "up to", andUp: "and up", person: "people", floorNote: "The minimum group total was applied.", guideNote: "The price depends on the language your guide speaks.", guideHe: "Hebrew-speaking guide", guideStd: "English / Russian-speaking guide", guideLabel: "Guide language", guideHint: "This choice changes the price and is independent of the site language." },
+    catalog: { title: "All tours", subtitle: "Pick your party size and guide language — prices update instantly.", viewAll: "View all tours", filters: "Filters", priceRange: "Price range", min: "Min", max: "Max", reset: "Reset", results: "tours found", none: "No tour matches these filters.", backHome: "Home", sortLabel: "Sort", sortDefault: "Recommended", sortPriceAsc: "Price: low to high", sortPriceDesc: "Price: high to low" },
 
   },
   he: {
@@ -94,12 +102,14 @@ export const T = {
     hero: { badge: "מדריכים דוברי עברית", title1: "אזרבייג'ן", title2: "מחכה לכם", subtitle: "טיולים מאורגנים לאזרבייג'ן — מפסגות חינלוק ועד באקו התוססת. מדריכים דוברי עברית, קבוצות קטנות ומסלול בהתאמה אישית.", searchPh: "חיפוש אזור או טיול...", cta: "לכל הטיולים" },
     stats: [{ k: "40+", v: "מסלולים מאורגנים" }, { k: "12", v: "אזורים" }, { k: "8K+", v: "מטיילים ישראלים" }, { k: "4.9", v: "דירוג ממוצע" }],
     tours: { eyebrow: "טיולים", title: "בחרו את המסלול", subtitle: "טיולים מאורגנים לכל עונה — מדריכים דוברי עברית, קבוצות קטנות, בקצב שלכם.", perPerson: "לאדם", book: "הזמן", details: "לפרטים", empty: "לא נמצאו טיולים מתאימים.", days: "ימים", people: "אנשים" },
-    cats: { all: "הכל", mountain: "הרים", history: "היסטוריה", nature: "טבע", wellness: "בריאות", coast: "חוף", offroad: "אופרוד" },
+    cats: { all: "הכל", mountain: "הרים", history: "היסטוריה", nature: "טבע", wellness: "בריאות", coast: "חוף", offroad: "אופרוד", city: "עיר", food: "אוכל" },
     how: { eyebrow: "איך זה עובד", title: "מוכנים לדרך בשלושה צעדים פשוטים", steps: [{ t: "בחרו מסלול", d: "בחרו טיול מהקטלוג או בקשו מסלול מותאם אישית לקבוצה שלכם." }, { t: "אשרו את הקבוצה", d: "קבעו תאריך, גודל קבוצה ושירותים נוספים בקלות." }, { t: "נחתם ויוצאים", d: "המדריך דובר העברית מקבל אתכם בשדה התעופה — והשאר נתון לכם לגלות." }] },
     cta: { title: "נבנה לכם מסלול אישי לאזרבייג'ן", subtitle: "ספרו לנו על התאריך, גודל הקבוצה והתחומים — תוך 24 שעות נשלח הצעה מותאמת בעברית.", ph: "אימייל או וואטסאפ", btn: "קבלו הצעה", sent: "הבקשה נשלחה ✓" },
     footer: "כל הזכויות שמורות.", madeBy: "האתר נבנה על ידי {c}",
     detail: { back: "חזרה", overview: "סקירה", itinerary: "מסלול", included: "מה כלול", excluded: "לא כלול", bookNow: "הזמן עכשיו", duration: "משך", group: "קבוצה", rating: "דירוג", price: "מחיר", notFound: "הטיול לא נמצא", dates: "תאריכים זמינים", noDates: "אין תאריכים פתוחים כרגע", seats: "מקומות", schedule: "תוכנית יומית", restDay: "יום חופשי", activeDays: "ימי פעילות", restDays: "ימים חופשיים" },
     reviews: { eyebrow: "ביקורות", title: "מה המטיילים שלנו אומרים", subtitle: "רשמים מהאורחים שטיילו איתנו.", tourLabel: "טיול" },
+    pricing: { title: "חשבו את המחיר", paxLabel: "כמה משתתפים?", total: "סה\u201dכ לתשלום", perPerson: "לאדם", groupTotal: "סה\u201dכ לקבוצה", perPersonBasis: "מחושב לאדם", perVehicle: "לג\u2019יפ", vehicles: "ג\u2019יפים", vehicleNote: "עד 4 נוסעים בג\u2019יפ", onRequest: "מחיר לפי פנייה", contactUs: "צרו קשר", table: "כל מדרגות המחיר", tableGroup: "לקבוצה", tablePerPerson: "לאדם", upTo: "עד", andUp: "ומעלה", person: "משתתפים", floorNote: "הוחל מחיר המינימום לקבוצה.", guideNote: "המחיר תלוי בשפה שבה המדריך מדבר.", guideHe: "מדריך דובר עברית", guideStd: "מדריך דובר אנגלית / רוסית", guideLabel: "שפת המדריך", guideHint: "הבחירה הזו משנה את המחיר ואינה תלויה בשפת האתר." },
+    catalog: { title: "כל הטיולים", subtitle: "בחרו כמות משתתפים ושפת מדריך — המחירים מתעדכנים מיד.", viewAll: "לכל הטיולים", filters: "סינון", priceRange: "טווח מחירים", min: "מינימום", max: "מקסימום", reset: "איפוס", results: "טיולים נמצאו", none: "אין טיול שמתאים לסינון הזה.", backHome: "דף הבית", sortLabel: "מיון", sortDefault: "מומלץ", sortPriceAsc: "מחיר: מהנמוך לגבוה", sortPriceDesc: "מחיר: מהגבוה לנמוך" },
 
   },
   ar: {
@@ -109,12 +119,14 @@ export const T = {
     hero: { badge: "اكتشف أذربيجان", title1: "عجائب", title2: "الوطن", subtitle: "من قمم خيناليق إلى بساتين الشاي في لنكران — مسارك، على إيقاعك.", searchPh: "ابحث عن منطقة أو جولة...", cta: "تصفّح الجولات" },
     stats: [{ k: "40+", v: "مسارات محلية" }, { k: "12", v: "منطقة" }, { k: "8K+", v: "مسافر سعيد" }, { k: "4.9", v: "متوسط التقييم" }],
     tours: { eyebrow: "الجولات", title: "اختر مسارك", subtitle: "جولات مصمّمة لكل موسم — مرشدون محليون، مجموعات صغيرة، على إيقاعك.", perPerson: "للفرد", book: "احجز", details: "عرض التفاصيل", empty: "لا توجد جولات تطابق بحثك.", days: "أيام", people: "أشخاص" },
-    cats: { all: "الكل", mountain: "الجبال", history: "التاريخ", nature: "الطبيعة", wellness: "الاستشفاء", coast: "الساحل", offroad: "الطرق الوعرة" },
+    cats: { all: "الكل", mountain: "الجبال", history: "التاريخ", nature: "الطبيعة", wellness: "الاستشفاء", coast: "الساحل", offroad: "الطرق الوعرة", city: "المدينة", food: "المطبخ" },
     how: { eyebrow: "كيف نعمل", title: "جاهز للسفر في ثلاث خطوات بسيطة", steps: [{ t: "اختر مساراً", d: "اختر جولة من الكتالوج أو اطلب مساراً مخصصاً." }, { t: "أكّد المجموعة", d: "حدّد التاريخ وحجم المجموعة والخدمات الإضافية بكل سهولة." }, { t: "انطلق", d: "يستقبلك مرشدك المحلي — والباقي متروك لك لتكتشفه." }] },
     cta: { title: "لنصمّم لك مساراً مخصصاً", subtitle: "أخبرنا بالتاريخ والميزانية واهتماماتك — وسنرسل لك عرضاً مخصصاً خلال 24 ساعة.", ph: "البريد الإلكتروني أو واتساب", btn: "احصل على عرض", sent: "تم إرسال طلبك ✓" },
     footer: "جميع الحقوق محفوظة.", madeBy: "تم إنشاء هذا الموقع بواسطة {c}",
     detail: { back: "رجوع", overview: "نظرة عامة", itinerary: "المسار", included: "ما يشمله السعر", excluded: "غير مشمول", bookNow: "احجز الآن", duration: "المدة", group: "المجموعة", rating: "التقييم", price: "السعر", notFound: "الجولة غير موجودة", dates: "التواريخ المتاحة", noDates: "لا توجد تواريخ متاحة حالياً", seats: "مقاعد", schedule: "برنامج يومي", restDay: "يوم حر", activeDays: "أيام نشطة", restDays: "أيام حرة" },
     reviews: { eyebrow: "التقييمات", title: "ماذا يقول مسافرونا", subtitle: "انطباعات من ضيوف سافروا معنا.", tourLabel: "الجولة" },
+    pricing: { title: "احسب السعر", paxLabel: "كم عدد الأشخاص؟", total: "المبلغ الإجمالي", perPerson: "للشخص", groupTotal: "الإجمالي للمجموعة", perPersonBasis: "يُحتسب للشخص", perVehicle: "لكل جيب", vehicles: "جيب", vehicleNote: "حتى 4 ركاب في الجيب", onRequest: "السعر عند الطلب", contactUs: "تواصل معنا", table: "جميع شرائح السعر", tableGroup: "للمجموعة", tablePerPerson: "للشخص", upTo: "حتى", andUp: "فأكثر", person: "أشخاص", floorNote: "تم تطبيق الحد الأدنى لسعر المجموعة.", guideNote: "يعتمد السعر على اللغة التي يتحدثها المرشد.", guideHe: "مرشد يتحدث العبرية", guideStd: "مرشد يتحدث الإنجليزية / الروسية", guideLabel: "لغة المرشد", guideHint: "هذا الاختيار يغيّر السعر وهو مستقل عن لغة الموقع." },
+    catalog: { title: "كل الجولات", subtitle: "اختر عدد الأشخاص ولغة المرشد — تتحدث الأسعار فورًا.", viewAll: "عرض كل الجولات", filters: "التصفية", priceRange: "نطاق السعر", min: "الأدنى", max: "الأعلى", reset: "إعادة تعيين", results: "جولة", none: "لا توجد جولة مطابقة لهذه التصفية.", backHome: "الرئيسية", sortLabel: "الترتيب", sortDefault: "موصى به", sortPriceAsc: "السعر: من الأقل للأعلى", sortPriceDesc: "السعر: من الأعلى للأقل" },
 
   },
   ru: {
@@ -124,12 +136,14 @@ export const T = {
     hero: { badge: "Организованные туры в Азербайджан", title1: "Азербайджан", title2: "ждёт вас", subtitle: "Организованные туры в Азербайджан — от вершин Хыналыга до яркого Баку. Опытные гиды, малые группы, индивидуальные маршруты.", searchPh: "Поиск региона или тура...", cta: "Смотреть туры" },
     stats: [{ k: "40+", v: "Маршрутов по стране" }, { k: "12", v: "Регионов" }, { k: "8K+", v: "Довольных туристов" }, { k: "4.9", v: "Средний рейтинг" }],
     tours: { eyebrow: "Туры", title: "Выберите маршрут", subtitle: "Туры на любой сезон — местные гиды, небольшие группы, ваш темп.", perPerson: "За человека", book: "Забронировать", details: "Подробнее", empty: "По вашему запросу туров не найдено.", days: "дней", people: "чел." },
-    cats: { all: "Все", mountain: "Горы", history: "История", nature: "Природа", wellness: "Оздоровление", coast: "Побережье", offroad: "Внедорожье" },
+    cats: { all: "Все", mountain: "Горы", history: "История", nature: "Природа", wellness: "Оздоровление", coast: "Побережье", offroad: "Внедорожье", city: "Город", food: "Кухня" },
     how: { eyebrow: "Как это работает", title: "Готовы к путешествию за три простых шага", steps: [{ t: "Выберите маршрут", d: "Выберите тур из каталога или закажите индивидуальный маршрут." }, { t: "Подтвердите группу", d: "Легко выберите дату, размер группы и дополнительные услуги." }, { t: "Отправляйтесь", d: "Вас встречает местный гид — остальное вам предстоит открыть." }] },
     cta: { title: "Составим индивидуальный маршрут", subtitle: "Сообщите дату, бюджет и интересы — в течение 24 часов пришлём персональное предложение.", ph: "Email или WhatsApp", btn: "Получить предложение", sent: "Запрос отправлен ✓" },
     footer: "Все права защищены.", madeBy: "Сайт разработан {c}",
     detail: { back: "Назад", overview: "Обзор", itinerary: "Маршрут", included: "Что включено", excluded: "Не включено", bookNow: "Забронировать", duration: "Длительность", group: "Группа", rating: "Рейтинг", price: "Цена", notFound: "Тур не найден", dates: "Доступные даты", noDates: "Сейчас нет открытых дат", seats: "мест", schedule: "Программа по дням", restDay: "Свободный день", activeDays: "активных дней", restDays: "свободных дней" },
     reviews: { eyebrow: "Отзывы", title: "Что говорят наши путешественники", subtitle: "Впечатления гостей, путешествовавших с нами.", tourLabel: "Тур" },
+    pricing: { title: "Рассчитать цену", paxLabel: "Сколько человек?", total: "Итого", perPerson: "на человека", groupTotal: "Итого за группу", perPersonBasis: "Считается на человека", perVehicle: "За джип", vehicles: "джипов", vehicleNote: "До 4 человек в джипе", onRequest: "Цена по запросу", contactUs: "Свяжитесь с нами", table: "Все ценовые ступени", tableGroup: "за группу", tablePerPerson: "с человека", upTo: "до", andUp: "и больше", person: "чел.", floorNote: "Применён минимальный тариф для группы.", guideNote: "Цена зависит от языка, на котором говорит гид.", guideHe: "Гид, говорящий на иврите", guideStd: "Гид, говорящий на английском / русском", guideLabel: "Язык гида", guideHint: "Этот выбор влияет на цену и не зависит от языка сайта." },
+    catalog: { title: "Все туры", subtitle: "Выберите количество человек и язык гида — цены обновятся сразу.", viewAll: "Смотреть все туры", filters: "Фильтры", priceRange: "Диапазон цен", min: "Мин", max: "Макс", reset: "Сбросить", results: "туров найдено", none: "Нет туров под эти фильтры.", backHome: "Главная", sortLabel: "Сортировка", sortDefault: "Рекомендуемые", sortPriceAsc: "Цена: по возрастанию", sortPriceDesc: "Цена: по убыванию" },
 
   },
 };
@@ -213,13 +227,13 @@ export const REVIEWS: Review[] = [
 ];
 
 
-export const CAT_KEYS: Array<"all" | CategoryKey> = ["all", "mountain", "history", "nature", "wellness", "coast", "offroad"];
+export const CAT_KEYS: Array<"all" | CategoryKey> = ["all", "city", "mountain", "history", "nature", "offroad", "food", "wellness", "coast"];
 export const LANGS: Array<{ code: Lang; label: string; native: string }> = [
   { code: "az", label: "AZ", native: "Azərbaycan" },
+  { code: "he", label: "HE", native: "עברית" },
   { code: "en", label: "EN", native: "English" },
   { code: "ru", label: "RU", native: "Русский" },
   { code: "ar", label: "AR", native: "العربية" },
-  { code: "he", label: "HE", native: "עברית" },
 ];
 
 const VALID_LANGS: Lang[] = ["az", "en", "he", "ar", "ru"];

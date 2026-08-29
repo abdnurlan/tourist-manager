@@ -192,7 +192,29 @@ export interface CreateGuestRequest {
 export type UpdateGuestRequest = Partial<CreateGuestRequest>;
 
 // ── Catalog tours (public marketing catalog) ──────────────────
-export type CatalogCategory = "mountain" | "history" | "nature" | "wellness" | "coast" | "offroad";
+export type CatalogCategory =
+  | "mountain" | "history" | "nature" | "wellness"
+  | "coast" | "offroad" | "city" | "food";
+
+// ── Pricing matrix (mirrors backend/internal/pricing) ───────────
+export type PriceBasis = "group" | "per_person" | "vehicle";
+export type PriceModel = "group_tiers" | "flat_per_person" | "per_vehicle" | "on_request";
+
+export interface PriceTier {
+  min: number;
+  max: number | null;
+  basis: PriceBasis;
+  /** "he" = İvrit dilli bələdçi tarifi, "std" = İngilis / Rus. */
+  rates: Record<string, number>;
+}
+
+export interface Pricing {
+  model: PriceModel;
+  currency?: string;
+  vehicle_capacity?: number;
+  tiers?: PriceTier[];
+  discounts?: { when_pax_in_vehicle: number; amount: number }[];
+}
 export type LangMap = Record<string, string>;
 export interface CatalogDayPlan { title: string; description: string }
 
@@ -214,6 +236,7 @@ export interface CatalogTour {
   itinerary: Record<string, CatalogDayPlan[]>;
   included: Record<string, string[]>;
   excluded: Record<string, string[]>;
+  pricing: Pricing | null;
   created_at: string;
   updated_at: string;
 }
@@ -221,7 +244,9 @@ export interface CatalogTour {
 export interface CatalogTourPayload {
   slug: string;
   category: CatalogCategory;
-  price: number;
+  /** Derived "starting from" figure — the backend recomputes it from pricing. */
+  price?: number;
+  pricing?: Pricing;
   rating?: number;
   duration?: number;
   group_size?: string;
@@ -253,6 +278,10 @@ export interface Booking {
   tour_id: string | null; // linked internal tour (bookable departure)
   notes: string | null;
   status: BookingStatus;
+  /** Frozen at booking time — recomputed server-side, not sent by the browser. */
+  quoted_total: number | null;
+  currency: string | null;
+  guide_lang: string | null;
   created_at: string;
   updated_at: string;
 }

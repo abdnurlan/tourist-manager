@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Ticket, Phone, Mail, Users, CalendarDays, Trash2 } from "lucide-react";
+import { formatPrice } from "@/lib/utils/format";
+import { Ticket, Phone, Mail, Users, CalendarDays, Trash2, Coins } from "lucide-react";
 
 import { PageHeader, PageBody } from "@/components/layout/page-header";
 import { PageTransition, StaggerList, StaggerItem } from "@/components/shared/page-transition";
@@ -136,6 +137,18 @@ export default function ReservationsPage() {
                       <Users className="size-4 shrink-0" />
                       {b.people} {az.reservation.people}
                     </div>
+                    {b.quoted_total !== null && (
+                      /* Frozen at booking time — the catalog may have changed since. */
+                      <div className="flex items-center gap-2 font-medium text-foreground">
+                        <Coins className="size-4 shrink-0" />
+                        {formatPrice(b.quoted_total, b.currency)}
+                        {b.guide_lang === "he" && (
+                          <span className="text-xs font-normal text-muted-foreground">
+                            · {az.reservation.guide_he}
+                          </span>
+                        )}
+                      </div>
+                    )}
                     <div className="flex items-center gap-2">
                       <CalendarDays className="size-4 shrink-0" />
                       {b.date ? fmtDate(b.date) : az.reservation.no_date}

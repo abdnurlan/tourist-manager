@@ -33,6 +33,7 @@ var validEventSources = map[string]bool{
 var validCatalogCategories = map[string]bool{
 	"mountain": true, "history": true, "nature": true,
 	"wellness": true, "coast": true, "offroad": true,
+	"city": true, "food": true,
 }
 
 var validBookingStatuses = map[string]bool{

@@ -63,6 +63,7 @@ func New(cfg *config.Config, h Handlers) *fiber.App {
 	// Public catalog + booking (consumed by the landing site, no auth).
 	api.Get("/public/catalog-tours", h.CatalogTour.ListPublic)
 	api.Get("/public/catalog-tours/:slug", h.CatalogTour.GetPublicBySlug)
+	api.Get("/public/catalog-tours/:slug/quote", h.CatalogTour.Quote)
 	api.Post("/public/bookings", h.Booking.Create)
 
 	// Protected routes.

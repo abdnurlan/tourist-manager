@@ -1,4 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
+import { T } from "@/lib/tours-data";
+import { quote, type Pricing } from "@/lib/pricing";
+import { useGuideLang } from "@/hooks/use-guide-lang";
+import { GuideLangSelect } from "@/components/GuideLangSelect";
 import { format } from "date-fns";
 import { ar, az, enUS, he, ru } from "date-fns/locale";
 import {
@@ -40,7 +44,9 @@ export type BookingTour = {
   title: string;
   region: string;
   duration: string;
+  /** Derived "starting from" figure; the real total comes from `pricing`. */
   price: number;
+  pricing?: Pricing | null;
   image: string;
   // Selected dated tour: when present the travel date is fixed to it and the
   // per-person price is that tour's (catalog-inherited) price.
@@ -54,14 +60,17 @@ interface Props {
   tour: BookingTour | null;
   open: boolean;
   lang: Lang;
+  /** Party size carried over from the tour page calculator. */
+  initialPeople?: number;
   onOpenChange: (open: boolean) => void;
 }
 
-export function BookingDialog({ tour, open, lang, onOpenChange }: Props) {
+export function BookingDialog({ tour, open, lang, initialPeople = 2, onOpenChange }: Props) {
+  const [guide, setGuide] = useGuideLang();
   const lockedDate = tour?.departureDate ? new Date(tour.departureDate) : undefined;
   const [step, setStep] = useState<Step>("details");
   const [date, setDate] = useState<Date | undefined>(lockedDate);
-  const [people, setPeople] = useState(2);
+  const [people, setPeople] = useState(initialPeople);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -73,17 +82,42 @@ export function BookingDialog({ tour, open, lang, onOpenChange }: Props) {
   const dateLocale = DATE_LOCALES[lang];
   const isRtl = lang === "ar" || lang === "he";
 
-  const total = useMemo(() => (tour ? tour.price * people : 0), [tour, people]);
+  // The total depends on the party size bracket and the guide language, so it
+  // comes from the shared pricing engine — never from price × people. The
+  // backend recomputes the same figure when the booking is stored.
+  const priceQuote = useMemo(
+    () => (tour ? quote(tour.pricing, people, guide) : null),
+    [tour, people, guide],
+  );
+  const total = priceQuote?.total ?? 0;
+
+  // One line telling the traveller what the figure covers: a group total, a
+  // per-person rate, or a number of jeeps.
+  const priceCopy = T[lang].pricing;
+  const basisNote = !priceQuote
+    ? null
+    : priceQuote.onRequest
+      ? priceCopy.onRequest
+      : priceQuote.basis === "group"
+        ? priceCopy.groupTotal
+        : priceQuote.basis === "vehicle"
+          ? `${priceCopy.perVehicle} · ${priceQuote.vehicles} ${priceCopy.vehicles}`
+          : `${priceQuote.perPerson} $ ${priceCopy.perPerson}`;
 
   // When a departure-bound tour is opened, lock the travel date to the departure.
   useEffect(() => {
     if (tour?.departureDate) setDate(new Date(tour.departureDate));
   }, [tour?.departureDate]);
 
+  // Reopening for another tour brings the party size chosen on that page.
+  useEffect(() => {
+    if (open) setPeople(initialPeople);
+  }, [open, initialPeople]);
+
   const reset = () => {
     setStep("details");
     setDate(lockedDate);
-    setPeople(2);
+    setPeople(initialPeople);
     setName("");
     setEmail("");
     setPhone("");
@@ -114,6 +148,7 @@ export function BookingDialog({ tour, open, lang, onOpenChange }: Props) {
         email: email.trim() || null,
         phone: phone.trim() || null,
         people,
+        guide_lang: guide,
         date: date ? format(date, "yyyy-MM-dd") : null,
         tour_id: tour.tourId ?? null,
       });
@@ -288,6 +323,8 @@ export function BookingDialog({ tour, open, lang, onOpenChange }: Props) {
                 />
               </div>
 
+              <GuideLangSelect value={guide} onChange={setGuide} lang={lang} compact />
+
               {/* Summary */}
               <div className="flex items-center justify-between rounded-lg bg-secondary/60 p-4">
                 <div className="text-sm text-muted-foreground flex items-center gap-3">
@@ -295,7 +332,8 @@ export function BookingDialog({ tour, open, lang, onOpenChange }: Props) {
                 </div>
                 <div className="text-end">
                   <div className="text-xs text-muted-foreground">{copy.total}</div>
-                  <div className="font-display text-xl font-bold tabular-nums text-accent-ink">{total} ₼</div>
+                  <div className="font-display text-xl font-bold tabular-nums text-accent-ink">{total} $</div>
+                  {basisNote && <div className="text-xs text-muted-foreground">{basisNote}</div>}
                 </div>
               </div>
 
@@ -325,8 +363,11 @@ export function BookingDialog({ tour, open, lang, onOpenChange }: Props) {
                 </div>
                 <div className="mt-3 flex items-center justify-between border-t border-border pt-3">
                   <span className="text-sm text-muted-foreground">{copy.totalAmount}</span>
-                  <span className="font-display text-2xl font-bold tabular-nums text-brand-orange">{total} ₼</span>
+                  <span className="font-display text-2xl font-bold tabular-nums text-brand-orange">{total} $</span>
                 </div>
+                {basisNote && (
+                  <p className="mt-2 text-end text-xs text-muted-foreground">{basisNote}</p>
+                )}
               </div>
 
               <div className="space-y-4">
@@ -393,7 +434,7 @@ export function BookingDialog({ tour, open, lang, onOpenChange }: Props) {
                   {copy.back}
                 </Button>
                 <Button className="flex-1" disabled={!canPay || processing} onClick={handlePay}>
-                  {processing ? copy.processing : `${copy.pay} ${total} ₼`}
+                  {processing ? copy.processing : `${copy.pay} ${total} $`}
                 </Button>
               </div>
             </div>
@@ -425,7 +466,7 @@ export function BookingDialog({ tour, open, lang, onOpenChange }: Props) {
                 </div>
                 <div className="mt-2 flex justify-between border-t border-border pt-2">
                   <span className="text-muted-foreground">{copy.amount}</span>
-                  <span className="font-semibold tabular-nums text-accent-ink">{total} ₼</span>
+                  <span className="font-semibold tabular-nums text-accent-ink">{total} $</span>
                 </div>
               </div>
               <Button className="mt-6 w-full" onClick={() => handleClose(false)}>

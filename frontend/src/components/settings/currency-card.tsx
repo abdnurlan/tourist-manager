@@ -12,14 +12,14 @@ import {
 import { SettingsCard } from "./settings-card";
 import { toast } from "@/components/ui/sonner";
 import { az } from "@/lib/i18n/az";
+import { DEFAULT_CURRENCY } from "@/lib/utils/format";
 
 const CURRENCY_KEY = "tp_default_currency";
-const DEFAULT_CURRENCY = "AZN";
 
 /** Selectable default currencies (local-only preference). */
 const CURRENCIES: { value: string; symbol: string; label: string }[] = [
-  { value: "AZN", symbol: "₼", label: "Azərbaycan manatı" },
   { value: "USD", symbol: "$", label: "ABŞ dolları" },
+  { value: "AZN", symbol: "₼", label: "Azərbaycan manatı" },
   { value: "EUR", symbol: "€", label: "Avro" },
   { value: "TRY", symbol: "₺", label: "Türk lirəsi" },
   { value: "GBP", symbol: "£", label: "Funt sterlinq" },
